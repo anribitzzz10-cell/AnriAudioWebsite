@@ -70,14 +70,14 @@ dialog{width:min(520px,calc(100% - 32px));border:1px solid #303039;border-radius
 
 <div class="wrap" id="buy">
 <div class="buy">
-<div><span class="tag">Anri Audio MIDI</span><h2 class="title" style="margin-top:16px">Website checkout ready for the next step.</h2><p class="sub" style="margin-bottom:0">This first version already has the Buy, Download, My License, and Support interface. Real payment can be connected to Anri Cloud next.</p></div>
+<div><span class="tag">Anri Audio MIDI</span><h2 class="title" style="margin-top:16px">Secure checkout with automatic license delivery.</h2><p class="sub" style="margin-bottom:0">Complete your purchase with Paddle. Anri Cloud creates your perpetual license automatically after payment.</p></div>
 <div class="buyright"><button class="btn red" onclick="openPaddleCheckout()">Buy</button><button class="btn ghost" onclick="openD('downloadD')">Download</button></div>
 </div>
 </div>
 
 <section class="features" id="license"><div class="wrap">
 <h2 class="title">License center</h2>
-<p class="sub">The interface is prepared for your Anri Cloud license API.</p>
+<p class="sub">Licenses purchased on this site are issued automatically by Anri Cloud after Paddle confirms payment.</p>
 <div class="actions"><button class="btn ghost" onclick="openD('licenseD')">My License</button><button class="btn ghost" onclick="openD('downloadD')">Download</button><button class="btn ghost" onclick="openD('supportD')">Support</button></div>
 </div></section>
 </main>
@@ -85,6 +85,22 @@ dialog{width:min(520px,calc(100% - 32px));border:1px solid #303039;border-radius
 <footer id="support"><div class="wrap">© <span id="year"></span> Anri Audio • Support • License • Download</div></footer>
 
 <dialog id="buyD"><div class="modal"><h3>Paddle checkout</h3><p id="buyStatus">Checkout could not be opened. Check the Paddle sandbox settings and try again.</p><div class="modalrow"><button class="btn ghost" onclick="closeD('buyD')">Close</button></div></div></dialog>
+<dialog id="purchaseD"><div class="modal">
+<h3>Purchase complete</h3>
+<p id="purchaseStatus">Payment confirmed. Anri Cloud is creating your license…</p>
+<div id="licenseResult" style="display:none">
+  <p style="margin-bottom:8px">Your Anri Audio MIDI license:</p>
+  <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+    <code id="issuedLicenseKey" style="display:block;padding:12px 14px;border-radius:12px;background:#0b0b0f;border:1px solid #2b2b34;word-break:break-all"></code>
+    <button class="btn ghost" onclick="copyIssuedLicense()">Copy</button>
+  </div>
+  <p style="font-size:13px">Keep this key private. It can activate up to <span id="issuedMaxActivations">2</span> devices.</p>
+</div>
+<div class="modalrow">
+  <button class="btn ghost" id="retryClaimButton" style="display:none" onclick="retryLicenseClaim()">Try again</button>
+  <button class="btn ghost" onclick="closeD('purchaseD')">Close</button>
+</div>
+</div></dialog>
 <dialog id="licenseD"><div class="modal"><h3>My License</h3><p>Enter the email or license key associated with your purchase.</p><div class="field"><input id="licenseInput" placeholder="name@example.com or ANRI-..."></div><button class="btn red" onclick="demoLookup()">Find license</button><p id="lookupStatus"></p><div class="modalrow"><button class="btn ghost" onclick="closeD('licenseD')">Close</button></div></div></dialog>
 <dialog id="downloadD"><div class="modal"><h3>Download</h3><p>The installer link will be connected after the signed macOS build is published.</p><div class="modalrow"><button class="btn ghost" onclick="closeD('downloadD')">Close</button></div></div></dialog>
 <dialog id="supportD"><div class="modal"><h3>Support</h3><p>Support can be linked to Telegram or email when you choose the public support address.</p><div class="modalrow"><button class="btn ghost" onclick="closeD('supportD')">Close</button></div></div></dialog>
@@ -94,16 +110,84 @@ document.getElementById('year').textContent=new Date().getFullYear();
 
 const PADDLE_CLIENT_TOKEN = "test_fa8cbde9f58ef0f188abd912914";
 const PADDLE_PRICE_ID = "pri_01m3hwgbry4me3gcr7g33fwm6k";
+const ANRI_CLOUD = "https://anri-cloud.onrender.com";
 
 let paddleReady = false;
+let purchaseClaimToken = sessionStorage.getItem("anri_claim_token") || "";
 
 function openD(id){document.getElementById(id).showModal()}
 function closeD(id){document.getElementById(id).close()}
+
+function makeClaimToken(){
+  const bytes = new Uint8Array(32);
+  crypto.getRandomValues(bytes);
+  return Array.from(bytes, b => b.toString(16).padStart(2, "0")).join("");
+}
 
 function showBuyError(message){
   const status = document.getElementById('buyStatus');
   if (status) status.textContent = message;
   openD('buyD');
+}
+
+async function claimLicenseOnce(){
+  if (!purchaseClaimToken) return null;
+  const response = await fetch(ANRI_CLOUD + "/v1/paddle/license/claim", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({claim_token: purchaseClaimToken})
+  });
+  if (response.status === 404) return null;
+  if (!response.ok) {
+    const text = await response.text();
+    throw new Error("Anri Cloud claim failed: " + response.status + " " + text);
+  }
+  return await response.json();
+}
+
+function showIssuedLicense(result){
+  const lic = result && result.license;
+  if (!lic || !lic.key) return;
+  document.getElementById("purchaseStatus").textContent =
+    result.email ? "License issued for " + result.email + "." : "Your license has been issued.";
+  document.getElementById("issuedLicenseKey").textContent = lic.key;
+  document.getElementById("issuedMaxActivations").textContent = lic.max_activations || 2;
+  document.getElementById("licenseResult").style.display = "block";
+  document.getElementById("retryClaimButton").style.display = "none";
+  sessionStorage.removeItem("anri_claim_token");
+}
+
+async function waitForIssuedLicense(){
+  const status = document.getElementById("purchaseStatus");
+  const retry = document.getElementById("retryClaimButton");
+  status.textContent = "Payment confirmed. Anri Cloud is creating your license…";
+  retry.style.display = "none";
+
+  for (let attempt = 0; attempt < 45; attempt++) {
+    try{
+      const result = await claimLicenseOnce();
+      if (result) {
+        showIssuedLicense(result);
+        return;
+      }
+    } catch(error){
+      console.error(error);
+    }
+    await new Promise(resolve => setTimeout(resolve, 2000));
+  }
+
+  status.textContent = "Payment succeeded, but the license is still processing. Tap Try again in a moment.";
+  retry.style.display = "inline-block";
+}
+
+async function retryLicenseClaim(){
+  document.getElementById("retryClaimButton").style.display = "none";
+  await waitForIssuedLicense();
+}
+
+async function copyIssuedLicense(){
+  const key = document.getElementById("issuedLicenseKey").textContent.trim();
+  if (key) await navigator.clipboard.writeText(key);
 }
 
 function initializePaddle(){
@@ -126,6 +210,9 @@ function initializePaddle(){
       eventCallback: function(event) {
         if (event && event.name === "checkout.completed") {
           console.log("Anri Audio MIDI sandbox checkout completed", event);
+          try { Paddle.Checkout.close(); } catch (_) {}
+          if (!document.getElementById("purchaseD").open) openD("purchaseD");
+          waitForIssuedLicense();
         }
       }
     });
@@ -141,8 +228,15 @@ function openPaddleCheckout(){
     return;
   }
 
+  purchaseClaimToken = makeClaimToken();
+  sessionStorage.setItem("anri_claim_token", purchaseClaimToken);
+
   try{
     Paddle.Checkout.open({
+      customData: {
+        anri_claim_token: purchaseClaimToken,
+        anri_product: "anri_audio_midi"
+      },
       items: [
         {
           priceId: PADDLE_PRICE_ID,
@@ -163,8 +257,6 @@ function demoLookup(){
 
 initializePaddle();
 
-// Backend base for the next integration step:
-// const ANRI_CLOUD = "https://anri-cloud.onrender.com";
 </script>
 </body>
 </html>
