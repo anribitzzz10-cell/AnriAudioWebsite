@@ -25,12 +25,13 @@ dialog{width:min(520px,calc(100% - 32px));border:1px solid #303039;border-radius
 @media(max-width:900px){.hero{grid-template-columns:1fr}.cards{grid-template-columns:1fr 1fr}.buy{grid-template-columns:1fr}.buyright{justify-content:flex-start}}
 @media(max-width:620px){.links{display:none}.cards{grid-template-columns:1fr}.wrap{padding:0 16px}h1{font-size:52px}.hero{padding-top:58px}.roll{height:215px}}
 </style>
+<script src="https://cdn.paddle.com/paddle/v2/paddle.js"></script>
 </head>
 <body>
 <header><div class="wrap nav">
 <a class="brand" href="#top"><span class="logo">A</span><span>Anri Audio MIDI</span></a>
 <nav class="links"><a href="#features">Features</a><a href="#buy">Buy</a><a href="#license">License</a><a href="#support">Support</a></nav>
-<button class="pill white" onclick="openD('buyD')">Buy</button>
+<button class="pill white" onclick="openPaddleCheckout()">Buy</button>
 </div></header>
 
 <main id="top">
@@ -39,7 +40,7 @@ dialog{width:min(520px,calc(100% - 32px));border:1px solid #303039;border-radius
 <span class="tag"><span class="dot"></span> Audio → MIDI workflow for Logic Pro</span>
 <h1>Turn audio into editable MIDI.</h1>
 <p class="lead">Analyze a performance, refine notes inside Anri Piano Roll, and move the result into your Logic Pro workflow from one focused interface.</p>
-<div class="actions"><button class="btn red" onclick="openD('buyD')">Buy Anri Audio MIDI</button><a class="btn ghost" href="#features">See features</a></div>
+<div class="actions"><button class="btn red" onclick="openPaddleCheckout()">Buy Anri Audio MIDI</button><a class="btn ghost" href="#features">See features</a></div>
 <p style="color:#777781;font-size:12px;margin-top:14px">macOS • Audio Unit • Logic Pro workflow</p>
 </div>
 <div class="mock"><div class="plugin">
@@ -70,7 +71,7 @@ dialog{width:min(520px,calc(100% - 32px));border:1px solid #303039;border-radius
 <div class="wrap" id="buy">
 <div class="buy">
 <div><span class="tag">Anri Audio MIDI</span><h2 class="title" style="margin-top:16px">Website checkout ready for the next step.</h2><p class="sub" style="margin-bottom:0">This first version already has the Buy, Download, My License, and Support interface. Real payment can be connected to Anri Cloud next.</p></div>
-<div class="buyright"><button class="btn red" onclick="openD('buyD')">Buy</button><button class="btn ghost" onclick="openD('downloadD')">Download</button></div>
+<div class="buyright"><button class="btn red" onclick="openPaddleCheckout()">Buy</button><button class="btn ghost" onclick="openD('downloadD')">Download</button></div>
 </div>
 </div>
 
@@ -83,19 +84,85 @@ dialog{width:min(520px,calc(100% - 32px));border:1px solid #303039;border-radius
 
 <footer id="support"><div class="wrap">© <span id="year"></span> Anri Audio • Support • License • Download</div></footer>
 
-<dialog id="buyD"><div class="modal"><h3>Buy Anri Audio MIDI</h3><p>Web payment is not connected yet. This button is ready to be linked to the checkout endpoint in Anri Cloud.</p><div class="modalrow"><button class="btn ghost" onclick="closeD('buyD')">Close</button></div></div></dialog>
+<dialog id="buyD"><div class="modal"><h3>Paddle checkout</h3><p id="buyStatus">Checkout could not be opened. Check the Paddle sandbox settings and try again.</p><div class="modalrow"><button class="btn ghost" onclick="closeD('buyD')">Close</button></div></div></dialog>
 <dialog id="licenseD"><div class="modal"><h3>My License</h3><p>Enter the email or license key associated with your purchase.</p><div class="field"><input id="licenseInput" placeholder="name@example.com or ANRI-..."></div><button class="btn red" onclick="demoLookup()">Find license</button><p id="lookupStatus"></p><div class="modalrow"><button class="btn ghost" onclick="closeD('licenseD')">Close</button></div></div></dialog>
 <dialog id="downloadD"><div class="modal"><h3>Download</h3><p>The installer link will be connected after the signed macOS build is published.</p><div class="modalrow"><button class="btn ghost" onclick="closeD('downloadD')">Close</button></div></div></dialog>
 <dialog id="supportD"><div class="modal"><h3>Support</h3><p>Support can be linked to Telegram or email when you choose the public support address.</p><div class="modalrow"><button class="btn ghost" onclick="closeD('supportD')">Close</button></div></div></dialog>
 
 <script>
 document.getElementById('year').textContent=new Date().getFullYear();
+
+const PADDLE_CLIENT_TOKEN = "test_fa8cbde9f58ef0f188abd912914";
+const PADDLE_PRICE_ID = "pri_01m3hwgbry4me3gcr7g33fwm6k";
+
+let paddleReady = false;
+
 function openD(id){document.getElementById(id).showModal()}
 function closeD(id){document.getElementById(id).close()}
+
+function showBuyError(message){
+  const status = document.getElementById('buyStatus');
+  if (status) status.textContent = message;
+  openD('buyD');
+}
+
+function initializePaddle(){
+  try{
+    if (typeof Paddle === 'undefined') {
+      showBuyError('Paddle.js did not load. Refresh the page and try again.');
+      return;
+    }
+
+    Paddle.Environment.set("sandbox");
+    Paddle.Initialize({
+      token: PADDLE_CLIENT_TOKEN,
+      checkout: {
+        settings: {
+          displayMode: "overlay",
+          theme: "dark",
+          locale: "en"
+        }
+      },
+      eventCallback: function(event) {
+        if (event && event.name === "checkout.completed") {
+          console.log("Anri Audio MIDI sandbox checkout completed", event);
+        }
+      }
+    });
+    paddleReady = true;
+  } catch(error){
+    console.error("Paddle initialization failed", error);
+  }
+}
+
+function openPaddleCheckout(){
+  if (!paddleReady || typeof Paddle === 'undefined') {
+    showBuyError('Paddle checkout is not ready yet. Refresh the page and try again.');
+    return;
+  }
+
+  try{
+    Paddle.Checkout.open({
+      items: [
+        {
+          priceId: PADDLE_PRICE_ID,
+          quantity: 1
+        }
+      ]
+    });
+  } catch(error){
+    console.error("Paddle checkout failed", error);
+    showBuyError('Checkout could not be opened. Make sure the Paddle Sandbox default payment link is configured for this website.');
+  }
+}
+
 function demoLookup(){
  const v=document.getElementById('licenseInput').value.trim();
  document.getElementById('lookupStatus').textContent=v?'Interface is ready. Next step: connect it to Anri Cloud.':'Enter an email or license key first.';
 }
+
+initializePaddle();
+
 // Backend base for the next integration step:
 // const ANRI_CLOUD = "https://anri-cloud.onrender.com";
 </script>
