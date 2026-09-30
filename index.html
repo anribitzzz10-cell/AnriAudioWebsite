@@ -18,12 +18,12 @@ h1{font-size:clamp(48px,7vw,80px);line-height:.96;letter-spacing:-.05em;margin:2
 .plugin{overflow:hidden;border-radius:18px;background:#0c0c10;border:1px solid #26262e}.bar{height:43px;background:#15151b;border-bottom:1px solid #26262e;display:flex;align-items:center;justify-content:space-between;padding:0 14px;font-size:12px;color:#c4c4cc}
 .screen{padding:18px}.screenhead{display:flex;justify-content:space-between;margin-bottom:16px}.chip{padding:6px 9px;border-radius:8px;background:#1c1c22;font-size:11px;color:#aaaab4}.chip.hot{background:rgba(237,31,61,.13);border:1px solid rgba(237,31,61,.24);color:#ffb5c1}
 .roll{height:255px;position:relative;overflow:hidden;border:1px solid #22222a;border-radius:12px;background:linear-gradient(to right,rgba(255,255,255,.04) 1px,transparent 1px) 0 0/42px 100%,linear-gradient(to bottom,rgba(255,255,255,.045) 1px,transparent 1px) 0 0/100% 22px,#09090c}
-.note{position:absolute;height:14px;border-radius:4px;background:linear-gradient(90deg,var(--red),#ff5068)}.features{padding:74px 0}.title{font-size:36px;letter-spacing:-.03em;margin:0 0 10px}.sub{color:var(--muted);max-width:720px;margin:0 0 30px}.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}.card{padding:22px;min-height:190px;border-radius:20px;background:linear-gradient(160deg,rgba(255,255,255,.045),rgba(255,255,255,.018));border:1px solid rgba(255,255,255,.07)}.ico{width:42px;height:42px;border-radius:12px;background:rgba(237,31,61,.12);display:grid;place-items:center;margin-bottom:20px}.card h3{margin:0 0 8px}.card p{margin:0;color:var(--muted);font-size:14px}.workflow{padding:10px 0 28px}.flow{display:grid;grid-template-columns:repeat(6,1fr);gap:9px}.flowstep{padding:13px 10px;border-radius:14px;border:1px solid rgba(255,255,255,.07);background:#111116;text-align:center;font-size:12px;font-weight:800;color:#d7d7de}.flowstep b{display:block;color:var(--red);font-size:10px;margin-bottom:4px}.controls{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}.controlchip{padding:8px 10px;border-radius:999px;border:1px solid #2b2b34;background:#101015;color:#c8c8d0;font-size:12px}
+.note{position:absolute;height:14px;border-radius:4px;background:linear-gradient(90deg,var(--red),#ff5068)}.features{padding:74px 0}.title{font-size:36px;letter-spacing:-.03em;margin:0 0 10px}.sub{color:var(--muted);max-width:720px;margin:0 0 30px}.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:15px}.card{padding:22px;min-height:190px;border-radius:20px;background:linear-gradient(160deg,rgba(255,255,255,.045),rgba(255,255,255,.018));border:1px solid rgba(255,255,255,.07)}.ico{width:42px;height:42px;border-radius:12px;background:rgba(237,31,61,.12);display:grid;place-items:center;margin-bottom:20px}.card h3{margin:0 0 8px}.card p{margin:0;color:var(--muted);font-size:14px}
 .buy{margin:20px 0 76px;padding:28px;border-radius:26px;border:1px solid rgba(237,31,61,.2);background:linear-gradient(140deg,rgba(237,31,61,.11),rgba(255,255,255,.025));display:grid;grid-template-columns:1.2fr .8fr;gap:20px}.buyright{display:flex;align-items:center;justify-content:flex-end;gap:10px;flex-wrap:wrap}
 footer{padding:34px 0 46px;border-top:1px solid rgba(255,255,255,.06);color:#80808a;font-size:13px}
 dialog{width:min(520px,calc(100% - 32px));border:1px solid #303039;border-radius:22px;background:#121217;color:white;padding:0}dialog::backdrop{background:rgba(0,0,0,.72);backdrop-filter:blur(5px)}.modal{padding:24px}.modal p{color:var(--muted)}.field{display:grid;gap:7px;margin:14px 0}.field input{background:#0b0b0f;border:1px solid #2b2b34;color:white;border-radius:12px;padding:13px}.modalrow{display:flex;justify-content:flex-end;gap:10px;margin-top:18px}
-@media(max-width:900px){.hero{grid-template-columns:1fr}.cards{grid-template-columns:1fr 1fr}.flow{grid-template-columns:repeat(3,1fr)}.buy{grid-template-columns:1fr}.buyright{justify-content:flex-start}}
-@media(max-width:620px){.links{display:none}.cards{grid-template-columns:1fr}.flow{grid-template-columns:1fr 1fr}.wrap{padding:0 16px}h1{font-size:52px}.hero{padding-top:58px}.roll{height:215px}}
+@media(max-width:900px){.hero{grid-template-columns:1fr}.cards{grid-template-columns:1fr 1fr}.buy{grid-template-columns:1fr}.buyright{justify-content:flex-start}}
+@media(max-width:620px){.links{display:none}.cards{grid-template-columns:1fr}.wrap{padding:0 16px}h1{font-size:52px}.hero{padding-top:58px}.roll{height:215px}}
 </style>
 <script src="https://cdn.paddle.com/paddle/v2/paddle.js"></script>
 </head>
@@ -39,14 +39,14 @@ dialog{width:min(520px,calc(100% - 32px));border:1px solid #303039;border-radius
 <div>
 <span class="tag"><span class="dot"></span> Audio → MIDI workflow for Logic Pro</span>
 <h1>Turn audio into editable MIDI.</h1>
-<p class="lead">Analyze a performance, compare MIDI against the original waveform, refine notes inside Anri Piano Roll, and move the result into your Logic Pro workflow from one focused interface.</p>
+<p class="lead">Analyze a performance, refine notes inside Anri Piano Roll, and move the result into your Logic Pro workflow from one focused interface.</p>
 <div class="actions"><button class="btn red" onclick="openPaddleCheckout()">Buy Anri Audio MIDI</button><a class="btn ghost" href="#features">See features</a></div>
 <p style="color:#777781;font-size:12px;margin-top:14px">macOS • Audio Unit • Logic Pro workflow</p>
 </div>
 <div class="mock"><div class="plugin">
 <div class="bar"><span>● ● ●</span><strong>ANRI AUDIO MIDI</strong><span>DAY / NIGHT</span></div>
 <div class="screen">
-<div class="screenhead"><span class="chip hot">ANALYZE</span><span class="chip">MIDI VIEW</span></div>
+<div class="screenhead"><span class="chip hot">ANALYZE AI</span><span class="chip">MIDI VIEW</span></div>
 <div class="roll">
 <span class="note" style="left:8%;top:65%;width:16%"></span>
 <span class="note" style="left:27%;top:55%;width:12%"></span>
@@ -57,35 +57,14 @@ dialog{width:min(520px,calc(100% - 32px));border:1px solid #303039;border-radius
 </div></div></div>
 </div>
 
-<section class="workflow"><div class="wrap">
-<div class="flow">
-<div class="flowstep"><b>01</b>Audio</div>
-<div class="flowstep"><b>02</b>Analyze</div>
-<div class="flowstep"><b>03</b>Piano Roll</div>
-<div class="flowstep"><b>04</b>Edit</div>
-<div class="flowstep"><b>05</b>Match / Quantize / Snap</div>
-<div class="flowstep"><b>06</b>Drag / Send MIDI</div>
-</div>
-</div></section>
-
 <section class="features" id="features"><div class="wrap">
-<h2 class="title">Audio to editable MIDI, with the original waveform still in view.</h2>
-<p class="sub">Analyze the performance, inspect MIDI against the source audio, edit the result, then drag or send it into your production workflow.</p>
+<h2 class="title">Built around the edit, not the export.</h2>
+<p class="sub">A streamlined workflow for detecting notes, checking the result visually, editing them, and sending MIDI into the DAW.</p>
 <div class="cards">
-<article class="card"><div class="ico">◉</div><h3>Analyze</h3><p>Run the main analysis pass and turn the available audio into an editable MIDI result.</p></article>
-<article class="card"><div class="ico">▦</div><h3>Piano Roll + Original Audio</h3><p>See MIDI notes on the pitch/time grid while the original waveform stays aligned underneath.</p></article>
-<article class="card"><div class="ico">✦</div><h3>Edit notes</h3><p>Move, resize, insert, delete, adjust velocity, and preview pitch while refining the result.</p></article>
-<article class="card"><div class="ico">≈</div><h3>Match Audio</h3><p>Match MIDI velocity to the local loudness of the original performance for a more natural dynamic result.</p></article>
-<article class="card"><div class="ico">⌗</div><h3>Quantize + Snap</h3><p>Clean timing with Quantize and Snap while keeping detailed control over note placement.</p></article>
-<article class="card"><div class="ico">↗</div><h3>Drag MIDI / Send MIDI</h3><p>Drag the MIDI into the project or send the prepared result through the host workflow.</p></article>
-<article class="card"><div class="ico">⇄</div><h3>MIDI routing</h3><p>Use host or external MIDI output, choose the MIDI channel, transpose, and constrain the pitch range.</p></article>
-<article class="card"><div class="ico">⌕</div><h3>Zoom + Preview</h3><p>Fit the phrase, zoom horizontally or vertically, then play, stop, and seek while checking edits.</p></article>
-<article class="card"><div class="ico">±</div><h3>Creative MIDI tools</h3><p>Use Randomise, Musical, Up +1, and Down -1 for fast variations and pitch adjustments.</p></article>
-</div>
-<h3 style="margin:30px 0 8px">Detection controls</h3>
-<p class="sub" style="margin-bottom:12px">Tune the analysis for different sources with dedicated controls.</p>
-<div class="controls">
-<span class="controlchip">Polyphony</span><span class="controlchip">Threshold</span><span class="controlchip">Sensitivity</span><span class="controlchip">Pitch Accuracy</span><span class="controlchip">Stability</span><span class="controlchip">Onset</span><span class="controlchip">Min Note</span><span class="controlchip">Release</span>
+<article class="card"><div class="ico">◉</div><h3>Analyze audio</h3><p>Convert a captured musical performance into an editable note view with waveform context.</p></article>
+<article class="card"><div class="ico">✦</div><h3>Edit directly</h3><p>Move, resize, delete, and refine detected notes from the Anri Piano Roll.</p></article>
+<article class="card"><div class="ico">⌘</div><h3>Logic workflow</h3><p>Designed around an Audio Unit workflow with Logic Pro as the production destination.</p></article>
+<article class="card"><div class="ico">↔</div><h3>Flexible view</h3><p>Zoom, snap, day/night UI, waveform view, and MIDI-oriented editing controls.</p></article>
 </div>
 </div></section>
 
