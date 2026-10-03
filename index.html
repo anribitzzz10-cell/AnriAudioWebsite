@@ -129,7 +129,7 @@ dialog{width:min(520px,calc(100% - 32px));border:1px solid #303039;border-radius
 <dialog id="buyD"><div class="modal"><h3>Paddle checkout</h3><p id="buyStatus">Checkout could not be opened. Check the Paddle sandbox settings and try again.</p><div class="modalrow"><button class="btn ghost" onclick="closeD('buyD')">Close</button></div></div></dialog>
 <dialog id="purchaseD"><div class="modal">
 <h3>Purchase complete</h3>
-<p id="purchaseStatus">Payment confirmed. Anri Cloud is creating your license…</p>
+<p id="purchaseStatus">Payment confirmed. Issuing your license now…</p>
 <div id="licenseResult" style="display:none">
   <p style="margin-bottom:8px">Your Anri Audio MIDI license:</p>
   <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
@@ -190,8 +190,11 @@ async function claimLicenseOnce(){
 function showIssuedLicense(result){
   const lic = result && result.license;
   if (!lic || !lic.key) return;
+  const emailNote = result.email
+    ? (result.email_sent ? " License sent to " + result.email + "." : " License issued for " + result.email + ".")
+    : "";
   document.getElementById("purchaseStatus").textContent =
-    result.email ? "License issued for " + result.email + "." : "Your license has been issued.";
+    "Your license is ready." + emailNote;
   document.getElementById("issuedLicenseKey").textContent = lic.key;
   document.getElementById("issuedMaxActivations").textContent = lic.max_activations || 2;
   document.getElementById("licenseResult").style.display = "block";
@@ -199,10 +202,34 @@ function showIssuedLicense(result){
   sessionStorage.removeItem("anri_claim_token");
 }
 
+async function finalizeLicenseFromCheckout(event){
+  if (!purchaseClaimToken) return null;
+  const data = event && event.data ? event.data : {};
+  const transactionId = data.transaction_id || "";
+  const customerEmail = data.customer && data.customer.email ? data.customer.email : null;
+  if (!transactionId) return null;
+
+  const response = await fetch(ANRI_CLOUD + "/v1/paddle/license/finalize", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({
+      transaction_id: transactionId,
+      claim_token: purchaseClaimToken,
+      customer_email: customerEmail
+    })
+  });
+
+  if (!response.ok) {
+    const text = await response.text();
+    throw new Error("Immediate license finalize failed: " + response.status + " " + text);
+  }
+  return await response.json();
+}
+
 async function waitForIssuedLicense(){
   const status = document.getElementById("purchaseStatus");
   const retry = document.getElementById("retryClaimButton");
-  status.textContent = "Payment confirmed. Anri Cloud is creating your license…";
+  status.textContent = "Payment confirmed. Issuing your license now…";
   retry.style.display = "none";
 
   for (let attempt = 0; attempt < 45; attempt++) {
@@ -254,7 +281,20 @@ function initializePaddle(){
           console.log("Anri Audio MIDI sandbox checkout completed", event);
           try { Paddle.Checkout.close(); } catch (_) {}
           if (!document.getElementById("purchaseD").open) openD("purchaseD");
-          waitForIssuedLicense();
+          document.getElementById("purchaseStatus").textContent = "Payment confirmed. Issuing your license now…";
+          (async () => {
+            try {
+              const result = await finalizeLicenseFromCheckout(event);
+              if (result && result.license && result.license.key) {
+                showIssuedLicense(result);
+                return;
+              }
+            } catch (error) {
+              console.error(error);
+            }
+            // Fallback: the verified Paddle webhook may arrive a moment later.
+            await waitForIssuedLicense();
+          })();
         }
       }
     });
