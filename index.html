@@ -145,17 +145,26 @@ dialog{width:min(520px,calc(100% - 32px));border:1px solid #303039;border-radius
 </div></dialog>
 <dialog id="licenseD"><div class="modal">
 <h3>My License</h3>
-<p>Enter the email or license key associated with your purchase.</p>
-<div class="field"><input id="licenseInput" placeholder="name@example.com or ANRI-..."></div>
-<button class="btn red" type="button" onclick="demoLookup()">Find license</button>
+<p>Enter the email used for your purchase, or paste an Anri license key.</p>
+
+<div class="field"><input id="licenseInput" autocomplete="email" inputmode="email" placeholder="name@example.com or ANRI-..."></div>
+<button class="btn red" type="button" id="findLicenseButton" onclick="startLicenseRecovery()">Find license</button>
 <p id="lookupStatus"></p>
-<div id="licenseCenterResult" style="display:none">
-  <p style="margin-bottom:8px">Your Anri Audio MIDI license:</p>
-  <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-    <code id="licenseCenterKey" style="display:block;padding:12px 14px;border-radius:12px;background:#0b0b0f;border:1px solid #2b2b34;word-break:break-all"></code>
-    <button id="copyLicenseCenterButton" class="btn ghost" type="button" onclick="copyLicenseCenterKey(this)">Copy</button>
+
+<div id="licenseCodeStep" style="display:none;margin-top:18px">
+  <p style="margin-bottom:8px">Enter the 6-digit code sent to your email:</p>
+  <div class="field"><input id="licenseCodeInput" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="123456"></div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap">
+    <button class="btn red" type="button" onclick="verifyLicenseRecovery()">Verify code</button>
+    <button class="btn ghost" type="button" onclick="resendLicenseRecovery()">Send again</button>
   </div>
 </div>
+
+<div id="licenseCenterResult" style="display:none;margin-top:18px">
+  <p style="margin-bottom:8px">Your Anri Audio MIDI license:</p>
+  <div id="licenseCenterResults"></div>
+</div>
+
 <div class="modalrow"><button class="btn ghost" onclick="closeD('licenseD')">Close</button></div>
 </div></dialog>
 <dialog id="downloadD"><div class="modal"><h3>Download</h3><p>The installer link will be connected after the signed macOS build is published.</p><div class="modalrow"><button class="btn ghost" onclick="closeD('downloadD')">Close</button></div></div></dialog>
@@ -404,30 +413,151 @@ function openPaddleCheckout(){
   }
 }
 
-function demoLookup(){
-  const v = document.getElementById("licenseInput").value.trim();
-  const status = document.getElementById("lookupStatus");
-  const result = document.getElementById("licenseCenterResult");
-  const keyEl = document.getElementById("licenseCenterKey");
+function setLicenseLookupStatus(message){
+  document.getElementById("lookupStatus").textContent = message || "";
+}
 
-  result.style.display = "none";
-  keyEl.textContent = "";
+function resetLicenseCenterResult(){
+  document.getElementById("licenseCenterResult").style.display = "none";
+  document.getElementById("licenseCenterResults").replaceChildren();
+}
 
-  if (!v) {
-    status.textContent = "Enter an email or license key first.";
+function renderRecoveredLicenses(data){
+  const licenses = data && Array.isArray(data.licenses) ? data.licenses : [];
+  const wrap = document.getElementById("licenseCenterResults");
+  wrap.replaceChildren();
+
+  for (const lic of licenses) {
+    const card = document.createElement("div");
+    card.style.cssText = "margin:10px 0 14px;padding:12px;border:1px solid #2b2b34;border-radius:12px;background:#0b0b0f";
+
+    const row = document.createElement("div");
+    row.style.cssText = "display:flex;gap:8px;align-items:center;flex-wrap:wrap";
+
+    const code = document.createElement("code");
+    code.textContent = lic.key || "";
+    code.style.cssText = "display:block;padding:12px 14px;border-radius:12px;background:#111118;border:1px solid #2b2b34;word-break:break-all;flex:1";
+
+    const copyButton = document.createElement("button");
+    copyButton.className = "btn ghost";
+    copyButton.type = "button";
+    copyButton.textContent = "Copy";
+    copyButton.addEventListener("click", async () => {
+      const copied = await copyTextReliable(lic.key || "");
+      showCopyFeedback(copyButton, copied);
+    });
+
+    row.append(code, copyButton);
+    card.append(row);
+
+    const meta = document.createElement("p");
+    meta.style.cssText = "font-size:13px;margin:10px 0 0";
+    const active = Number(lic.active_activations || 0);
+    const max = Number(lic.max_activations || 2);
+    meta.textContent = `Status: ${lic.status || "active"} • Activations: ${active}/${max}`;
+    card.append(meta);
+
+    wrap.append(card);
+  }
+
+  document.getElementById("licenseCenterResult").style.display = licenses.length ? "block" : "none";
+}
+
+async function startLicenseRecovery(){
+  const value = document.getElementById("licenseInput").value.trim();
+  const codeStep = document.getElementById("licenseCodeStep");
+
+  resetLicenseCenterResult();
+  codeStep.style.display = "none";
+
+  if (!value) {
+    setLicenseLookupStatus("Enter an email or license key first.");
     return;
   }
 
-  // Until email lookup is connected to Anri Cloud, a pasted license key can
-  // already be displayed and copied reliably from the License Center.
-  if (/^ANRI-[A-Z0-9-]+$/i.test(v)) {
-    keyEl.textContent = v.toUpperCase();
-    result.style.display = "block";
-    status.textContent = "License key ready.";
+  // A pasted key can still be copied immediately without contacting the server.
+  if (/^ANRI-[A-Z0-9-]+$/i.test(value)) {
+    renderRecoveredLicenses({
+      licenses: [{
+        key: value.toUpperCase(),
+        status: "key entered",
+        active_activations: 0,
+        max_activations: 2
+      }]
+    });
+    setLicenseLookupStatus("License key ready.");
     return;
   }
 
-  status.textContent = "Interface is ready. Next step: connect email lookup to Anri Cloud.";
+  if (!value.includes("@")) {
+    setLicenseLookupStatus("Enter the purchase email or a valid Anri license key.");
+    return;
+  }
+
+  setLicenseLookupStatus("Checking your purchase…");
+
+  try {
+    const response = await fetch(ANRI_CLOUD + "/v1/license/recovery/request", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({email: value})
+    });
+
+    if (!response.ok) {
+      const text = await response.text();
+      throw new Error("Recovery request failed: " + response.status + " " + text);
+    }
+
+    codeStep.style.display = "block";
+    document.getElementById("licenseCodeInput").value = "";
+    setLicenseLookupStatus("If this email has a purchase, a 6-digit verification code has been sent.");
+    document.getElementById("licenseCodeInput").focus();
+  } catch (error) {
+    console.error(error);
+    setLicenseLookupStatus("Could not contact Anri Cloud. Try again.");
+  }
+}
+
+async function resendLicenseRecovery(){
+  await startLicenseRecovery();
+}
+
+async function verifyLicenseRecovery(){
+  const email = document.getElementById("licenseInput").value.trim();
+  const code = document.getElementById("licenseCodeInput").value.trim();
+
+  resetLicenseCenterResult();
+
+  if (!email || !email.includes("@")) {
+    setLicenseLookupStatus("Enter the purchase email first.");
+    return;
+  }
+  if (!/^\d{6}$/.test(code)) {
+    setLicenseLookupStatus("Enter the 6-digit verification code.");
+    return;
+  }
+
+  setLicenseLookupStatus("Verifying…");
+
+  try {
+    const response = await fetch(ANRI_CLOUD + "/v1/license/recovery/verify", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({email, code})
+    });
+
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok) {
+      throw new Error(data.detail || "Verification failed");
+    }
+
+    renderRecoveredLicenses(data);
+    document.getElementById("licenseCodeStep").style.display = "none";
+    setLicenseLookupStatus("License found.");
+  } catch (error) {
+    console.error(error);
+    setLicenseLookupStatus(error.message || "Invalid or expired verification code.");
+  }
 }
 
 initializePaddle();
