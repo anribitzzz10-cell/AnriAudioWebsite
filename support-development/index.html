@@ -17,14 +17,74 @@ main{min-height:calc(100vh - 160px)}.hero{padding:90px 0 40px;max-width:850px}.t
 h1{font-size:clamp(44px,7vw,74px);line-height:1;letter-spacing:-.05em;margin:22px 0 20px}p{color:var(--muted);font-size:17px}.emphasis{color:var(--text);font-weight:700}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin:22px 0 30px}.card{padding:25px;border-radius:20px;background:linear-gradient(160deg,rgba(255,255,255,.045),rgba(255,255,255,.018));border:1px solid rgba(255,255,255,.07)}.card h2{font-size:20px;margin:0 0 9px}.card p{font-size:14px;margin:0}.status{display:inline-block;margin-top:22px;border:1px solid var(--line);border-radius:30px;padding:7px 11px;font-size:12px;color:#e4d3d5}.support-link{display:inline-block;margin-top:16px;padding:11px 15px;border:1px solid rgba(237,31,61,.35);border-radius:12px;background:rgba(237,31,61,.1);color:#ffe3e7;font-size:14px;font-weight:800}.support-link:hover{background:rgba(237,31,61,.2)}
 .note{margin:30px 0 80px;padding:22px 25px;border-radius:20px;background:linear-gradient(145deg,rgba(237,31,61,.09),rgba(255,255,255,.02));border:1px solid rgba(237,31,61,.2)}.note p{font-size:14px;margin:0}footer{padding:34px 0 46px;border-top:1px solid rgba(255,255,255,.06);color:#80808a;font-size:13px}
 @media(max-width:740px){.grid{grid-template-columns:1fr}.hero{padding:56px 0 22px}.wrap{padding:0 16px}}
+
+/* Payment details: responsive and finger-friendly */
+.payment-groups{display:grid;gap:22px;margin:26px 0 36px}
+.payment-group{border:1px solid rgba(255,255,255,.08);border-radius:22px;background:linear-gradient(160deg,rgba(255,255,255,.048),rgba(255,255,255,.012));padding:25px}
+.payment-group h2{font-size:24px;margin:0 0 4px;letter-spacing:-.02em}
+.group-intro{font-size:14px;margin:0 0 18px;color:var(--muted)}
+.payment-row{display:flex;gap:15px;align-items:center;justify-content:space-between;padding:15px 0;border-top:1px solid rgba(255,255,255,.065)}
+.payment-label{display:grid;gap:3px;min-width:110px}.payment-label strong{font-size:15px}.payment-label span{color:var(--muted);font-size:12px}
+.payment-action{display:flex;align-items:center;gap:11px;min-width:0}
+.payment-action code{font:600 14px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.02em;overflow-wrap:anywhere;color:#f3f3f8}
+.copy-button,.pay-link{font:700 13px/1.2 Inter,system-ui,sans-serif;border-radius:11px;border:1px solid rgba(237,31,61,.36);padding:11px 14px;color:#ffe5ea;background:rgba(237,31,61,.10);white-space:nowrap;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;min-height:42px}
+.copy-button:hover,.pay-link:hover{background:rgba(237,31,61,.20)}
+.copy-button:focus-visible,.pay-link:focus-visible{outline:2px solid #fff;outline-offset:2px}
+.copy-confirm{min-height:24px;text-align:center;font-size:13px;color:#d3f8d9}
+.payment-note{font-size:13px!important;color:#bcbcc7!important;margin:16px 0 0!important}
+.payment-group.boosty{border-color:rgba(237,31,61,.18)}
+@media(max-width:600px){.payment-group{padding:19px 16px}.payment-row{align-items:flex-start;flex-direction:column;gap:10px}.payment-action{width:100%;justify-content:space-between;gap:8px}.payment-action code{font-size:13px}.pay-link{width:100%}.payment-group h2{font-size:21px}}
 </style>
 </head>
 <body>
 <header><div class="wrap nav"><a class="brand" href="/"><span class="logo">A</span><span>Anri Audio</span></a><a class="back" href="/">← Back to Anri Audio</a></div></header>
 <main><div class="wrap"><section class="hero"><span class="tag"><span class="dot"></span> Completely optional</span><h1>♡ Support Development</h1><p class="emphasis">Anri Audio plugins are free for everyone.</p><p>If our tools help your music, you're welcome to support independent development. There are no paid features, no priority access, no reminders and no obligation to contribute. Everything works the same whether you support us or not.</p></section>
-<div class="grid"><article class="card"><h2>Boosty</h2><p>Official profile of Anri prod. / Anri Audio. Payout verification is in progress; please wait before sending donations.</p><a class="support-link" href="https://boosty.to/anriproduct" target="_blank" rel="noopener noreferrer">Official Boosty page ↗</a><br><span class="status">Payout verification in progress</span></article><article class="card"><h2>Kazakhstan</h2><p>Kaspi / Halyk support details will be added once verified.</p><span class="status">Not yet active</span></article><article class="card"><h2>International</h2><p>International support methods will be enabled after payout tests.</p><span class="status">Not yet active</span></article></div>
-<aside class="note"><p><strong>Our official Boosty profile is linked above to confirm the connection to Anri Audio.</strong> Payouts are being verified, so please wait before sending donations. All plugins are free and support is never required. Please avoid unofficial payment links.</p></aside>
+<p class="copy-confirm" id="copyStatus" role="status" aria-live="polite"></p>
+<div class="payment-groups">
+<section class="payment-group" id="kazakhstan" aria-labelledby="kzTitle">
+<h2 id="kzTitle">🇰🇿 Kazakhstan</h2><p class="group-intro">Voluntary support via Kazakhstan bank cards or Qplus. Tap Copy to transfer the card number.</p>
+<div class="payment-row"><div class="payment-label"><strong>Kaspi Bank</strong><span>Bank card</span></div><div class="payment-action"><code>4400 4306 4724 9090</code><button class="copy-button" type="button" data-copy="4400430647249090" aria-label="Copy Kaspi Bank number">Copy</button></div></div>
+<div class="payment-row"><div class="payment-label"><strong>Halyk Bank</strong><span>Bank card</span></div><div class="payment-action"><code>4146 2130 8044 1187</code><button class="copy-button" type="button" data-copy="4146213080441187" aria-label="Copy Halyk Bank number">Copy</button></div></div>
+<div class="payment-row"><div class="payment-label"><strong>Alatau City Bank</strong><span>Bank card</span></div><div class="payment-action"><code>5395 4550 2350 2758</code><button class="copy-button" type="button" data-copy="5395455023502758" aria-label="Copy Alatau City Bank number">Copy</button></div></div>
+<div class="payment-row"><div class="payment-label"><strong>Qplus</strong><span>External payment form</span></div><a class="pay-link" href="https://qpay-payform.qiwi.kz/form/invoice?invoiceUid=cec6cb48-cca3-4960-913b-34de8cb7e95b" target="_blank" rel="noopener noreferrer">Open ↗</a></div>
+</section>
+<section class="payment-group" id="russia" aria-labelledby="ruTitle">
+<h2 id="ruTitle">🇷🇺 Russia</h2><p class="group-intro">Choose YooMoney, Mir, Visa or Qplus. Transfer availability and fees depend on the sending bank or service.</p>
+<div class="payment-row"><div class="payment-label"><strong>YooMoney</strong><span>Wallet number</span></div><div class="payment-action"><code>410014809934355</code><button class="copy-button" type="button" data-copy="410014809934355" aria-label="Copy YooMoney number">Copy</button></div></div>
+<div class="payment-row"><div class="payment-label"><strong>Mir</strong><span>Card number</span></div><div class="payment-action"><code>2204 1201 4510 8458</code><button class="copy-button" type="button" data-copy="2204120145108458" aria-label="Copy Mir number">Copy</button></div></div>
+<div class="payment-row"><div class="payment-label"><strong>Visa</strong><span>Card number</span></div><div class="payment-action"><code>4048 4150 2098 4494</code><button class="copy-button" type="button" data-copy="4048415020984494" aria-label="Copy Visa number">Copy</button></div></div>
+<div class="payment-row"><div class="payment-label"><strong>Qplus</strong><span>External payment form</span></div><a class="pay-link" href="https://qpay-payform.qiwi.kz/form/invoice?invoiceUid=cec6cb48-cca3-4960-913b-34de8cb7e95b" target="_blank" rel="noopener noreferrer">Open ↗</a></div>
+</section>
+<section class="payment-group" id="international" aria-labelledby="intTitle">
+<h2 id="intTitle">🌍 International</h2><p class="group-intro">Voluntary support via PayPal.</p>
+<div class="payment-row"><div class="payment-label"><strong>PayPal</strong><span>paypal.me/anribeats</span></div><a class="pay-link" href="https://paypal.me/anribeats" target="_blank" rel="noopener noreferrer">Open ↗</a></div>
+</section>
+<section class="payment-group boosty" id="boosty" aria-labelledby="boostyTitle">
+<h2 id="boostyTitle">♡ Boosty</h2><p class="group-intro">Official Anri prod. / Anri Audio profile. Payout verification is still in progress, so please wait before sending donations through Boosty.</p>
+<div class="payment-row"><div class="payment-label"><strong>Boosty</strong><span>Official creator profile</span></div><a class="pay-link" href="https://boosty.to/anriproduct" target="_blank" rel="noopener noreferrer">Open ↗</a></div>
+</section>
+</div>
+<aside class="note"><p><strong>Support is completely optional.</strong> Anri Audio plugins remain free, with no extra features or priority access for supporters. Always verify the recipient and amount on your bank or payment service before confirming a transfer. Qplus invoice links may expire or be payable only once; check the payment form before sending. Boosty payouts are still being verified.</p></aside>
 </div></main>
 <footer><div class="wrap">© <span id="year"></span> Anri Audio • Free tools • Voluntary support</div></footer>
 <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+<script>
+(function(){
+  const status = document.getElementById('copyStatus');
+  document.querySelectorAll('[data-copy]').forEach(function(button){
+    button.addEventListener('click', async function(){
+      const value=button.getAttribute('data-copy');
+      let ok=false;
+      try {
+        if (navigator.clipboard && window.isSecureContext) {await navigator.clipboard.writeText(value);ok=true;}
+        else {
+          const temp=document.createElement('textarea');temp.value=value;temp.setAttribute('readonly','');temp.style.position='fixed';temp.style.opacity='0';document.body.appendChild(temp);temp.select();ok=document.execCommand('copy');temp.remove();
+        }
+      } catch(e){ok=false;}
+      if(ok){button.textContent='Copied ✓';status.textContent='Copied to clipboard';setTimeout(function(){button.textContent='Copy';status.textContent='';},2200);}
+      else {status.textContent='Could not copy automatically. Press and hold the number to copy it.';}
+    });
+  });
+})();
+</script>
 </body></html>
