@@ -132,6 +132,7 @@ dialog{width:min(520px,calc(100% - 32px));border:1px solid #303039;border-radius
 <section class="features" id="how-to-buy"><div class="wrap">
 <h2 class="title">Purchase options — being prepared</h2>
 <p class="sub">We are finalizing verified payment confirmation and secure license delivery before accepting orders. Please do not treat voluntary support transfers as license purchases.</p>
+<p class="muted-label" style="margin:-8px 0 24px">Payment methods may differ by country. Buyers in Russia should check supported international transfers, minimums and fees before paying. Do not send direct card transfers as license purchases.</p>
 <div class="cards">
 <article class="card"><div class="ico">♡</div><h3>Boosty</h3><p>Planned purchase channel with manual payment verification first. A dedicated product checkout link and confirmed terms will appear here when ready.</p><p style="margin-top:14px"><a class="boosty-link" href="https://boosty.to/anriproduct" target="_blank" rel="noopener noreferrer">Official Boosty profile ↗</a></p><p class="muted-label">Profile link is not a purchase link.</p></article>
 <article class="card"><div class="ico">◈</div><h3>International checkout</h3><p>Paddle integration is under review. Sandbox checkout is disabled. We will publish a working payment method only after its verification.</p><p class="muted-label" style="margin-top:14px">Not available yet</p></article>
@@ -164,9 +165,16 @@ dialog{width:min(520px,calc(100% - 32px));border:1px solid #303039;border-radius
 <p>Voluntary support for independent ANRI AUDIO development is separate from buying ANRI AUDIO MIDI. Donations do not issue a license, reserve a copy or unlock paid features. Please wait for the official purchase checkout when buying a license.</p>
 <a class="btn ghost" href="/support-development/" style="display:inline-block;margin-top:14px">Optional creator support ↗</a>
 </div></div></section>
+
+<section class="features" id="support"><div class="wrap">
+<div class="support-box">
+<h2 class="title">Technical support</h2>
+<p>Questions about installation, activation, license recovery or payment verification? A dedicated technical-support contact and published purchasing terms will be available before checkout opens. Do not send account details, license keys or payment information through donation comments.</p>
+<p class="muted-label">Commercial support and voluntary creator support are separate.</p>
+</div></div></section>
 </main>
 
-<footer id="support"><div class="wrap">© <span id="year"></span> ANRI AUDIO • <a href="#pricing">Licensing</a> • <a href="#how-to-buy">Purchase information</a> • <a href="#download">Downloads</a> • <a href="/support-development/">Optional support</a> • <a href="https://boosty.to/anriproduct" target="_blank" rel="noopener noreferrer">Official Boosty profile ↗</a></div></footer>
+<footer><div class="wrap">© <span id="year"></span> ANRI AUDIO • <a href="#pricing">Licensing</a> • <a href="#how-to-buy">Purchase information</a> • <a href="#download">Downloads</a> • <a href="/support-development/">Optional support</a> • <a href="https://boosty.to/anriproduct" target="_blank" rel="noopener noreferrer">Official Boosty profile ↗</a></div></footer>
 <script>
 document.getElementById("year").textContent = new Date().getFullYear();
 // No payment SDK, order endpoints, customer data capture or automatic licensing
