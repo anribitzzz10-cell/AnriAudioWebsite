@@ -12,8 +12,8 @@ This branch prepares the existing public website for a **future paid** ANRI AUDI
 ## Commercial messaging
 
 - ANRI AUDIO MIDI is moving toward a one-time perpetual license, with two-device activation intended.
-- Current proposed price is **not finally approved**. Website says "to be announced", not $39 or $59.
-- No working purchase link is confirmed. Boosty official profile `https://boosty.to/anriproduct` is listed only as a profile, **not** as checkout.
+- **Approved price: $39 USD** for a one-time perpetual license (full version), with intended activation on up to two devices and no subscription. Page prominently shows $39.
+- No working purchase link is confirmed. The **Buy for $39 — coming soon** button is visibly disabled, with no checkout event handler. Boosty official profile `https://boosty.to/anriproduct` is listed only as a profile, **not** as checkout.
 - Boosty currently requires manual independent payment confirmation; no official payment-verifying webhook is integrated.
 - Paddle Sandbox code has been excluded from the rendered main page; production Paddle checkout is not operational/verified.
 - No installer is published yet and the public license lookup/email recovery workflow is still under testing.
@@ -23,14 +23,14 @@ This branch prepares the existing public website for a **future paid** ANRI AUDI
 
 ## Files changed
 
-- `index.html`: new license/pricing (price pending), how-to-buy, license details, downloads and safe prelaunch copy. Removed all active Paddle JavaScript, paid transaction fetches, and obsolete free-mode dialogs.
+- `index.html`: $39 USD price block, permanently disabled prelaunch Buy button, how-to-buy, license details, downloads and safe prelaunch copy. No active Paddle JavaScript, paid transaction fetches, or free-mode dialogs.
 - `support-development/index.html`: clear warnings that donations/transfers never create or reserve a license.
 
 Other files including screenshots, favicons and webmanifest remain untouched.
 
 ## Release gates (not fulfilled)
 
-1. Confirm exact price/currency and user-approved terms, merchant contact, refund policy, privacy policy and support contact.
+1. Price is confirmed at **$39 USD**. Before checkout opens, confirm user-approved Terms of Sale, refund policy, privacy policy, merchant identity/contact, any payment-provider fees/taxes disclosures, and support contact.
 2. Complete payment route validation for target markets, independent proof of payment and merchant payout.
 3. Confirm license activation in the signed ANRI AUDIO MIDI plugin, with two-device policy and secure recovery.
 4. Finish Resend delivery and receipt tests, sender/recipient controls and safe retry behavior.
