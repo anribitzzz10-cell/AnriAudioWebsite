@@ -80,9 +80,9 @@
 .anri-artchips{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
 .anri-artchip{padding:8px 11px;border-radius:999px;border:1px solid rgba(255,255,255,.12);background:#101015;color:#dedce5;font-size:12px;font-weight:700}
 .anri-artvisual{padding:10px;border-radius:20px;background:#0f0f14;border:1px solid rgba(255,255,255,.09)}
-.anri-artvisual img{display:block;width:100%;height:auto;border-radius:13px}
+.anri-artvisual img{display:block;width:auto;max-width:100%;height:auto;margin-inline:auto;border-radius:13px}
 .anri-artfull{margin-top:18px;padding:12px;border-radius:20px;background:#0f0f14;border:1px solid rgba(255,255,255,.09)}
-.anri-artfull img{display:block;width:100%;height:auto;border-radius:14px}
+.anri-artfull img{display:block;width:auto;max-width:100%;height:auto;margin-inline:auto;border-radius:14px}
 .anri-artcaption{margin-top:9px;color:#aaa9b4;font-size:13px}
 @media(max-width:850px){.anri-artbox{grid-template-columns:1fr;gap:24px}}
 @media(max-width:700px){.anri-art{padding:16px 0 48px}.anri-artbox{padding:18px;border-radius:20px}.anri-artfull{padding:8px}}
@@ -126,7 +126,7 @@
       </div>
     </div>
   </section>
-  <section class="anri-art" id="articulations" aria-labelledby="articulations-heading">
+  <section class="anri-art wrap" id="articulations" aria-labelledby="articulations-heading">
 <div class="anri-artbox">
   <div class="anri-artcopy">
     <span class="anri-art-tag">Выразительность исполнения</span>
