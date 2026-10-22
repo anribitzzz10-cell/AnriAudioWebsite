@@ -69,13 +69,31 @@
     footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
     @media(max-width:930px){.hero,.showcase,.price-shell{grid-template-columns:1fr}.hero{padding-top:60px}.navlinks{gap:12px}.price-shell{padding:28px}.grid{grid-template-columns:repeat(2,1fr)}}
     @media(max-width:700px){.navlinks{display:none}.hero{gap:28px}.grid,.shots,.legal-grid,.faq{grid-template-columns:1fr}.workflow{grid-template-columns:1fr 1fr}.wrap{width:min(100% - 30px,1120px)}.section{padding:50px 0}.price-shell{padding:20px}.legal-panel dl{grid-template-columns:1fr;gap:3px}.legal-panel dd{margin-bottom:10px}h1{font-size:50px}}
-  </style>
+  
+/* Articulation feature — mirrored from the existing English presentation */
+.anri-art{padding:24px 0 70px}
+.anri-artbox{display:grid;grid-template-columns:.92fr 1.08fr;gap:28px;align-items:center;padding:28px;border-radius:26px;border:1px solid rgba(237,31,61,.25);background:linear-gradient(145deg,rgba(237,31,61,.11),rgba(255,255,255,.02))}
+.anri-art-tag{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;background:rgba(237,31,61,.12);border:1px solid rgba(237,31,61,.32);border-radius:99px;color:#ffbac6;font-size:12px;font-weight:800}
+.anri-art-tag::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:#ed1f3d}
+.anri-art-title{font-size:clamp(30px,3.6vw,42px);letter-spacing:-.045em;line-height:1.16;margin:16px 0;color:#f6f5f7}
+.anri-artcopy p{color:#bab7c2;font-size:15px;line-height:1.65;margin:0 0 14px}
+.anri-artchips{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.anri-artchip{padding:8px 11px;border-radius:999px;border:1px solid rgba(255,255,255,.12);background:#101015;color:#dedce5;font-size:12px;font-weight:700}
+.anri-artvisual{padding:10px;border-radius:20px;background:#0f0f14;border:1px solid rgba(255,255,255,.09)}
+.anri-artvisual img{display:block;width:100%;height:auto;border-radius:13px}
+.anri-artfull{margin-top:18px;padding:12px;border-radius:20px;background:#0f0f14;border:1px solid rgba(255,255,255,.09)}
+.anri-artfull img{display:block;width:100%;height:auto;border-radius:14px}
+.anri-artcaption{margin-top:9px;color:#aaa9b4;font-size:13px}
+@media(max-width:850px){.anri-artbox{grid-template-columns:1fr;gap:24px}}
+@media(max-width:700px){.anri-art{padding:16px 0 48px}.anri-artbox{padding:18px;border-radius:20px}.anri-artfull{padding:8px}}
+
+</style>
 </head>
 <body>
 <header>
   <div class="wrap nav">
     <a class="brand" href="../" aria-label="ANRI AUDIO — главная"><span class="brand-mark">A</span><span>ANRI AUDIO</span></a>
-    <nav class="navlinks" aria-label="Навигация"><a href="#product">Программа</a><a href="#functions">Функции</a><a href="#price">Лицензия</a><a href="#seller">Разработчик</a><a href="#faq">Вопросы</a><a href="../kk/" lang="kk">ҚАЗ</a></nav>
+    <nav class="navlinks" aria-label="Навигация"><a href="#product">Программа</a><a href="#functions">Функции</a><a href="#articulations">Артикуляции</a><a href="#price">Лицензия</a><a href="#seller">Разработчик</a><a href="#faq">Вопросы</a><a href="../kk/" lang="kk">ҚАЗ</a></nav>
     <a class="enlink" href="../" lang="en">EN ↗</a>
   </div>
 </header>
@@ -108,7 +126,23 @@
       </div>
     </div>
   </section>
-  <section class="section" style="padding-top:0">
+  <section class="anri-art" id="articulations" aria-labelledby="articulations-heading">
+<div class="anri-artbox">
+  <div class="anri-artcopy">
+    <span class="anri-art-tag">Выразительность исполнения</span>
+    <h2 class="anri-art-title" id="articulations-heading">Распознавание артикуляций</h2>
+    <p>Не только высота и длительность нот: ANRI AUDIO MIDI показывает характеристики артикуляции и выразительности исходного исполнения рядом с подготовленными MIDI-данными.</p>
+    <p>Перед переносом MIDI в Logic Pro можно изучить характер исходной фразы — от Legato и Portamento до Vibrato, Expression и других параметров. Все показатели собраны в одной наглядной панели.</p>
+    <div class="anri-artchips" aria-label="Параметры артикуляции"><span class="anri-artchip">Portamento</span><span class="anri-artchip">Legato</span><span class="anri-artchip">Decay</span><span class="anri-artchip">Sustain</span><span class="anri-artchip">Attack Time</span><span class="anri-artchip">Release Time</span><span class="anri-artchip">Tremolo</span><span class="anri-artchip">Sostenuto</span><span class="anri-artchip">Harmonic</span><span class="anri-artchip">Pitch</span><span class="anri-artchip">Expression</span><span class="anri-artchip">Vibrato</span><span class="anri-artchip">Breath</span><span class="anri-artchip">Articul</span></div>
+  </div>
+  <div class="anri-artvisual"><img src="../assets/articulation_panel_real.png" alt="Реальная панель Articulation Detection с параметрами выразительности исполнения" loading="lazy"></div>
+</div>
+<div class="anri-artfull">
+  <img src="../assets/articulation_control_real.png" alt="Реальный интерфейс ANRI AUDIO MIDI с ANALYZE и REC ARTICULATION" loading="lazy">
+  <div class="anri-artcaption">Реальная панель управления: ANALYZE и REC ARTICULATION.</div>
+</div>
+</section>
+<section class="section" style="padding-top:0">
     <div class="wrap">
       <span class="eyebrow">Интерфейс программы</span>
       <h2>Скриншоты из реальной версии</h2>

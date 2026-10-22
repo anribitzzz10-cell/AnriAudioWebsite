@@ -31,16 +31,50 @@ dl{display:grid;grid-template-columns:190px minmax(0,1fr);gap:12px 20px;margin:0
 footer{padding:26px 0 42px;border-top:1px solid var(--line);font-size:13px;color:#a19fab}
 footer .wrap{display:flex;flex-wrap:wrap;gap:15px;justify-content:space-between}footer a{color:#d7d5dd;text-decoration:none}
 @media(max-width:680px){.wrap{width:calc(100% - 30px)}.nav{flex-wrap:wrap;padding:12px 0}.navlinks{gap:12px;flex-wrap:wrap}.hero{padding-top:46px}.paper{gap:12px}.section{padding:20px}dl{grid-template-columns:1fr;gap:3px}dd{margin-bottom:13px}}
+
+/* Articulation feature — mirrored from the existing English presentation */
+.anri-art{padding:24px 0 70px}
+.anri-artbox{display:grid;grid-template-columns:.92fr 1.08fr;gap:28px;align-items:center;padding:28px;border-radius:26px;border:1px solid rgba(237,31,61,.25);background:linear-gradient(145deg,rgba(237,31,61,.11),rgba(255,255,255,.02))}
+.anri-art-tag{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;background:rgba(237,31,61,.12);border:1px solid rgba(237,31,61,.32);border-radius:99px;color:#ffbac6;font-size:12px;font-weight:800}
+.anri-art-tag::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:#ed1f3d}
+.anri-art-title{font-size:clamp(30px,3.6vw,42px);letter-spacing:-.045em;line-height:1.16;margin:16px 0;color:#f6f5f7}
+.anri-artcopy p{color:#bab7c2;font-size:15px;line-height:1.65;margin:0 0 14px}
+.anri-artchips{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.anri-artchip{padding:8px 11px;border-radius:999px;border:1px solid rgba(255,255,255,.12);background:#101015;color:#dedce5;font-size:12px;font-weight:700}
+.anri-artvisual{padding:10px;border-radius:20px;background:#0f0f14;border:1px solid rgba(255,255,255,.09)}
+.anri-artvisual img{display:block;width:100%;height:auto;border-radius:13px}
+.anri-artfull{margin-top:18px;padding:12px;border-radius:20px;background:#0f0f14;border:1px solid rgba(255,255,255,.09)}
+.anri-artfull img{display:block;width:100%;height:auto;border-radius:14px}
+.anri-artcaption{margin-top:9px;color:#aaa9b4;font-size:13px}
+@media(max-width:850px){.anri-artbox{grid-template-columns:1fr;gap:24px}}
+@media(max-width:700px){.anri-art{padding:16px 0 48px}.anri-artbox{padding:18px;border-radius:20px}.anri-artfull{padding:8px}}
+
 </style>
 </head>
 <body>
 <header><div class="wrap nav">
 <a class="brand" href="./"><span class="brand-mark">A</span><span>ANRI AUDIO</span></a>
-<nav class="navlinks" aria-label="Бөлімдер"><a href="./" aria-current="page">Бағдарлама</a><a href="terms/" >Сатып алу шарттары</a><a href="contacts/" >Байланыс</a><a href="../ru/" lang="ru">RU</a></nav>
+<nav class="navlinks" aria-label="Бөлімдер"><a href="./" aria-current="page">Бағдарлама</a><a href="#articulations">Артикуляциялар</a><a href="terms/" >Сатып алу шарттары</a><a href="contacts/" >Байланыс</a><a href="../ru/" lang="ru">RU</a></nav>
 </div></header>
 <main class="wrap"><section class="hero"><span class="eyebrow">Музыкалық бағдарламалық жасақтама</span><h1>Аудиодан MIDI-ге. Бір терезеде.</h1><p class="lead">ANRI AUDIO MIDI — музыкалық аудионы өңделетін MIDI ноталарына айналдыруға арналған плагин. Нәтижені Piano Roll терезесінде көріп, түзетіп, Logic Pro жобасына тасымалдаңыз.</p><div class="draft"><strong>Назар аударыңыз.</strong> Коммерциялық шығарылым әзірленіп жатыр. Тапсырыстар мен төлемдер әзірге қабылданбайды.</div></section>
 <div class="paper">
 <section class="section"><h2>Бағдарлама мүмкіндіктері</h2><ul><li><strong>ANALYZE:</strong> аудиоматериалды талдау және MIDI ноталарын құрастыру</li><li><strong>Piano Roll:</strong> ноталардың биіктігін, басталу уақытын, ұзақтығын және velocity мәндерін өңдеу</li><li><strong>Preview:</strong> MIDI нәтижесін алдын ала тыңдау</li><li><strong>Quantize және Snap:</strong> ырғақтық торға туралау</li><li><strong>Drag &amp; Drop және SEND MIDI:</strong> MIDI деректерін Logic Pro жобасына тасымалдау</li></ul></section>
+<section class="anri-art" id="articulations" aria-labelledby="articulations-heading">
+<div class="anri-artbox">
+  <div class="anri-artcopy">
+    <span class="anri-art-tag">Орындау мәнерінің ерекшеліктері</span>
+    <h2 class="anri-art-title" id="articulations-heading">Артикуляцияларды анықтау</h2>
+    <p>ANRI AUDIO MIDI ноталардың биіктігі мен ұзақтығынан бөлек, бастапқы орындаудың артикуляциясы мен мәнерлілік сипаттамаларын MIDI деректерімен қатар көрсетеді.</p>
+    <p>MIDI деректерін Logic Pro жобасына тасымалдамас бұрын бастапқы фразаның сипатын қарап шығыңыз: Legato, Portamento, Vibrato, Expression және басқа параметрлер бір панельде берілген.</p>
+    <div class="anri-artchips" aria-label="Артикуляция параметрлері"><span class="anri-artchip">Portamento</span><span class="anri-artchip">Legato</span><span class="anri-artchip">Decay</span><span class="anri-artchip">Sustain</span><span class="anri-artchip">Attack Time</span><span class="anri-artchip">Release Time</span><span class="anri-artchip">Tremolo</span><span class="anri-artchip">Sostenuto</span><span class="anri-artchip">Harmonic</span><span class="anri-artchip">Pitch</span><span class="anri-artchip">Expression</span><span class="anri-artchip">Vibrato</span><span class="anri-artchip">Breath</span><span class="anri-artchip">Articul</span></div>
+  </div>
+  <div class="anri-artvisual"><img src="../assets/articulation_panel_real.png" alt="Орындау мәнерінің параметрлері көрсетілген Articulation Detection панелі" loading="lazy"></div>
+</div>
+<div class="anri-artfull">
+  <img src="../assets/articulation_control_real.png" alt="ANALYZE және REC ARTICULATION батырмалары бар ANRI AUDIO MIDI интерфейсі" loading="lazy">
+  <div class="anri-artcaption">Нақты интерфейс: ANALYZE және REC ARTICULATION басқару элементтері.</div>
+</div>
+</section>
 <section class="section"><h2>Үйлесімділік</h2><p><strong>macOS:</strong> Logic Pro бағдарламасына арналған Audio Unit (AUv2) плагині.</p><p><strong>Windows VST3:</strong> жеке әзірленіп жатыр, қазіргі ұсынысқа кірмейді.</p></section>
 <section class="section"><span class="chip">Жоспарланған коммерциялық нұсқа</span><h2 style="margin-top:14px">Біржолғы лицензия — 39 USD</h2><p><strong>Бағасы: 39 АҚШ доллары (USD).</strong> Бір рет төленетін мерзімсіз лицензия. Ай сайынғы немесе жыл сайынғы міндетті жазылым жоқ.</p><p>Екі құрылғыда белсендіру — іске қосылғанға дейін түпкілікті бекітілетін жоспарланған шарт. Нақты төлем валютасы мен төлем тәсілдері төлем беті іске қосылғанда көрсетіледі.</p><button type="button" disabled style="padding:11px 16px;background:#49212b;border:1px solid #89404f;color:#fff;opacity:.7;border-radius:10px;font-weight:700;cursor:not-allowed">39 USD — сату әлі ашылған жоқ</button><p class="note" style="margin-top:14px">Бұл бет төлемдерді немесе банк карталарының деректерін қабылдамайды.</p><p><a href="terms/">Сатып алу шарттарының жобасы</a> · <a href="contacts/">Сатушының деректемелері</a></p></section>
 <section class="section"><h2>Әзірлеуші және сатушы</h2><p>ANRI AUDIO MIDI бағдарламасын Қазақстан Республикасында тіркелген <strong>«Анрипрод» ЖК — Безручкин Андрей Александрович</strong> әзірлейді және сатуға дайындайды.</p><p>ЖСН: 921007301843. Қызмет түрі: ЭҚЖЖ 58290 — өзге бағдарламалық қамтамасыз етуді шығару.</p><p>Заңды мекенжай мен байланыс деректері: <a href="contacts/">Сатушы туралы мәліметтер</a>.</p></section>
