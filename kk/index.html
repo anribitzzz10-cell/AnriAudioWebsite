@@ -49,6 +49,16 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:15px;justify-content:space-between}
 @media(max-width:850px){.anri-artbox{grid-template-columns:1fr;gap:24px}}
 @media(max-width:700px){.anri-art{padding:16px 0 48px}.anri-artbox{padding:18px;border-radius:20px}.anri-artfull{padding:8px}}
 
+
+.anri-gallery-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px;margin-top:22px}
+.anri-gallery-card{margin:0;min-width:0;overflow:hidden;border-radius:17px;background:#101015;border:1px solid rgba(255,255,255,.12)}
+.anri-gallery-card img{display:block;width:100%;height:auto;object-fit:contain;aspect-ratio:1106/904;background:#0c0c11}
+.anri-gallery-card figcaption{padding:14px;color:#cbc9d4;font-size:13px;line-height:1.55}
+.anri-gallery-card figcaption strong{display:block;color:#f5f4f8;font-size:14px;margin-bottom:6px}
+.anri-gallery-card figcaption span{display:block}
+@media(max-width:850px){.anri-gallery-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.anri-gallery-grid{grid-template-columns:1fr}}
+
 </style>
 </head>
 <body>
@@ -74,6 +84,16 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:15px;justify-content:space-between}
   <img src="../assets/articulation_control_real.png" alt="ANALYZE және REC ARTICULATION батырмалары бар ANRI AUDIO MIDI интерфейсі" loading="lazy">
   <div class="anri-artcaption">Нақты интерфейс: ANALYZE және REC ARTICULATION басқару элементтері.</div>
 </div>
+</section>
+<section class="section" id="screenshots" aria-labelledby="screenshots-title">
+  <span class="eyebrow">Бағдарламаның нақты интерфейсі</span>
+  <h2 id="screenshots-title" style="margin-top:10px">ANRI AUDIO MIDI — скриншоттар</h2>
+  <p>Плагиннің нақты жұмыс көріністері: бастапқы аудиомен бірге MIDI ноталарын өңдеу, артикуляцияны көру және Piano Roll ішінде нотаны дәл өзгерту.</p>
+  <div class="anri-gallery-grid">
+   <figure class="anri-gallery-card"><img src="../assets/anri-showcase-piano-roll-20261023.webp" alt="ANRI AUDIO MIDI Piano Roll: MIDI ноталары және бастапқы аудиотолқын" loading="lazy" width="1106" height="904"><figcaption><strong>Piano Roll және бастапқы аудио</strong><span>MIDI ноталарының биіктігі мен уақытын бастапқы аудиотолқынмен салыстырып өңдеңіз.</span></figcaption></figure>
+   <figure class="anri-gallery-card"><img src="../assets/anri-showcase-articulations-20261023.webp" alt="ANRI AUDIO MIDI: MIDI оқиғалары мен артикуляция параметрлері" loading="lazy" width="1106" height="904"><figcaption><strong>Артикуляциялар мен орындау мәнері</strong><span>MIDI оқиғаларын орындау параметрлерімен және түрлі түсті көрсеткіштермен бірге қараңыз.</span></figcaption></figure>
+   <figure class="anri-gallery-card"><img src="../assets/anri-showcase-note-editing-20261023.webp" alt="ANRI AUDIO MIDI: таңдалған MIDI нотасы мен бастапқы аудиотолқын" loading="lazy" width="1106" height="904"><figcaption><strong>MIDI ноталарын дәл өңдеу</strong><span>Жеке бөліктерді үлкейтіп, ноталардың орнын және ұзақтығын өзгертіп, нәтижені тексеріңіз.</span></figcaption></figure>
+  </div>
 </section>
 <section class="section"><h2>Үйлесімділік</h2><p><strong>macOS:</strong> Logic Pro бағдарламасына арналған Audio Unit (AUv2) плагині.</p><p><strong>Windows VST3:</strong> жеке әзірленіп жатыр, қазіргі ұсынысқа кірмейді.</p></section>
 <section class="section"><span class="chip">Жоспарланған коммерциялық нұсқа</span><h2 style="margin-top:14px">Біржолғы лицензия — 39 USD</h2><p><strong>Бағасы: 39 АҚШ доллары (USD).</strong> Бір рет төленетін мерзімсіз лицензия. Ай сайынғы немесе жыл сайынғы міндетті жазылым жоқ.</p><p>Екі құрылғыда белсендіру — іске қосылғанға дейін түпкілікті бекітілетін жоспарланған шарт. Нақты төлем валютасы мен төлем тәсілдері төлем беті іске қосылғанда көрсетіледі.</p><button type="button" disabled style="padding:11px 16px;background:#49212b;border:1px solid #89404f;color:#fff;opacity:.7;border-radius:10px;font-weight:700;cursor:not-allowed">39 USD — сату әлі ашылған жоқ</button><p class="note" style="margin-top:14px">Бұл бет төлемдерді немесе банк карталарының деректерін қабылдамайды.</p><p><a href="terms/">Сатып алу шарттарының жобасы</a> · <a href="contacts/">Сатушының деректемелері</a></p></section>
