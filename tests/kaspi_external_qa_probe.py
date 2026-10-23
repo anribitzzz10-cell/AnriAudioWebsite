@@ -166,7 +166,22 @@ def main():
     )
     assert attempt_status == 503, f"SECURITY: staging checkout enabled HTTP {attempt_status}"
     print("PASS staging checkout remains disabled even with valid idempotency token")
-    print("PASS all 11 external QA checks")
+    # Seller HTML remains inaccessible until a dedicated operator password is
+    # provisioned. The powerful admin API secret is NOT a panel password.
+    hidden_panel, _, hidden_body = request("/internal/kaspi")
+    assert hidden_panel == 404, f"SECURITY: disabled seller panel returned {hidden_panel}"
+    assert b"customer_email" not in hidden_body and b"<table" not in hidden_body
+    print("PASS seller panel fails closed until its separate operator password exists")
+
+    malformed_status, _, _ = request("/v1/kaspi/orders/not-a-real-order")
+    assert malformed_status == 404, f"Malformed public order ID returned {malformed_status}"
+    print("PASS malformed public order lookup rejected without reaching order data")
+
+    valid_status, valid_headers, valid_body = request("/v1/kaspi/orders/" + test_id)
+    assert valid_status == 200 and json.loads(valid_body)["status"] == "pending"
+    assert valid_headers.get("Cache-Control") == "private, no-store", "QA buyer status is cacheable"
+    print("PASS public status no-store and synthetic pending order preserved")
+    print("PASS all 14 external QA checks")
 
     # Seller verification diagnostic: public site only; does not print identifiers.
     from seller_public_info_audit import main as seller_audit
