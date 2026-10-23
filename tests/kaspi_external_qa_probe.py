@@ -192,7 +192,21 @@ def main():
     )
     assert b"license_key" not in unknown_body and b"customer_email" not in unknown_body
     print("PASS unknown opaque order ID rejected without disclosure; no QA flood test")
-    print("PASS all 15 external QA checks")
+    # Hostile visitor-supplied forwarding headers must NOT affect the QA
+    # route's effective client identity (socket mode is default). This
+    # deliberately uses one harmless negative lookup, not a traffic flood.
+    spoof_status, _, spoof_payload = request(
+        "/v1/kaspi/orders/KSP-" + "E" * 32,
+        headers={
+            "X-Real-IP": "8.8.8.8",
+            "X-Forwarded-For": "9.9.9.9",
+            "CF-Connecting-IP": "1.1.1.1",
+        },
+    )
+    assert spoof_status == 404, f"SECURITY: unsafe forwarding header path {spoof_status}"
+    assert b"license_key" not in spoof_payload and b"customer_email" not in spoof_payload
+    print("PASS forged forwarding headers do not expose customer data in disabled QA")
+    print("PASS all 16 external QA checks")
 
     # Seller verification diagnostic: public site only; does not print identifiers.
     from seller_public_info_audit import main as seller_audit
