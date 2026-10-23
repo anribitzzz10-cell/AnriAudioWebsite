@@ -72,7 +72,8 @@
   const link = document.getElementById("kaspi-link");
   const check = document.getElementById("check");
   let orderId = null;
-  if (base && /^https:\/\//.test(base)) {
+  const loopbackTest = location.hostname === "127.0.0.1" && /^http:\/\/127\.0\.0\.1:[0-9]+$/.test(base);
+  if (base && (/^https:\/\//.test(base) || loopbackTest)) {
     create.disabled = false;
     feedback.textContent = "Тестовая форма подключена к серверу. До подтверждения релиза не совершайте реальный платёж.";
   }
