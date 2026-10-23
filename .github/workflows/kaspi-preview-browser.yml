@@ -1,0 +1,30 @@
+name: Kaspi Checkout Preview — Browser Tests
+
+on:
+  push:
+    branches:
+      - feature/kaspi-checkout-preview-20261023
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  isolated-kaspi-preview:
+    if: github.head_ref == 'feature/kaspi-checkout-preview-20261023' || github.ref_name == 'feature/kaspi-checkout-preview-20261023'
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    container:
+      image: mcr.microsoft.com/playwright:v1.56.1-noble
+      options: --ipc=host
+    steps:
+      - uses: actions/checkout@v4
+        name: Checkout preview branch
+      - name: Install browser testing tools
+        run: npm install --no-save --no-audit --no-fund @playwright/test@1.56.1
+      - name: Test checkout in browser with mocked payment API only
+        env:
+          CI: "true"
+        run: npx playwright test tests/kaspi-preview.spec.js --browser=chromium --reporter=line

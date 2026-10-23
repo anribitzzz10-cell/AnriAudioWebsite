@@ -1,0 +1,25 @@
+name: Kaspi QA — External HTTPS Probe (Read Only)
+
+on:
+  push:
+    branches:
+      - feature/kaspi-checkout-preview-20261023
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  qa-public-probe:
+    if: github.head_ref == 'feature/kaspi-checkout-preview-20261023' || github.ref_name == 'feature/kaspi-checkout-preview-20261023'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Verify live QA HTTPS without payments or credentials
+        run: python tests/kaspi_external_qa_probe.py
