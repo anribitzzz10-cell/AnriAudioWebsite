@@ -138,7 +138,16 @@ def main():
     status, _, raw_after = request("/v1/kaspi/orders/" + test_id)
     assert status == 200 and json.loads(raw_after)["status"] == "pending"
     print("PASS invalid admin confirmation rejected; QA order remains pending")
-    print("PASS all 8 external QA checks")
+    # Operator queue exists on the deployed QA server, but access is private.
+    list_status, _, _ = request("/admin/kaspi/orders?status_filter=pending")
+    assert list_status == 401, f"SECURITY: public Kaspi order queue allowed HTTP {list_status}"
+    wrong_status, _, _ = request(
+        "/admin/kaspi/orders?status_filter=all",
+        headers={"X-Admin-Key": "invalid-test-only"},
+    )
+    assert wrong_status == 401, f"SECURITY: fake admin key allowed HTTP {wrong_status}"
+    print("PASS operator reconciliation queue requires admin authentication")
+    print("PASS all 9 external QA checks")
 
     # Seller verification diagnostic: public site only; does not print identifiers.
     from seller_public_info_audit import main as seller_audit
