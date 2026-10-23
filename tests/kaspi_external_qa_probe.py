@@ -206,7 +206,24 @@ def main():
     assert spoof_status == 404, f"SECURITY: unsafe forwarding header path {spoof_status}"
     assert b"license_key" not in spoof_payload and b"customer_email" not in spoof_payload
     print("PASS forged forwarding headers do not expose customer data in disabled QA")
-    print("PASS all 16 external QA checks")
+    # A spoofed peer header must never turn a staged checkout back on.
+    # One synthetic .invalid request, no real merchant bank transaction.
+    spoof_create_status, _, spoof_create_body = request(
+        "/v1/kaspi/orders", method="POST",
+        data=json.dumps({"customer_email": "qa-proxy-guard@example.invalid"}).encode(),
+        headers={
+            "Content-Type": "application/json",
+            "Idempotency-Key": "QA-INDEPENDENT-LAUNCH-GATE-20261023",
+            "X-Real-IP": "8.8.8.8",
+            "X-Forwarded-For": "9.9.9.9",
+        },
+    )
+    assert spoof_create_status == 503, (
+        f"SECURITY: spoofed headers enabled Kaspi checkout {spoof_create_status}"
+    )
+    assert b"payment_url" not in spoof_create_body and b"license_key" not in spoof_create_body
+    print("PASS commercial Kaspi checkout stays disabled with attacker forwarding headers")
+    print("PASS all 17 external QA checks")
 
     # Seller verification diagnostic: public site only; does not print identifiers.
     from seller_public_info_audit import main as seller_audit
