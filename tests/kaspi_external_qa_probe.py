@@ -78,6 +78,8 @@ def main():
                 assert "ANRI AUDIO MIDI" in html
                 assert "Оплата пока недоступна" in html
                 assert "QA API доступен" in html, "Preview cannot reach its own API backend"
+                assert "KSP-QA-20261023-PENDING-00001" in html, "QA order ID missing from read-only preview"
+                assert "тест успешно прочитан из PostgreSQL" in html, "QA order cannot be read by preview"
                 assert "https://pay.kaspi.kz/pay/" not in html
                 print("PASS public preview HTML and server-to-server QA API health integration")
                 break
