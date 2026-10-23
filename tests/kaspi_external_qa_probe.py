@@ -181,7 +181,18 @@ def main():
     assert valid_status == 200 and json.loads(valid_body)["status"] == "pending"
     assert valid_headers.get("Cache-Control") == "private, no-store", "QA buyer status is cacheable"
     print("PASS public status no-store and synthetic pending order preserved")
-    print("PASS all 14 external QA checks")
+    # Probe the new status-throttling path gently: one opaque, correctly
+    # shaped unknown order only. Do NOT flood the shared QA fixture.
+    candidate_id = "KSP-" + "F" * 32
+    unknown_status, unknown_headers, unknown_body = request(
+        "/v1/kaspi/orders/" + candidate_id
+    )
+    assert unknown_status == 404, (
+        f"SECURITY: unexpected result for an unknown opaque ID: {unknown_status}"
+    )
+    assert b"license_key" not in unknown_body and b"customer_email" not in unknown_body
+    print("PASS unknown opaque order ID rejected without disclosure; no QA flood test")
+    print("PASS all 15 external QA checks")
 
     # Seller verification diagnostic: public site only; does not print identifiers.
     from seller_public_info_audit import main as seller_audit
