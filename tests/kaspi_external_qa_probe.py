@@ -103,7 +103,25 @@ def main():
         post_status = exc.code
     assert post_status == 405, f"SECURITY: QA preview accepted POST ({post_status})"
     print("PASS preview refuses POST; no orders, no payment")
-    print("PASS all 6 external QA checks")
+    print("PASS six existing external QA checks")
+
+    # One synthetic order inserted by a one-time Railway QA seed script.
+    # The public lookup must never reveal email, payment ref or license key.
+    test_id = "KSP-QA-20261023-PENDING-00001"
+    status, headers, body = request("/v1/kaspi/orders/" + test_id)
+    assert status == 200, f"QA pending-order lookup returned HTTP {status}"
+    test_order = json.loads(body)
+    assert test_order == {
+        "order_id": test_id,
+        "status": "pending",
+        "currency": "KZT",
+        "amount_kzt": 20000,
+    }, f"Unexpected QA order data: {test_order}"
+    assert b"qa-20261023@example.invalid" not in body, "Email exposed in public order status"
+    assert b"license_key" not in body and b"payment_reference" not in body
+    print("PASS persisted pending QA order read via public API without PII or license")
+    print("PASS all 7 external QA checks")
+
 
 
 if __name__ == "__main__":
