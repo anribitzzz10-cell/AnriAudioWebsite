@@ -65,7 +65,45 @@ def main():
     assert status == 200
     assert headers.get("Access-Control-Allow-Origin") is None, "SECURITY: wildcard CORS"
     print("PASS arbitrary browser origin not authorized in QA")
-    print("PASS all 3 external QA checks; no real payment attempted")
+
+    # A separate public QA preview acts as read-only frontend; it can call
+    # only the QA API /health endpoint. Never test real merchant checkout here.
+    preview = "https://anri-kaspi-preview-qa-staging.up.railway.app"
+    preview_last = None
+    for attempt in range(5):
+        try:
+            with urllib.request.urlopen(preview + "/", context=HTTPS, timeout=15) as result:
+                html = result.read(15000).decode("utf-8")
+                assert result.status == 200, f"Preview status {result.status}"
+                assert "ANRI AUDIO MIDI" in html
+                assert "Оплата пока недоступна" in html
+                assert "QA API доступен" in html, "Preview cannot reach its own API backend"
+                assert "https://pay.kaspi.kz/pay/" not in html
+                print("PASS public preview HTML and server-to-server QA API health integration")
+                break
+        except (urllib.error.URLError, TimeoutError, ValueError, AssertionError) as exc:
+            preview_last = str(exc)
+        if attempt < 4:
+            time.sleep(3)
+    else:
+        raise AssertionError("Public QA preview not healthy: " + str(preview_last))
+
+    with urllib.request.urlopen(preview + "/health", context=HTTPS, timeout=12) as result:
+        details = json.load(result)
+        assert result.status == 200
+        assert details.get("payments_enabled") is False
+        assert details.get("ok") is True
+    print("PASS preview /health reports payments_enabled=false")
+
+    req = urllib.request.Request(preview + "/", data=b"", method="POST")
+    try:
+        with urllib.request.urlopen(req, context=HTTPS, timeout=12) as result:
+            post_status = result.status
+    except urllib.error.HTTPError as exc:
+        post_status = exc.code
+    assert post_status == 405, f"SECURITY: QA preview accepted POST ({post_status})"
+    print("PASS preview refuses POST; no orders, no payment")
+    print("PASS all 6 external QA checks")
 
 
 if __name__ == "__main__":
