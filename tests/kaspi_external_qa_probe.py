@@ -140,6 +140,10 @@ def main():
     print("PASS invalid admin confirmation rejected; QA order remains pending")
     print("PASS all 8 external QA checks")
 
+    # Seller verification diagnostic: public site only; does not print identifiers.
+    from seller_public_info_audit import main as seller_audit
+    seller_audit()
+
 
 
 if __name__ == "__main__":
