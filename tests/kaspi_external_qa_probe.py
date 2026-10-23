@@ -147,7 +147,26 @@ def main():
     )
     assert wrong_status == 401, f"SECURITY: fake admin key allowed HTTP {wrong_status}"
     print("PASS operator reconciliation queue requires admin authentication")
-    print("PASS all 9 external QA checks")
+    audit_status, _, _ = request("/admin/kaspi/audit")
+    assert audit_status == 401, f"SECURITY: public audit exposed HTTP {audit_status}"
+    audit_fake_status, _, _ = request(
+        "/admin/kaspi/audit", headers={"X-Admin-Key": "invalid-test-only"}
+    )
+    assert audit_fake_status == 401, f"SECURITY: fake admin key exposed audit HTTP {audit_fake_status}"
+    print("PASS new Kaspi admin audit endpoint requires authentication")
+
+    attempt_status, _, attempt_body = request(
+        "/v1/kaspi/orders",
+        method="POST",
+        data=json.dumps({"customer_email": "qa-antispam@example.invalid"}).encode(),
+        headers={
+            "Content-Type": "application/json",
+            "Idempotency-Key": "QA-OFF-NO-CHECKOUT-20261023",
+        },
+    )
+    assert attempt_status == 503, f"SECURITY: staging checkout enabled HTTP {attempt_status}"
+    print("PASS staging checkout remains disabled even with valid idempotency token")
+    print("PASS all 11 external QA checks")
 
     # Seller verification diagnostic: public site only; does not print identifiers.
     from seller_public_info_audit import main as seller_audit
