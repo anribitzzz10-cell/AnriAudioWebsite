@@ -72,6 +72,8 @@
   const link = document.getElementById("kaspi-link");
   const check = document.getElementById("check");
   let orderId = null;
+  let checkoutEmail = "";
+  let checkoutToken = "";
   const loopbackTest = location.hostname === "127.0.0.1" && /^http:\/\/127\.0\.0\.1:[0-9]+$/.test(base);
   if (base && (/^https:\/\//.test(base) || loopbackTest)) {
     create.disabled = false;
@@ -88,9 +90,17 @@
     if (!base || create.disabled) return;
     create.disabled = true;
     try {
+      const email = document.getElementById("email").value.trim();
+      // Reuse a cryptographically random token only when retrying the same
+      // buyer's request. Never confuse retries with another purchaser.
+      if (email.toLowerCase() !== checkoutEmail || !checkoutToken) {
+        checkoutEmail = email.toLowerCase();
+        checkoutToken = crypto.randomUUID();
+      }
       const data = await api("/v1/kaspi/orders", {
-        method:"POST",headers:{"Content-Type":"application/json"},
-        body:JSON.stringify({customer_email:document.getElementById("email").value.trim()})
+        method:"POST",
+        headers:{"Content-Type":"application/json","Idempotency-Key":checkoutToken},
+        body:JSON.stringify({customer_email:email})
       });
       orderId = data.order_id;
       document.getElementById("order-id").textContent = orderId;
