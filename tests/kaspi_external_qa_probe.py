@@ -122,7 +122,23 @@ def main():
     assert b"qa-20261023@example.invalid" not in body, "Email exposed in public order status"
     assert b"license_key" not in body and b"payment_reference" not in body
     print("PASS persisted pending QA order read via public API without PII or license")
-    print("PASS all 7 external QA checks")
+    # Re-check the live staged backend after its security deployment:
+    # unauthenticated attempts cannot confirm the known synthetic QA order.
+    fake_confirmation = json.dumps({
+        "payment_reference": "SYNTHETIC-NO-POS-NO-MONEY-00001",
+        "actual_amount_kzt": 20000,
+    }).encode()
+    confirm_status, _, _ = request(
+        "/admin/kaspi/orders/" + test_id + "/confirm",
+        method="POST",
+        data=fake_confirmation,
+        headers={"Content-Type": "application/json", "X-Admin-Key": "invalid-test-only"},
+    )
+    assert confirm_status == 401, f"SECURITY: unauthenticated admin allowed: {confirm_status}"
+    status, _, raw_after = request("/v1/kaspi/orders/" + test_id)
+    assert status == 200 and json.loads(raw_after)["status"] == "pending"
+    print("PASS invalid admin confirmation rejected; QA order remains pending")
+    print("PASS all 8 external QA checks")
 
 
 
