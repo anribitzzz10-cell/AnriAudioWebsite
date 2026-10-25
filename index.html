@@ -27,15 +27,13 @@ dialog{width:min(520px,calc(100% - 32px));border:1px solid #303039;border-radius
 @media(max-width:620px){.links{display:none}.cards{grid-template-columns:1fr}.shotgrid{grid-template-columns:1fr}.flow{grid-template-columns:1fr 1fr}.wrap{padding:0 16px}h1{font-size:52px}.hero{padding-top:58px}.roll{height:215px}}
 .support-box{margin-top:20px;padding:28px;border:1px solid rgba(237,31,61,.2);border-radius:26px;background:linear-gradient(145deg,rgba(237,31,61,.075),rgba(255,255,255,.018))}.support-box p{max-width:780px;color:var(--muted)}.support-options{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:20px}.support-option{border:1px solid var(--line);background:#111116;border-radius:16px;padding:18px}.support-option strong{display:block;margin-bottom:8px}.support-option p{font-size:13px;margin:0}.muted-label{font-size:12px;color:#b8b8c2}.boosty-link{display:inline-flex;margin-top:14px;padding:9px 12px;border:1px solid rgba(237,31,61,.35);border-radius:11px;color:#ffe2e7;font-size:13px;font-weight:700;background:rgba(237,31,61,.09)}.boosty-link:hover{background:rgba(237,31,61,.18)}@media(min-width:621px) and (max-width:1080px){.links{gap:11px;font-size:12px}} [hidden]{display:none!important}@media(max-width:900px){.support-options{grid-template-columns:1fr}}
 
-/* Language selector (EN / RU / KZ), always available on narrow screens. */
-.nav-actions{display:flex;align-items:center;gap:10px;flex-shrink:0}
-.lang-switch{display:flex;align-items:center;gap:3px;border:1px solid var(--line);background:#15151b;border-radius:999px;padding:3px}
-.lang-switch a{display:inline-flex;align-items:center;justify-content:center;padding:6px 8px;border-radius:999px;color:#bdbdc8;font-size:12px;font-weight:800;line-height:1.2}
-.lang-switch a:hover,.lang-switch a:focus-visible{background:#292932;color:white}
-.lang-switch a[aria-current="page"]{background:#34343e;color:#fff}
-@media(max-width:1100px){.nav{gap:10px}.nav-actions{gap:7px}.links{gap:9px;font-size:12px}}
-@media(max-width:960px){.links{display:none}}
-@media(max-width:620px){.nav{height:auto;min-height:70px;flex-wrap:wrap;padding-top:10px;padding-bottom:10px}.nav-actions{margin-left:auto}.nav-actions .pill{font-size:12px;padding:9px 11px}}
+/* Same language switch in the top-right header of all three locales. */
+.anri-lang-switch{display:inline-flex;align-items:center;justify-content:center;gap:3px;flex:0 0 auto;margin-left:auto;padding:3px;border:1px solid #2d2c34;border-radius:999px;background:#15151b;white-space:nowrap}
+.anri-lang-switch a{display:inline-flex;align-items:center;justify-content:center;min-width:34px;padding:7px 9px;border-radius:999px;text-decoration:none;color:#bdbdc8;font-size:12px;font-weight:800;line-height:1}
+.anri-lang-switch a:hover,.anri-lang-switch a:focus-visible{background:#292932;color:#fff}
+.anri-lang-switch a[aria-current="page"]{background:#34343e;color:#fff}
+@media(max-width:700px){.nav{height:auto;min-height:70px;flex-wrap:wrap;padding-top:10px;padding-bottom:10px;row-gap:10px}.brand{order:0}.anri-lang-switch{order:1;margin-left:auto}.navlinks{order:2;flex-basis:100%}.anri-header-cta{order:2}}
+@media(max-width:400px){.anri-lang-switch a{min-width:32px;padding:7px 7px}}
 </style>
 <!-- Paid-release preview. Payment scripts intentionally not loaded until verified live checkout is approved. -->
   <link rel="icon" href="/favicon.ico" sizes="any">
@@ -49,14 +47,12 @@ dialog{width:min(520px,calc(100% - 32px));border:1px solid #303039;border-radius
 <header><div class="wrap nav">
 <a class="brand" href="#top"><span class="logo">A</span><span>Anri Audio MIDI</span></a>
 <nav class="links" aria-label="Site navigation"><a href="#features">Features</a><a href="#articulations">Articulations</a><a href="#screenshots">Screenshots</a><a href="#pricing">License</a><a href="#how-to-buy">How to buy</a><a href="#download">Download</a><a href="#support">Support</a></nav>
-<div class="nav-actions">
-<nav class="lang-switch" aria-label="Language">
+<a class="pill white anri-header-cta" href="#pricing">View license</a>
+<nav class="anri-lang-switch" aria-label="Language switcher">
 <a href="/" lang="en" hreflang="en" aria-current="page">EN</a>
 <a href="/ru/" lang="ru" hreflang="ru">RU</a>
 <a href="/kk/" lang="kk" hreflang="kk">KZ</a>
 </nav>
-<a class="pill white" href="#pricing">View license</a>
-</div>
 </div></header>
 
 <main id="top">
