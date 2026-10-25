@@ -87,14 +87,25 @@
 @media(max-width:850px){.anri-artbox{grid-template-columns:1fr;gap:24px}}
 @media(max-width:700px){.anri-art{padding:16px 0 48px}.anri-artbox{padding:18px;border-radius:20px}.anri-artfull{padding:8px}}
 
+/* Same language switch in the top-right header of all three locales. */
+.anri-lang-switch{display:inline-flex;align-items:center;justify-content:center;gap:3px;flex:0 0 auto;margin-left:auto;padding:3px;border:1px solid #2d2c34;border-radius:999px;background:#15151b;white-space:nowrap}
+.anri-lang-switch a{display:inline-flex;align-items:center;justify-content:center;min-width:34px;padding:7px 9px;border-radius:999px;text-decoration:none;color:#bdbdc8;font-size:12px;font-weight:800;line-height:1}
+.anri-lang-switch a:hover,.anri-lang-switch a:focus-visible{background:#292932;color:#fff}
+.anri-lang-switch a[aria-current="page"]{background:#34343e;color:#fff}
+@media(max-width:700px){.nav{height:auto;min-height:70px;flex-wrap:wrap;padding-top:10px;padding-bottom:10px;row-gap:10px}.brand{order:0}.anri-lang-switch{order:1;margin-left:auto}.navlinks{order:2;flex-basis:100%}.anri-header-cta{order:2}}
+@media(max-width:400px){.anri-lang-switch a{min-width:32px;padding:7px 7px}}
 </style>
 </head>
 <body>
 <header>
   <div class="wrap nav">
     <a class="brand" href="../" aria-label="ANRI AUDIO — главная"><span class="brand-mark">A</span><span>ANRI AUDIO</span></a>
-    <nav class="navlinks" aria-label="Навигация"><a href="#product">Программа</a><a href="#functions">Функции</a><a href="#articulations">Артикуляции</a><a href="#price">Лицензия</a><a href="#seller">Разработчик</a><a href="#faq">Вопросы</a><a href="../kk/" lang="kk">ҚАЗ</a></nav>
-    <a class="enlink" href="../" lang="en">EN ↗</a>
+    <nav class="navlinks" aria-label="Навигация"><a href="#product">Программа</a><a href="#functions">Функции</a><a href="#articulations">Артикуляции</a><a href="#price">Лицензия</a><a href="#seller">Разработчик</a><a href="#faq">Вопросы</a></nav>
+    <nav class="anri-lang-switch" aria-label="Language switcher">
+<a href="/" lang="en" hreflang="en">EN</a>
+<a href="/ru/" lang="ru" hreflang="ru" aria-current="page">RU</a>
+<a href="/kk/" lang="kk" hreflang="kk">KZ</a>
+</nav>
   </div>
 </header>
 <main>
