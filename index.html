@@ -6,26 +6,80 @@
 <title>ANRI AUDIO MIDI — Professional Audio-to-MIDI for Logic Pro</title>
 <meta name="description" content="ANRI AUDIO MIDI for Logic Pro. $39 USD one-time perpetual license, up to two device activations, no subscription. Commercial launch in preparation; checkout is not yet open.">
 <style>
-:root{--bg:#0a0a0d;--panel:#141419;--text:#f4f4f6;--muted:#a5a5af;--line:#2b2b33;--red:#ED1F3D}
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(800px 450px at 75% 0%,rgba(237,31,61,.16),transparent 55%),var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;line-height:1.5}
-a{color:inherit;text-decoration:none}.wrap{max-width:1140px;margin:auto;padding:0 22px}
-header{position:sticky;top:0;z-index:10;background:rgba(10,10,13,.78);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,.05)}
-.nav{height:70px;display:flex;align-items:center;justify-content:space-between;gap:18px}.brand{display:flex;align-items:center;gap:11px;font-weight:800}.logo{width:34px;height:34px;border-radius:10px;background:linear-gradient(145deg,var(--red),#9a1128);display:grid;place-items:center;font-weight:900}
-.links{display:flex;gap:20px;color:var(--muted);font-size:14px}.pill{border:0;border-radius:999px;padding:10px 16px;font-weight:800;cursor:pointer}
-.white{background:white;color:#09090b}.red{background:var(--red);color:white}.ghost{background:#19191f;color:white;border:1px solid var(--line)}
-.hero{padding:88px 0 62px;display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center}.tag{display:inline-flex;gap:8px;align-items:center;padding:8px 12px;border:1px solid rgba(237,31,61,.25);background:rgba(237,31,61,.1);border-radius:999px;font-size:13px;color:#ffd4dc;font-weight:700}.dot{width:7px;height:7px;border-radius:50%;background:var(--red)}
-h1{font-size:clamp(48px,7vw,80px);line-height:.96;letter-spacing:-.05em;margin:22px 0 18px}.lead{font-size:19px;color:var(--muted);max-width:620px}.actions{display:flex;gap:11px;flex-wrap:wrap;margin-top:27px}.btn{padding:14px 18px;border-radius:14px;border:0;font-weight:800;cursor:pointer}
-.mock{padding:14px;background:linear-gradient(160deg,#1b1b21,#0c0c10);border:1px solid #2c2c34;border-radius:26px;box-shadow:0 25px 70px rgba(0,0,0,.4)}
-.plugin{overflow:hidden;border-radius:18px;background:#0c0c10;border:1px solid #26262e}.bar{height:43px;background:#15151b;border-bottom:1px solid #26262e;display:flex;align-items:center;justify-content:space-between;padding:0 14px;font-size:12px;color:#c4c4cc}
-.screen{padding:18px}.screenhead{display:flex;justify-content:space-between;margin-bottom:16px}.chip{padding:6px 9px;border-radius:8px;background:#1c1c22;font-size:11px;color:#aaaab4}.chip.hot{background:rgba(237,31,61,.13);border:1px solid rgba(237,31,61,.24);color:#ffb5c1}
-.roll{height:255px;position:relative;overflow:hidden;border:1px solid #22222a;border-radius:12px;background:linear-gradient(to right,rgba(255,255,255,.04) 1px,transparent 1px) 0 0/42px 100%,linear-gradient(to bottom,rgba(255,255,255,.045) 1px,transparent 1px) 0 0/100% 22px,#09090c}
-.note{position:absolute;height:14px;border-radius:4px;background:linear-gradient(90deg,var(--red),#ff5068)}.features{padding:74px 0}.title{font-size:36px;letter-spacing:-.03em;margin:0 0 10px}.sub{color:var(--muted);max-width:720px;margin:0 0 30px}.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}.card{padding:22px;min-height:190px;border-radius:20px;background:linear-gradient(160deg,rgba(255,255,255,.045),rgba(255,255,255,.018));border:1px solid rgba(255,255,255,.07)}.ico{width:42px;height:42px;border-radius:12px;background:rgba(237,31,61,.12);display:grid;place-items:center;margin-bottom:20px}.card h3{margin:0 0 8px}.card p{margin:0;color:var(--muted);font-size:14px}.workflow{padding:10px 0 28px}.flow{display:grid;grid-template-columns:repeat(6,1fr);gap:9px}.flowstep{padding:13px 10px;border-radius:14px;border:1px solid rgba(255,255,255,.07);background:#111116;text-align:center;font-size:12px;font-weight:800;color:#d7d7de}.flowstep b{display:block;color:var(--red);font-size:10px;margin-bottom:4px}.controls{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}.controlchip{padding:8px 10px;border-radius:999px;border:1px solid #2b2b34;background:#101015;color:#c8c8d0;font-size:12px}
-.artsec{padding:28px 0 74px}.artbox{display:grid;grid-template-columns:.92fr 1.08fr;gap:28px;align-items:center;padding:28px;border-radius:26px;border:1px solid rgba(237,31,61,.2);background:linear-gradient(145deg,rgba(237,31,61,.08),rgba(255,255,255,.02))}.artcopy .sub{margin-bottom:18px}.artchips{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}.artchip{padding:8px 11px;border-radius:999px;border:1px solid rgba(255,255,255,.09);background:#101015;color:#d7d7de;font-size:12px;font-weight:700}.artvisual{padding:10px;border-radius:20px;background:#0f0f14;border:1px solid rgba(255,255,255,.07)}.artvisual img{display:block;width:100%;height:auto;border-radius:14px}.artfull{margin-top:18px;padding:12px;border-radius:20px;background:#0f0f14;border:1px solid rgba(255,255,255,.07)}.artfull img{display:block;width:100%;height:auto;border-radius:14px}.artcaption{margin-top:9px;color:var(--muted);font-size:13px}.shotframe{padding:12px}.shotimg{display:block;width:100%;height:auto;border-radius:18px;border:1px solid #26262e;background:#0c0c10}.screens{padding-top:14px}.shotgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.shot{margin:0;border-radius:22px;overflow:hidden;background:linear-gradient(160deg,rgba(255,255,255,.04),rgba(255,255,255,.015));border:1px solid rgba(255,255,255,.08)}.shot img{display:block;width:100%;height:auto;background:#0d0d12}.shot figcaption{padding:16px}.shot figcaption strong{display:block;margin-bottom:6px}.shot figcaption span{display:block;color:var(--muted);font-size:14px;line-height:1.5}.buy{margin:20px 0 76px;padding:28px;border-radius:26px;border:1px solid rgba(237,31,61,.2);background:linear-gradient(140deg,rgba(237,31,61,.11),rgba(255,255,255,.025));display:grid;grid-template-columns:1.2fr .8fr;gap:20px}.buyright{display:flex;align-items:center;justify-content:flex-end;gap:10px;flex-wrap:wrap}.price-amount{display:flex;align-items:baseline;flex-wrap:wrap;gap:12px;margin:12px 0 14px;font-size:clamp(46px,6vw,66px);font-weight:850;letter-spacing:-.055em;line-height:1.05}.price-currency{font-size:14px;letter-spacing:0;color:#d3d3dc;font-weight:700}.btn:disabled{cursor:not-allowed;opacity:.55;filter:saturate(.65)}.purchase-status{color:#ffd2d9;font-size:14px;max-width:600px;margin:0}
-footer{padding:34px 0 46px;border-top:1px solid rgba(255,255,255,.06);color:#80808a;font-size:13px}
-dialog{width:min(520px,calc(100% - 32px));border:1px solid #303039;border-radius:22px;background:#121217;color:white;padding:0}dialog::backdrop{background:rgba(0,0,0,.72);backdrop-filter:blur(5px)}.modal{padding:24px}.modal p{color:var(--muted)}.field{display:grid;gap:7px;margin:14px 0}.field input{background:#0b0b0f;border:1px solid #2b2b34;color:white;border-radius:12px;padding:13px}.modalrow{display:flex;justify-content:flex-end;gap:10px;margin-top:18px}
-@media(max-width:900px){.hero{grid-template-columns:1fr}.artbox{grid-template-columns:1fr}.cards{grid-template-columns:1fr 1fr}.shotgrid{grid-template-columns:1fr}.flow{grid-template-columns:repeat(3,1fr)}.buy{grid-template-columns:1fr}.buyright{justify-content:flex-start}}
-@media(max-width:620px){.links{display:none}.cards{grid-template-columns:1fr}.shotgrid{grid-template-columns:1fr}.flow{grid-template-columns:1fr 1fr}.wrap{padding:0 16px}h1{font-size:52px}.hero{padding-top:58px}.roll{height:215px}}
-.support-box{margin-top:20px;padding:28px;border:1px solid rgba(237,31,61,.2);border-radius:26px;background:linear-gradient(145deg,rgba(237,31,61,.075),rgba(255,255,255,.018))}.support-box p{max-width:780px;color:var(--muted)}.support-options{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:20px}.support-option{border:1px solid var(--line);background:#111116;border-radius:16px;padding:18px}.support-option strong{display:block;margin-bottom:8px}.support-option p{font-size:13px;margin:0}.muted-label{font-size:12px;color:#b8b8c2}.boosty-link{display:inline-flex;margin-top:14px;padding:9px 12px;border:1px solid rgba(237,31,61,.35);border-radius:11px;color:#ffe2e7;font-size:13px;font-weight:700;background:rgba(237,31,61,.09)}.boosty-link:hover{background:rgba(237,31,61,.18)}@media(min-width:621px) and (max-width:1080px){.links{gap:11px;font-size:12px}} [hidden]{display:none!important}@media(max-width:900px){.support-options{grid-template-columns:1fr}}
+    :root {--bg:#0a0a0d;--panel:#141419;--panel2:#101015;--line:#2d2c34;--fg:#f4f4f7;--muted:#aaa9b4;--red:#ed1f3d;--cream:#ffd8df}
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;background:radial-gradient(900px 520px at 77% -50px,rgba(237,31,61,.17),transparent 67%),var(--bg);color:var(--fg);font:16px/1.62 Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}
+    a{color:inherit;text-decoration:none} a:focus-visible,button:focus-visible{outline:2px solid white;outline-offset:4px}
+    .wrap{width:min(1120px,calc(100% - 44px));margin-inline:auto}
+    header{position:sticky;top:0;z-index:10;border-bottom:1px solid rgba(255,255,255,.08);background:rgba(10,10,13,.89);backdrop-filter:blur(16px)}
+    .nav{min-height:70px;display:flex;justify-content:space-between;align-items:center;gap:22px}
+    .brand{display:inline-flex;align-items:center;gap:12px;font-weight:850;letter-spacing:.02em;white-space:nowrap}
+    .brand-mark{width:37px;height:37px;border-radius:11px;background:linear-gradient(145deg,var(--red),#96132a);display:grid;place-items:center;font-weight:950;font-size:20px;box-shadow:0 0 22px rgba(237,31,61,.18)}
+    .navlinks{display:flex;gap:23px;align-items:center;color:#c8c7d0;font-size:13px;font-weight:650;white-space:nowrap}
+    .navlinks a:hover,.enlink:hover{color:white}.enlink{border:1px solid var(--line);border-radius:999px;padding:8px 12px;color:#c8c7d0;font-size:12px;font-weight:750}
+    .hero{padding:88px 0 66px;display:grid;grid-template-columns:1.02fr .98fr;align-items:center;gap:55px}
+    .chip{display:inline-flex;align-items:center;gap:9px;border:1px solid rgba(237,31,61,.36);background:rgba(237,31,61,.09);border-radius:999px;color:#ffc9d3;font-size:12px;font-weight:750;padding:8px 12px}
+    .red-dot{width:7px;height:7px;background:var(--red);border-radius:50%}
+    h1{font-size:clamp(45px,6vw,76px);line-height:.99;letter-spacing:-.058em;margin:26px 0 23px;font-weight:850}
+    .accent{color:#ff4965}.lead{font-size:18px;line-height:1.65;color:#b8b7c1;max-width:590px}
+    .hero-foot{margin-top:26px;display:flex;gap:8px;flex-wrap:wrap;color:#c8c7d0;font-size:12px}
+    .hero-foot span{border:1px solid var(--line);border-radius:999px;padding:7px 11px;background:#15151b}
+    .cta-row{display:flex;flex-wrap:wrap;gap:12px;margin:30px 0 0}
+    .btn{display:inline-flex;justify-content:center;align-items:center;border-radius:13px;padding:13px 20px;font-weight:800;font-size:14px;min-height:47px;border:1px solid var(--line)}
+    .btn-red{background:var(--red);color:white;border-color:var(--red)}.btn-ghost{background:#17171e}
+    .image-frame{overflow:hidden;padding:12px;border:1px solid #34333d;background:linear-gradient(145deg,#23232b,#111116);border-radius:24px;box-shadow:0 25px 75px rgba(0,0,0,.42)}
+    .image-frame img{width:100%;height:auto;display:block;border-radius:14px;background:#0c0c10}
+    .eyebrow{display:block;color:#ff8394;text-transform:uppercase;letter-spacing:.16em;font-size:11px;font-weight:850;margin-bottom:12px}
+    .section{padding:73px 0}.section h2{font-size:clamp(30px,4.2vw,43px);line-height:1.12;letter-spacing:-.035em;margin:0 0 16px}
+    .section .intro{color:var(--muted);max-width:720px;font-size:16px;margin:0 0 28px}
+    .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px}
+    .box{border:1px solid rgba(255,255,255,.075);border-radius:18px;background:linear-gradient(150deg,rgba(255,255,255,.047),rgba(255,255,255,.017));padding:23px}
+    .box .icon{display:grid;place-items:center;width:42px;height:42px;border-radius:11px;background:rgba(237,31,61,.13);color:#ff7188;font-size:20px;margin-bottom:19px}
+    .box h3{font-size:18px;line-height:1.3;margin:0 0 9px}.box p{font-size:14px;color:var(--muted);margin:0}
+    .workflow{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;margin-top:31px}
+    .step{border:1px solid var(--line);background:#111116;padding:17px;border-radius:15px;font-weight:750;font-size:13px}.step small{display:block;font-size:11px;color:#ff5b77;margin-bottom:6px}
+    .showcase{display:grid;grid-template-columns:1.08fr .92fr;gap:22px;align-items:center;margin-top:28px}
+    .showcase-text{padding:8px 0}.showcase-text p{color:var(--muted)}.showcase-text strong{color:var(--fg)}
+    .shots{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:28px}
+    figure{margin:0;overflow:hidden;border-radius:19px;border:1px solid var(--line);background:#14141a}
+    figure img{display:block;width:100%;height:auto;min-height:130px;object-fit:contain;background:#0c0c11}
+    figcaption{padding:13px 16px;font-size:13px;color:#bbb9c6}figcaption b{display:block;color:white;font-size:14px;margin-bottom:2px}
+    .price-shell{margin-top:10px;border:1px solid rgba(237,31,61,.38);border-radius:25px;padding:38px;background:linear-gradient(145deg,rgba(237,31,61,.16),rgba(255,255,255,.02));display:grid;grid-template-columns:1.25fr .75fr;gap:30px;align-items:center}
+    .price{font-size:clamp(60px,8vw,89px);font-weight:900;letter-spacing:-.07em;line-height:1;margin:20px 0 8px}.price .usd{font-size:16px;vertical-align:middle;color:#e1dbe0;letter-spacing:0}
+    .price-note{font-size:14px;color:#ddd4d9}.checks{margin:18px 0 0;padding:0;list-style:none;color:#eae8eb;font-size:15px}.checks li{margin-bottom:8px}.checks li::before{content:'✓';color:#ff627d;font-weight:800;margin-right:10px}
+    .block-soon{border:1px solid var(--line);border-radius:18px;padding:20px;background:#111117;color:#bdbac5}
+    .block-soon .disabled{cursor:not-allowed;width:100%;padding:15px;border:0;border-radius:12px;background:#62202b;color:#f6c6ce;font-weight:800;font-size:14px;opacity:.83}
+    .block-soon p{margin:12px 0 0;font-size:12px;line-height:1.6}
+    .small{font-size:13px;color:var(--muted)}
+    .legal-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+    .legal-panel{border:1px solid var(--line);border-radius:19px;background:#14141a;padding:23px}
+    .legal-panel h3{margin:0 0 18px;font-size:20px}.legal-panel dl{display:grid;grid-template-columns:150px minmax(0,1fr);gap:10px 16px;margin:0;font-size:14px}
+    .legal-panel dt{color:#aaa8b3}.legal-panel dd{margin:0;overflow-wrap:anywhere}
+    .placeholder{display:inline-block;color:#ffc2cc;background:rgba(237,31,61,.09);border:1px dashed rgba(237,31,61,.55);padding:2px 6px;border-radius:6px}
+    .notice{margin-top:20px;padding:17px 19px;border-radius:14px;background:#23171e;border:1px solid rgba(237,31,61,.32);color:#e2c9cf;font-size:13px}
+    .faq{display:grid;grid-template-columns:1fr 1fr;gap:15px}.faq .box{min-height:140px}
+    footer{margin-top:56px;padding:30px 0 45px;border-top:1px solid var(--line);color:#918e9a;font-size:13px}
+    footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+    @media(max-width:930px){.hero,.showcase,.price-shell{grid-template-columns:1fr}.hero{padding-top:60px}.navlinks{gap:12px}.price-shell{padding:28px}.grid{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:700px){.navlinks{display:none}.hero{gap:28px}.grid,.shots,.legal-grid,.faq{grid-template-columns:1fr}.workflow{grid-template-columns:1fr 1fr}.wrap{width:min(100% - 30px,1120px)}.section{padding:50px 0}.price-shell{padding:20px}.legal-panel dl{grid-template-columns:1fr;gap:3px}.legal-panel dd{margin-bottom:10px}h1{font-size:50px}}
+  
+/* Articulation feature — mirrored from the existing English presentation */
+.anri-art{padding:24px 0 70px}
+.anri-artbox{display:grid;grid-template-columns:.92fr 1.08fr;gap:28px;align-items:center;padding:28px;border-radius:26px;border:1px solid rgba(237,31,61,.25);background:linear-gradient(145deg,rgba(237,31,61,.11),rgba(255,255,255,.02))}
+.anri-art-tag{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;background:rgba(237,31,61,.12);border:1px solid rgba(237,31,61,.32);border-radius:99px;color:#ffbac6;font-size:12px;font-weight:800}
+.anri-art-tag::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:#ed1f3d}
+.anri-art-title{font-size:clamp(30px,3.6vw,42px);letter-spacing:-.045em;line-height:1.16;margin:16px 0;color:#f6f5f7}
+.anri-artcopy p{color:#bab7c2;font-size:15px;line-height:1.65;margin:0 0 14px}
+.anri-artchips{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.anri-artchip{padding:8px 11px;border-radius:999px;border:1px solid rgba(255,255,255,.12);background:#101015;color:#dedce5;font-size:12px;font-weight:700}
+.anri-artvisual{padding:10px;border-radius:20px;background:#0f0f14;border:1px solid rgba(255,255,255,.09)}
+.anri-artvisual img{display:block;width:auto;max-width:100%;height:auto;margin-inline:auto;border-radius:13px}
+.anri-artfull{margin-top:18px;padding:12px;border-radius:20px;background:#0f0f14;border:1px solid rgba(255,255,255,.09)}
+.anri-artfull img{display:block;width:auto;max-width:100%;height:auto;margin-inline:auto;border-radius:14px}
+.anri-artcaption{margin-top:9px;color:#aaa9b4;font-size:13px}
+@media(max-width:850px){.anri-artbox{grid-template-columns:1fr;gap:24px}}
+@media(max-width:700px){.anri-art{padding:16px 0 48px}.anri-artbox{padding:18px;border-radius:20px}.anri-artfull{padding:8px}}
 
 /* Same language switch in the top-right header of all three locales. */
 .anri-lang-switch{display:inline-flex;align-items:center;justify-content:center;gap:3px;flex:0 0 auto;margin-left:auto;padding:3px;border:1px solid #2d2c34;border-radius:999px;background:#15151b;white-space:nowrap}
@@ -34,12 +88,31 @@ dialog{width:min(520px,calc(100% - 32px));border:1px solid #303039;border-radius
 .anri-lang-switch a[aria-current="page"]{background:#34343e;color:#fff}
 @media(max-width:700px){.nav{height:auto;min-height:70px;flex-wrap:wrap;padding-top:10px;padding-bottom:10px;row-gap:10px}.brand{order:0}.anri-lang-switch{order:1;margin-left:auto}.navlinks{order:2;flex-basis:100%}.anri-header-cta{order:2}}
 @media(max-width:400px){.anri-lang-switch a{min-width:32px;padding:7px 7px}}
-.anri-two-col{grid-template-columns:repeat(2,minmax(0,1fr))}
-.anri-faq-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}
-.anri-faq-grid .card{min-height:145px}
-.anri-legal-rows{display:grid;grid-template-columns:140px minmax(0,1fr);gap:9px 14px;font-size:14px}
-.anri-legal-rows dt{color:var(--muted)}.anri-legal-rows dd{margin:0;overflow-wrap:anywhere}
-@media(max-width:620px){.anri-two-col,.anri-faq-grid{grid-template-columns:1fr}.anri-legal-rows{grid-template-columns:1fr;gap:2px}.anri-legal-rows dd{margin-bottom:12px}}
+.anri-extra-heading{font-size:22px;margin:30px 0 8px}
+.anri-controls{display:flex;flex-wrap:wrap;gap:8px}
+.anri-controls span{padding:8px 10px;border:1px solid var(--line);border-radius:999px;background:#101015;color:#c8c8d0;font-size:12px}
+.anri-section-actions{margin-top:18px;display:flex;flex-wrap:wrap;gap:10px}
+.anri-section-actions a{display:inline-flex;align-items:center;padding:10px 13px;border:1px solid rgba(237,31,61,.36);border-radius:11px;background:rgba(237,31,61,.1);color:#ffe2e7;font-size:13px;font-weight:750}
+@media(min-width:701px) and (max-width:1020px){.workflow{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:700px){.workflow{grid-template-columns:repeat(2,minmax(0,1fr))}}
+/* Supplemental breakpoints to align the existing card and row counts in EN, RU and KZ */
+@media(min-width:901px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}.workflow{grid-template-columns:repeat(6,minmax(0,1fr))}}
+@media(min-width:901px) and (max-width:930px){.hero{grid-template-columns:1.02fr .98fr}}
+@media(max-width:900px){.shots{grid-template-columns:1fr}.anri-artbox{grid-template-columns:1fr}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.workflow{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(min-width:621px) and (max-width:700px){.faq,.legal-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:620px){.grid,.faq,.legal-grid{grid-template-columns:1fr}.workflow{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* Original English Support Development panels, shared by all locales */
+.anri-english-support-box{margin-top:20px;padding:28px;border:1px solid rgba(237,31,61,.2);border-radius:26px;background:linear-gradient(145deg,rgba(237,31,61,.075),rgba(255,255,255,.018))}
+.anri-english-support-box p{max-width:780px;color:var(--muted);font-size:15px;line-height:1.6}
+.anri-english-support-box .anri-section-actions{margin-top:18px}
+@media(max-width:700px){.anri-english-support-box{padding:20px;border-radius:20px}}
+
+/* Text and links retained from the original English content, in the RU grid system */
+.anri-extra-link{display:inline-flex;margin-top:12px;padding:9px 12px;border:1px solid rgba(237,31,61,.35);border-radius:11px;color:#ffe2e7;background:rgba(237,31,61,.09);font-size:13px;font-weight:750}
+.anri-ref-legal-rows{display:grid;grid-template-columns:150px minmax(0,1fr);gap:10px 16px;margin:0;font-size:14px}
+.anri-ref-legal-rows dt{color:#aaa8b3}.anri-ref-legal-rows dd{margin:0;overflow-wrap:anywhere}
+@media(max-width:700px){.anri-ref-legal-rows{grid-template-columns:1fr;gap:3px}.anri-ref-legal-rows dd{margin-bottom:10px}}
 </style>
 <!-- Paid-release preview. Payment scripts intentionally not loaded until verified live checkout is approved. -->
   <link rel="icon" href="/favicon.ico" sizes="any">
@@ -51,8 +124,8 @@ dialog{width:min(520px,calc(100% - 32px));border:1px solid #303039;border-radius
 </head>
 <body>
 <header><div class="wrap nav">
-<a class="brand" href="#top"><span class="logo">A</span><span>Anri Audio MIDI</span></a>
-<nav class="links" aria-label="Site navigation"><a href="#features">Features</a><a href="#articulations">Articulations</a><a href="#screenshots">Screenshots</a><a href="#pricing">License</a><a href="#how-to-buy">How to buy</a><a href="#download">Download</a><a href="#support">Support</a></nav>
+<a class="brand" href="#top"><span class="brand-mark">A</span><span>Anri Audio MIDI</span></a>
+<nav class="navlinks" aria-label="Site navigation"><a href="#functions">Features</a><a href="#articulations">Articulations</a><a href="#screenshots">Screenshots</a><a href="#price">License</a><a href="#how-to-buy">How to buy</a><a href="#download">Download</a><a href="#support">Support</a></nav>
 <nav class="anri-lang-switch" aria-label="Language switcher">
 <a href="/" lang="en" hreflang="en" aria-current="page">EN</a>
 <a href="/ru/" lang="ru" hreflang="ru">RU</a>
@@ -61,175 +134,168 @@ dialog{width:min(520px,calc(100% - 32px));border:1px solid #303039;border-radius
 </div></header>
 
 <main id="top">
-<div class="wrap hero">
+<div class="wrap hero" id="product">
 <div>
-<span class="tag"><span class="dot"></span> Paid release in preparation • Audio → MIDI for Logic Pro</span>
+<span class="chip"><span class="red-dot"></span> Paid release in preparation • Audio → MIDI for Logic Pro</span>
 <h1>Turn audio into editable MIDI.</h1>
 <p class="lead">Analyze a performance, compare MIDI against the original waveform, refine notes inside Anri Piano Roll, and move the result into your Logic Pro workflow from one focused interface.</p>
-<div class="actions"><a class="btn red" href="#pricing">Full license — $39</a><a class="btn ghost" href="#features">See features</a></div>
-<p class="muted-label">$39 USD one-time, no subscription. Checkout and the signed installer are not yet publicly available.</p>
+<div class="cta-row"><a class="btn btn-red" href="#price">Full license — $39</a><a class="btn btn-ghost" href="#functions">See features</a></div>
+<p class="small">$39 USD one-time, no subscription. Checkout and the signed installer are not yet publicly available.</p>
 <p style="color:#777781;font-size:12px;margin-top:14px">macOS • Audio Unit • Logic Pro workflow</p>
 </div>
-<div class="mock shotframe"><img class="shotimg" src="assets/anri-showcase-note-editing-20261023.webp" alt="ANRI AUDIO MIDI Piano Roll with selected MIDI note and original waveform" width="1106" height="904" decoding="async" fetchpriority="high"></div>
+<div class="image-frame"><img class="anri-shot-reference" src="assets/anri-showcase-note-editing-20261023.webp" alt="ANRI AUDIO MIDI Piano Roll with selected MIDI note and original waveform" width="1106" height="904" decoding="async" fetchpriority="high"></div>
 </div>
 
-<section class="workflow"><div class="wrap">
-<div class="flow">
-<div class="flowstep"><b>01</b>Audio</div>
-<div class="flowstep"><b>02</b>Analyze</div>
-<div class="flowstep"><b>03</b>Piano Roll</div>
-<div class="flowstep"><b>04</b>Edit</div>
-<div class="flowstep"><b>05</b>Match / Quantize / Snap</div>
-<div class="flowstep"><b>06</b>Drag / Send MIDI</div>
-</div>
-</div></section>
 
-<section class="features" id="features"><div class="wrap">
-<h2 class="title">Audio to editable MIDI, with the original waveform still in view.</h2>
-<p class="sub">Analyze the performance, inspect MIDI against the source audio, edit the result, then drag or send it into your production workflow.</p>
-<div class="cards">
-<article class="card"><div class="ico">◉</div><h3>Analyze</h3><p>Run the main analysis pass and turn the available audio into an editable MIDI result.</p></article>
-<article class="card"><div class="ico">▦</div><h3>Piano Roll + Original Audio</h3><p>See MIDI notes on the pitch/time grid while the original waveform stays aligned underneath.</p></article>
-<article class="card"><div class="ico">✦</div><h3>Edit notes</h3><p>Move, resize, insert, delete, adjust velocity, and preview pitch while refining the result.</p></article>
-<article class="card"><div class="ico">≈</div><h3>Match Audio</h3><p>Match MIDI velocity to the local loudness of the original performance for a more natural dynamic result.</p></article>
-<article class="card"><div class="ico">⌗</div><h3>Quantize + Snap</h3><p>Clean timing with Quantize and Snap while keeping detailed control over note placement.</p></article>
-<article class="card"><div class="ico">↗</div><h3>Drag MIDI / Send MIDI</h3><p>Drag the MIDI into the project or send the prepared result through the host workflow.</p></article>
-<article class="card"><div class="ico">⇄</div><h3>MIDI routing</h3><p>Use host or external MIDI output, choose the MIDI channel, transpose, and constrain the pitch range.</p></article>
-<article class="card"><div class="ico">⌕</div><h3>Zoom + Preview</h3><p>Fit the phrase, zoom horizontally or vertically, then play, stop, and seek while checking edits.</p></article>
-<article class="card"><div class="ico">±</div><h3>Creative MIDI tools</h3><p>Use Randomise, Musical, Up +1, and Down -1 for fast variations and pitch adjustments.</p></article>
-<article class="card"><div class="ico">≋</div><h3>Articulation Detection</h3><p>Review articulation and expression characteristics alongside the detected MIDI, including Legato, Tremolo, Pitch, Expression, Vibrato, Breath, and Articul.</p></article>
+
+<section class="section" id="functions"><div class="wrap">
+<h2 class="anri-title-text">Audio to editable MIDI, with the original waveform still in view.</h2>
+<p class="intro">Analyze the performance, inspect MIDI against the source audio, edit the result, then drag or send it into your production workflow.</p>
+<div class="grid">
+<article class="box"><span class="icon">◉</span><h3>Analyze</h3><p>Run the main analysis pass and turn the available audio into an editable MIDI result.</p></article>
+<article class="box"><span class="icon">▦</span><h3>Piano Roll + Original Audio</h3><p>See MIDI notes on the pitch/time grid while the original waveform stays aligned underneath.</p></article>
+<article class="box"><span class="icon">✦</span><h3>Edit notes</h3><p>Move, resize, insert, delete, adjust velocity, and preview pitch while refining the result.</p></article>
+<article class="box"><span class="icon">≈</span><h3>Match Audio</h3><p>Match MIDI velocity to the local loudness of the original performance for a more natural dynamic result.</p></article>
+<article class="box"><span class="icon">⌗</span><h3>Quantize + Snap</h3><p>Clean timing with Quantize and Snap while keeping detailed control over note placement.</p></article>
+<article class="box"><span class="icon">↗</span><h3>Drag MIDI / Send MIDI</h3><p>Drag the MIDI into the project or send the prepared result through the host workflow.</p></article>
+<article class="box"><span class="icon">⇄</span><h3>MIDI routing</h3><p>Use host or external MIDI output, choose the MIDI channel, transpose, and constrain the pitch range.</p></article>
+<article class="box"><span class="icon">⌕</span><h3>Zoom + Preview</h3><p>Fit the phrase, zoom horizontally or vertically, then play, stop, and seek while checking edits.</p></article>
+<article class="box"><span class="icon">±</span><h3>Creative MIDI tools</h3><p>Use Randomise, Musical, Up +1, and Down -1 for fast variations and pitch adjustments.</p></article>
+<article class="box"><span class="icon">≋</span><h3>Articulation Detection</h3><p>Review articulation and expression characteristics alongside the detected MIDI, including Legato, Tremolo, Pitch, Expression, Vibrato, Breath, and Articul.</p></article>
 </div>
 <h3 style="margin:30px 0 8px">Detection controls</h3>
-<p class="sub" style="margin-bottom:12px">Tune the analysis for different sources with dedicated controls.</p>
-<div class="controls">
-<span class="controlchip">Polyphony</span><span class="controlchip">Threshold</span><span class="controlchip">Sensitivity</span><span class="controlchip">Pitch Accuracy</span><span class="controlchip">Stability</span><span class="controlchip">Onset</span><span class="controlchip">Min Note</span><span class="controlchip">Release</span>
+<p class="intro" style="margin-bottom:12px">Tune the analysis for different sources with dedicated controls.</p>
+<div class="anri-controls">
+<span>Polyphony</span><span>Threshold</span><span>Sensitivity</span><span>Pitch Accuracy</span><span>Stability</span><span>Onset</span><span>Min Note</span><span>Release</span>
 </div>
+<div class="workflow" aria-label="Six-step workflow"><div class="step"><small>01</small>Audio</div><div class="step"><small>02</small>Analyze</div><div class="step"><small>03</small>Piano Roll</div><div class="step"><small>04</small>Edit</div><div class="step"><small>05</small>Match / Quantize / Snap</div><div class="step"><small>06</small>Drag / Send MIDI</div></div>
 </div></section>
 
 
 
-<section class="artsec" id="articulations"><div class="wrap">
-<div class="artbox">
-<div class="artcopy">
-<span class="tag"><span class="dot"></span> Performance detail</span>
-<h2 class="title" style="margin-top:16px">Articulation Detection</h2>
-<p class="sub">Capture more than pitch and timing. Anri Audio MIDI analyzes the performance character of the source and shows articulation and expression information alongside the detected MIDI.</p>
+<section class="anri-art wrap" id="articulations">
+<div class="anri-artbox">
+<div class="anri-artcopy">
+<span class="chip"><span class="red-dot"></span> Performance detail</span>
+<h2 class="anri-title-text" style="margin-top:16px">Articulation Detection</h2>
+<p class="intro">Capture more than pitch and timing. Anri Audio MIDI analyzes the performance character of the source and shows articulation and expression information alongside the detected MIDI.</p>
 <p style="color:var(--muted);margin:0">Review the character of the original performance before sending MIDI into the project. The performance view exposes articulation-related and expressive parameters in a compact visual panel.</p>
-<div class="artchips">
-<span class="artchip">Portamento</span><span class="artchip">Legato</span><span class="artchip">Decay</span><span class="artchip">Sustain</span><span class="artchip">Attack Time</span><span class="artchip">Release Time</span><span class="artchip">Tremolo</span><span class="artchip">Sostenuto</span><span class="artchip">Harmonic</span><span class="artchip">Pitch</span><span class="artchip">Expression</span><span class="artchip">Vibrato</span><span class="artchip">Breath</span><span class="artchip">Articul</span>
+<div class="anri-artchips">
+<span class="anri-artchip">Portamento</span><span class="anri-artchip">Legato</span><span class="anri-artchip">Decay</span><span class="anri-artchip">Sustain</span><span class="anri-artchip">Attack Time</span><span class="anri-artchip">Release Time</span><span class="anri-artchip">Tremolo</span><span class="anri-artchip">Sostenuto</span><span class="anri-artchip">Harmonic</span><span class="anri-artchip">Pitch</span><span class="anri-artchip">Expression</span><span class="anri-artchip">Vibrato</span><span class="anri-artchip">Breath</span><span class="anri-artchip">Articul</span>
 </div>
 </div>
-<div class="artvisual"><img src="assets/articulation_panel_real.png" alt="Anri Audio MIDI articulation and performance analysis panel"></div>
+<div class="anri-artvisual"><img src="assets/articulation_panel_real.png" alt="Anri Audio MIDI articulation and performance analysis panel"></div>
 </div>
-<div class="artfull">
+<div class="anri-artfull">
 <img src="assets/articulation_control_real.png" alt="Anri Audio MIDI Analyze and REC ARTICULATION controls">
-<div class="artcaption">Analyze and REC ARTICULATION in the current interface.</div>
+<div class="anri-artcaption">Analyze and REC ARTICULATION in the current interface.</div>
 </div>
 </div></section>
 
-<section class="features screens" id="screenshots"><div class="wrap">
-<h2 class="title">Real screenshots from the current interface.</h2>
-<p class="sub">Explore the real ANRI AUDIO MIDI interface in Logic Pro: edit detected notes with the original waveform, review articulation details, and zoom in for precise MIDI adjustments.</p>
-<div class="shotgrid">
-<figure class="shot"><img src="assets/anri-showcase-piano-roll-20261023.webp" alt="ANRI AUDIO MIDI Piano Roll showing MIDI notes and original waveform in Logic Pro" loading="lazy" width="1106" height="904"><figcaption><strong>Piano Roll and original audio</strong><span>Edit MIDI notes while comparing their timing and pitch with the source waveform.</span></figcaption></figure>
-<figure class="shot"><img src="assets/anri-showcase-articulations-20261023.webp" alt="ANRI AUDIO MIDI articulation parameters and musical phrase in Piano Roll" loading="lazy" width="1106" height="904"><figcaption><strong>Articulations and performance detail</strong><span>See MIDI events, the performance display, and expressive parameters together.</span></figcaption></figure>
-<figure class="shot"><img src="assets/anri-showcase-note-editing-20261023.webp" alt="ANRI AUDIO MIDI editor with one selected MIDI note and original audio waveform" loading="lazy" width="1106" height="904"><figcaption><strong>Precise MIDI note editing</strong><span>Zoom in, adjust note placement and duration, and review the result in the editor.</span></figcaption></figure>
+<section class="section" id="screenshots"><div class="wrap">
+<h2 class="anri-title-text">Real screenshots from the current interface.</h2>
+<p class="intro">Explore the real ANRI AUDIO MIDI interface in Logic Pro: edit detected notes with the original waveform, review articulation details, and zoom in for precise MIDI adjustments.</p>
+<div class="shots">
+<figure><img src="assets/anri-showcase-piano-roll-20261023.webp" alt="ANRI AUDIO MIDI Piano Roll showing MIDI notes and original waveform in Logic Pro" loading="lazy" width="1106" height="904"><figcaption><b>Piano Roll and original audio</b><span>Edit MIDI notes while comparing their timing and pitch with the source waveform.</span></figcaption></figure>
+<figure><img src="assets/anri-showcase-articulations-20261023.webp" alt="ANRI AUDIO MIDI articulation parameters and musical phrase in Piano Roll" loading="lazy" width="1106" height="904"><figcaption><b>Articulations and performance detail</b><span>See MIDI events, the performance display, and expressive parameters together.</span></figcaption></figure>
+<figure><img src="assets/anri-showcase-note-editing-20261023.webp" alt="ANRI AUDIO MIDI editor with one selected MIDI note and original audio waveform" loading="lazy" width="1106" height="904"><figcaption><b>Precise MIDI note editing</b><span>Zoom in, adjust note placement and duration, and review the result in the editor.</span></figcaption></figure>
 </div>
 </div></section>
 
-<div class="wrap" id="pricing">
-<div class="buy">
-<div><span class="tag"><span class="dot"></span> ANRI AUDIO MIDI • Full version</span>
-<h2 class="title" style="margin-top:16px">One perpetual license. Two devices.</h2>
-<p class="price-amount"><span>$39</span><span class="price-currency">USD / one-time purchase</span></p>
-<p class="sub" style="margin-bottom:10px">The full ANRI AUDIO MIDI for Logic Pro, with intended activation on up to two devices. Pay once, use perpetually — no monthly or annual subscription.</p>
-<p class="purchase-status" id="checkout-status" role="status">Checkout is not open yet. This page does not collect payment information or accept orders.</p>
-</div>
-<div class="buyright"><button class="btn red" type="button" disabled aria-describedby="checkout-status">Buy for $39 — coming soon</button><a class="btn ghost" href="#how-to-buy">Purchase information</a><a class="btn ghost" href="#license">License details</a></div>
-</div></div>
+<section class="section" id="price"><div class="wrap">
+<span class="eyebrow">Price and purchase model</span><div class="price-shell">
+<div><span class="chip"><span class="red-dot"></span> ANRI AUDIO MIDI • Full version</span>
+<h2 style="margin:22px 0 4px">Perpetual license</h2><div class="price">$39 <span class="usd">USD</span></div>
+<p class="price-note">A one-time payment for a license to use the software, with no mandatory subscription.</p>
+<ul class="checks"><li>Perpetual use rights for the purchased version</li><li>No monthly or annual payments</li><li>Activation on up to two devices — planned term</li><li>License delivery after verified payment once sales open</li></ul>
+<p class="small">The price is listed in US dollars. The charged currency and available payment methods will be shown when checkout opens.</p>
+</div><div class="block-soon"><button class="disabled" type="button" disabled aria-describedby="not-open">Buy for $39 — coming soon</button>
+<p id="not-open">Sales are not open yet. This page does not accept payments or collect payment-card information. The checkout will be announced after provider verification and the signed release.</p>
+<p><strong>Voluntary support payments are not license purchases.</strong></p></div>
+</div></div></section>
 
-<section class="features" id="how-to-buy"><div class="wrap">
-<h2 class="title">How to buy — available after launch</h2>
-<p class="sub">We are finalizing verified payment confirmation and secure license delivery before accepting orders. Please do not treat voluntary support transfers as license purchases.</p>
-<p class="muted-label" style="margin:-8px 0 24px">Payment methods may differ by country. Buyers in Russia should check supported international transfers, minimums and fees before paying. Do not send direct card transfers as license purchases.</p>
-<div class="cards">
-<article class="card"><div class="ico">♡</div><h3>Voluntary creator support</h3><p>Boosty and PayPal are for optional support of development, not for buying or reserving an ANRI AUDIO MIDI license.</p><p style="margin-top:14px"><a class="boosty-link" href="/support-development/">Support Development ↗</a></p></article>
-<article class="card"><div class="ico">◈</div><h3>Official payment information</h3><p>ANRI AUDIO is preparing its paid checkout. The ProEducation platform identifies Anriprod as the seller and TOO PRO EDUCATION as the payment recipient on its external platform.</p><p style="margin-top:14px"><a class="boosty-link" href="/legal/">Seller &amp; payment information ↗</a></p><p class="muted-label">Information only — purchases are not open yet.</p></article>
-<article class="card"><div class="ico">✓</div><h3>Verified license delivery</h3><p>After payment is independently confirmed, Anri Cloud will issue the license. Email delivery, receipt handling and secure recovery are being tested.</p><p class="muted-label" style="margin-top:14px">No automatic purchase confirmation yet</p></article>
-</div>
-</div></section>
-
-<section class="features" id="license"><div class="wrap">
-<h2 class="title">License &amp; activation</h2>
-<p class="sub">Commercial licensing is in final testing. These are the intended license terms, not a claim that online sales are already operating.</p>
-<div class="cards">
-<article class="card"><div class="ico">2</div><h3>Up to two devices</h3><p>One personal license is intended to support activation on two devices. Device management will be available through the licensing workflow.</p></article>
-<article class="card"><div class="ico">∞</div><h3>$39 USD — no subscription</h3><p>The full version is priced at $39 USD as a one-time perpetual license. Final sale, refund, and update policies will be published before checkout opens.</p></article>
-<article class="card"><div class="ico">🔐</div><h3>My License</h3><p>Secure license lookup and recovery are in development. Recovery will require verification of purchase ownership, not just a typed order number.</p></article>
+<section class="section" id="how-to-buy"><div class="wrap">
+<h2 class="anri-title-text">How to buy — available after launch</h2>
+<p class="intro">We are finalizing verified payment confirmation and secure license delivery before accepting orders. Please do not treat voluntary support transfers as license purchases.</p>
+<p class="small" style="margin:-8px 0 24px">Payment methods may differ by country. Buyers in Russia should check supported international transfers, minimums and fees before paying. Do not send direct card transfers as license purchases.</p>
+<div class="grid">
+<article class="box"><span class="icon">♡</span><h3>Voluntary creator support</h3><p>Boosty and PayPal are for optional support of development, not for buying or reserving an ANRI AUDIO MIDI license.</p><p style="margin-top:14px"><a class="anri-extra-link" href="/support-development/">Support Development ↗</a></p></article>
+<article class="box"><span class="icon">◈</span><h3>Official payment information</h3><p>ANRI AUDIO is preparing its paid checkout. The ProEducation platform identifies Anriprod as the seller and TOO PRO EDUCATION as the payment recipient on its external platform.</p><p style="margin-top:14px"><a class="anri-extra-link" href="/legal/">Seller &amp; payment information ↗</a></p><p class="small">Information only — purchases are not open yet.</p></article>
+<article class="box"><span class="icon">✓</span><h3>Verified license delivery</h3><p>After payment is independently confirmed, Anri Cloud will issue the license. Email delivery, receipt handling and secure recovery are being tested.</p><p class="small" style="margin-top:14px">No automatic purchase confirmation yet</p></article>
 </div>
 </div></section>
 
-<section class="features" id="compatibility"><div class="wrap"><div class="support-box">
-<h2 class="title">Compatibility</h2>
+<section class="section" id="license"><div class="wrap">
+<h2 class="anri-title-text">License &amp; activation</h2>
+<p class="intro">Commercial licensing is in final testing. These are the intended license terms, not a claim that online sales are already operating.</p>
+<div class="grid">
+<article class="box"><span class="icon">2</span><h3>Up to two devices</h3><p>One personal license is intended to support activation on two devices. Device management will be available through the licensing workflow.</p></article>
+<article class="box"><span class="icon">∞</span><h3>$39 USD — no subscription</h3><p>The full version is priced at $39 USD as a one-time perpetual license. Final sale, refund, and update policies will be published before checkout opens.</p></article>
+<article class="box"><span class="icon">🔐</span><h3>My License</h3><p>Secure license lookup and recovery are in development. Recovery will require verification of purchase ownership, not just a typed order number.</p></article>
+</div>
+</div></section>
+
+<section class="section" id="compatibility"><div class="wrap"><div class="anri-english-support-box">
+<h2 class="anri-title-text">Compatibility</h2>
 <p><strong>macOS:</strong> Audio Unit (AUv2) for Logic Pro. <strong>Windows VST3:</strong> a separate version is in development and is not included in the current release.</p>
 </div></div></section>
-<section class="features" id="download"><div class="wrap">
-<div class="support-box">
-<span class="tag"><span class="dot"></span> Installer status: coming soon</span>
-<h2 class="title" style="margin-top:16px">Download ANRI AUDIO MIDI</h2>
+<section class="section" id="download"><div class="wrap">
+<div class="anri-english-support-box">
+<span class="chip"><span class="red-dot"></span> Installer status: coming soon</span>
+<h2 class="anri-title-text" style="margin-top:16px">Download ANRI AUDIO MIDI</h2>
 <p>The signed macOS Audio Unit installer has not been published. Installation, system requirements and license activation instructions will appear here when the release is ready. The full version is priced at $39 USD, but no purchase, public download, or trial is available yet.</p>
-<a class="btn ghost" href="#screenshots" style="display:inline-block;margin-top:14px">Explore real screenshots</a>
+<a class="btn btn-ghost" href="#screenshots" style="display:inline-block;margin-top:14px">Explore real screenshots</a>
 </div></div></section>
 
-<section class="features" id="support-development"><div class="wrap">
-<div class="support-box">
-<span class="tag"><span class="dot"></span> Separate from license purchases</span>
-<h2 class="title" style="margin-top:16px">♡ Support Development</h2>
+<section class="section" id="support-development"><div class="wrap">
+<div class="anri-english-support-box">
+<span class="chip"><span class="red-dot"></span> Separate from license purchases</span>
+<h2 class="anri-title-text" style="margin-top:16px">♡ Support Development</h2>
 <p>Voluntary support for independent ANRI AUDIO development is separate from buying ANRI AUDIO MIDI. Donations do not issue a license, reserve a copy or unlock paid features. Please wait for the official purchase checkout when buying a license.</p>
-<a class="btn ghost" href="/support-development/" style="display:inline-block;margin-top:14px">Optional creator support ↗</a>
+<a class="btn btn-ghost" href="/support-development/" style="display:inline-block;margin-top:14px">Optional creator support ↗</a>
 </div></div></section>
 
-<section class="features" id="support"><div class="wrap">
-<div class="support-box">
-<h2 class="title">Technical support</h2>
+<section class="section" id="support"><div class="wrap">
+<div class="anri-english-support-box">
+<h2 class="anri-title-text">Technical support</h2>
 <p>Questions about installation, activation, license recovery or payment verification? Contact <a href="mailto:anribitzzz10@gmail.com" style="color:#ff8ea0;text-decoration:underline">anribitzzz10@gmail.com</a>. Final purchase and refund terms will be published before checkout opens. Do not send account details, license keys or payment information through donation comments.</p>
-<p class="muted-label">Commercial support and voluntary creator support are separate.</p>
+<p class="small">Commercial support and voluntary creator support are separate.</p>
 </div></div></section>
 
-<section class="features" id="seller"><div class="wrap">
-<h2 class="title">Developer and seller</h2>
-<p class="sub">ANRI AUDIO MIDI is proprietary software developed by the independent Kazakhstan-based business Individual Entrepreneur “Anriprod”. Commercial sales have not opened.</p>
-<div class="cards anri-two-col">
-<article class="card"><h3>Seller details</h3>
-<dl class="anri-legal-rows">
+<section class="section" id="seller"><div class="wrap">
+<h2 class="anri-title-text">Developer and seller</h2>
+<p class="intro">ANRI AUDIO MIDI is proprietary software developed by the independent Kazakhstan-based business Individual Entrepreneur “Anriprod”. Commercial sales have not opened.</p>
+<div class="legal-grid">
+<div class="legal-panel"><h3>Seller details</h3>
+<dl class="anri-ref-legal-rows">
 <dt>Registered business</dt><dd>ИП «Анрипрод» — Безручкин Андрей Александрович</dd>
 <dt>Identification number</dt><dd>921007301843</dd>
 <dt>Jurisdiction</dt><dd>Republic of Kazakhstan</dd>
 <dt>Registered address</dt><dd>25 RU-6 Street, Apartment 2, Kokshoky Microdistrict, Shieli Settlement, Shieli District, Kyzylorda Region, Kazakhstan</dd>
 <dt>Business activity</dt><dd>Software publishing (OKED 58290)</dd>
 <dt>Contact</dt><dd><a href="mailto:anribitzzz10@gmail.com">anribitzzz10@gmail.com</a></dd>
-</dl><p style="margin-top:14px"><a href="/legal/" class="boosty-link">Full legal information ↗</a></p></article>
-<article class="card"><h3>Supply and licensing</h3>
-<dl class="anri-legal-rows">
+</dl><p style="margin-top:14px"><a href="/legal/" class="anri-extra-link">Full legal information ↗</a></p></div>
+<div class="legal-panel"><h3>Supply and licensing</h3>
+<dl class="anri-ref-legal-rows">
 <dt>Platform</dt><dd>macOS AUv2 for Logic Pro</dd>
 <dt>Windows</dt><dd>VST3 version in development, not currently included</dd>
 <dt>Delivery</dt><dd>Digital license and installer instructions after launch and verified purchase</dd>
 <dt>Subscription</dt><dd>Not required</dd>
 <dt>Purchase terms</dt><dd>Final terms and refund rules to be published before checkout opens</dd>
 <dt>Status</dt><dd>Pre-release information; no orders accepted</dd>
-</dl><p style="margin-top:14px"><a href="/terms/" class="boosty-link">Draft purchase terms ↗</a></p></article>
+</dl><p style="margin-top:14px"><a href="/terms/" class="anri-extra-link">Draft purchase terms ↗</a></p></div>
 </div></div></section>
-<section class="features" id="faq"><div class="wrap">
-<h2 class="title">License and release FAQ</h2>
-<div class="anri-faq-grid">
-<article class="card"><h3>Can I buy it now?</h3><p>No. Online sales will open after payment verification and publication of the signed installer.</p></article>
-<article class="card"><h3>Is there a monthly subscription?</h3><p>No. The planned model is a single USD 39 perpetual license.</p></article>
-<article class="card"><h3>Does it work on Windows?</h3><p>Windows VST3 is under separate development. The initial release is intended for macOS AUv2 and Logic Pro.</p></article>
-<article class="card"><h3>How do I get help?</h3><p>Use the <a href="/legal/">official seller contacts</a> or email <a href="mailto:anribitzzz10@gmail.com">anribitzzz10@gmail.com</a>.</p></article>
+<section class="section" id="faq"><div class="wrap">
+<h2 class="anri-title-text">License and release FAQ</h2>
+<div class="faq">
+<article class="box"><h3>Can I buy it now?</h3><p>No. Online sales will open after payment verification and publication of the signed installer.</p></article>
+<article class="box"><h3>Is there a monthly subscription?</h3><p>No. The planned model is a single USD 39 perpetual license.</p></article>
+<article class="box"><h3>Does it work on Windows?</h3><p>Windows VST3 is under separate development. The initial release is intended for macOS AUv2 and Logic Pro.</p></article>
+<article class="box"><h3>How do I get help?</h3><p>Use the <a href="/legal/">official seller contacts</a> or email <a href="mailto:anribitzzz10@gmail.com">anribitzzz10@gmail.com</a>.</p></article>
 </div></div></section>
 </main>
 
-<footer><div class="wrap">© <span id="year"></span> ANRI AUDIO • <a href="#pricing">Licensing</a> • <a href="#how-to-buy">Purchase information</a> • <a href="#download">Downloads</a> • <a href="/support-development/">Optional support</a> • <a href="/legal/">Legal information</a> • <a href="/terms/">Purchase terms</a> • <a href="https://boosty.to/anriproduct" target="_blank" rel="noopener noreferrer">Official Boosty profile ↗</a></div></footer>
+<footer><div class="wrap">© <span id="year"></span> ANRI AUDIO • <a href="#price">Licensing</a> • <a href="#how-to-buy">Purchase information</a> • <a href="#download">Downloads</a> • <a href="/support-development/">Optional support</a> • <a href="/legal/">Legal information</a> • <a href="/terms/">Purchase terms</a> • <a href="https://boosty.to/anriproduct" target="_blank" rel="noopener noreferrer">Official Boosty profile ↗</a></div></footer>
 <script>
 document.getElementById("year").textContent = new Date().getFullYear();
 // No payment SDK, order endpoints, customer data capture or automatic licensing
