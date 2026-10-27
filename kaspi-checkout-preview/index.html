@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="ru" data-checkout-api="">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Kaspi Pay — предпросмотр оформления | ANRI AUDIO MIDI</title>
+  <style>
+    :root{color-scheme:dark;--bg:#0a0a0d;--surface:#15151c;--line:#33313b;--muted:#bcb8c5;--red:#ed1f3d}
+    *{box-sizing:border-box}body{margin:0;min-height:100vh;padding:32px 18px;background:radial-gradient(650px 360px at 80% 0%,rgba(237,31,61,.17),transparent 65%),var(--bg);color:#f7f5f8;font:16px/1.55 Inter,system-ui,sans-serif}
+    .wrap{width:min(760px,100%);margin:0 auto}.brand{display:inline-block;text-decoration:none;font-weight:850;color:#fff;letter-spacing:.04em;margin:0 0 28px}
+    .tag{display:inline-flex;border-radius:999px;padding:7px 12px;background:#381720;border:1px solid #7a2839;font-size:12px;font-weight:800;color:#ffd8df}
+    h1{font-size:clamp(30px,5vw,48px);line-height:1.1;margin:20px 0 8px}h2{font-size:21px}p{color:var(--muted)}
+    .card{border:1px solid var(--line);border-radius:21px;background:var(--surface);padding:clamp(18px,4vw,30px);margin:23px 0}
+    .price{font-size:43px;line-height:1;font-weight:900;letter-spacing:-.04em}.small{font-size:13px;color:var(--muted)}
+    label{display:block;font-weight:750;margin:18px 0 7px}input{display:block;width:100%;padding:13px 14px;border:1px solid #777080;border-radius:11px;background:#0d0d12;color:white;font:inherit}
+    button,.button{display:inline-flex;justify-content:center;align-items:center;padding:13px 18px;border-radius:12px;border:0;background:var(--red);color:#fff;font:inherit;font-weight:800;text-decoration:none;cursor:pointer}
+    button:disabled,.button[aria-disabled="true"]{opacity:.5;cursor:not-allowed;pointer-events:none}
+    .actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:18px}.secondary{background:#272632;border:1px solid #4b4553}
+    .status{border-left:3px solid #ed1f3d;padding:10px 14px;background:#20191f;border-radius:4px;font-size:14px}
+    .summary{margin:20px 0;padding:16px;border:1px solid #514d5a;border-radius:13px}.summary dd{margin:0 0 12px;font-weight:800;overflow-wrap:anywhere}.summary dt{font-size:12px;color:var(--muted)}
+    [hidden]{display:none!important}a{color:#ffadb9}.fine{font-size:12px}.fine a{color:#ffced4}
+  </style>
+</head>
+<body>
+<main class="wrap">
+  <a class="brand" href="../ru/">ANRI AUDIO MIDI</a>
+  <div><span class="tag">ПРЕДПРОСМОТР • ОПЛАТА ОТКЛЮЧЕНА</span></div>
+  <h1>Оформление через Kaspi Pay</h1>
+  <p>Для покупателей из Казахстана. Этот интерфейс находится в разработке и не принимает реальные заказы, пока продавец не включит проверенный сервер оплаты.</p>
+
+  <section class="card" aria-labelledby="product">
+    <h2 id="product">ANRI AUDIO MIDI — полная версия</h2>
+    <div class="price">$39 <span style="font-size:14px;font-weight:650;letter-spacing:0">USD</span></div>
+    <p>Разовая покупка бессрочной лицензии приобретённой версии. Подписки нет. Активация до двух устройств — после завершения релизной проверки.</p>
+    <p class="small">Фактическая сумма в тенге должна быть зафиксирована продавцом до запуска. Сервис Kaspi Pay не устанавливает её автоматически через обычную ссылку.</p>
+  </section>
+
+  <section class="card" aria-labelledby="make-order">
+    <h2 id="make-order">Создание заказа</h2>
+    <form id="order-form">
+      <label for="email">Email для получения лицензии</label>
+      <input id="email" type="email" name="email" autocomplete="email" maxlength="254" required placeholder="you@example.com" aria-describedby="privacy">
+      <p class="fine" id="privacy">Email будет отправлен только в сервер заказов ANRI Cloud после подключения защищённой формы. Сейчас отправка отключена.</p>
+      <div class="actions"><button id="create" type="submit" disabled>Создать заказ</button><a class="button secondary" href="../ru/">Вернуться на сайт</a></div>
+    </form>
+    <p class="status" role="status" id="feedback">Тестовый интерфейс. Сервер заказов не подключён, платежи не принимаются.</p>
+
+    <div class="summary" id="order-result" hidden>
+      <dl>
+        <dt>Номер заказа</dt><dd id="order-id"></dd>
+        <dt>Сумма в Kaspi Pay</dt><dd id="order-amount"></dd>
+        <dt>Состояние</dt><dd id="order-state">Ожидает подтверждения</dd>
+      </dl>
+      <p class="small">На странице Kaspi.kz самостоятельно введите <strong>точную сумму в тенге</strong>, указанную здесь. В комментарии к платежу укажите номер заказа. Возврат на сайт или скриншот не подтверждает оплату.</p>
+      <div class="actions"><a id="kaspi-link" class="button" href="#" target="_blank" rel="noopener noreferrer" aria-disabled="true">Перейти в Kaspi Pay</a><button class="secondary" id="check" type="button">Проверить статус</button></div>
+      <p class="small">После проверки операции продавцом в Kaspi POS ключ создаётся через защищённый ANRI Cloud и отправляется вручную. Мгновенная автоматическая выдача не обещается.</p>
+    </div>
+  </section>
+  <p class="fine">В этом предпросмотре нет платёжного SDK, хранения карточных данных или функции самостоятельного подтверждения оплаты покупателем.</p>
+</main>
+<script>
+(() => {
+  "use strict";
+  // Deliberately empty in source. This preview cannot accept real orders by default.
+  // Connect only to an approved *staging* API after verification and separate review.
+  const base = document.documentElement.dataset.checkoutApi.trim().replace(/\/$/, "");
+  const form = document.getElementById("order-form");
+  const create = document.getElementById("create");
+  const feedback = document.getElementById("feedback");
+  const result = document.getElementById("order-result");
+  const link = document.getElementById("kaspi-link");
+  const check = document.getElementById("check");
+  let orderId = null;
+  let checkoutEmail = "";
+  let checkoutToken = "";
+  const loopbackTest = location.hostname === "127.0.0.1" && /^http:\/\/127\.0\.0\.1:[0-9]+$/.test(base);
+  if (base && (/^https:\/\//.test(base) || loopbackTest)) {
+    create.disabled = false;
+    feedback.textContent = "Тестовая форма подключена к серверу. До подтверждения релиза не совершайте реальный платёж.";
+  }
+  async function api(path, init) {
+    const response = await fetch(base + path, {cache:"no-store", ...init});
+    const json = await response.json();
+    if (!response.ok) throw new Error(json.detail || "Ошибка подключения к серверу");
+    return json;
+  }
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    if (!base || create.disabled) return;
+    create.disabled = true;
+    try {
+      const email = document.getElementById("email").value.trim();
+      // Reuse a cryptographically random token only when retrying the same
+      // buyer's request. Never confuse retries with another purchaser.
+      if (email.toLowerCase() !== checkoutEmail || !checkoutToken) {
+        checkoutEmail = email.toLowerCase();
+        checkoutToken = crypto.randomUUID();
+      }
+      const data = await api("/v1/kaspi/orders", {
+        method:"POST",
+        headers:{"Content-Type":"application/json","Idempotency-Key":checkoutToken},
+        body:JSON.stringify({customer_email:email})
+      });
+      orderId = data.order_id;
+      document.getElementById("order-id").textContent = orderId;
+      document.getElementById("order-amount").textContent = new Intl.NumberFormat("ru-KZ").format(data.amount_kzt) + " ₸";
+      document.getElementById("order-state").textContent = "Ожидает проверки в Kaspi POS";
+      result.hidden = false;
+      if (/^https:\/\/pay\.kaspi\.kz\/pay\/[A-Za-z0-9]+$/.test(data.payment_url)) {
+        link.href = data.payment_url;
+        link.removeAttribute("aria-disabled");
+      }
+      feedback.textContent = "Заказ создан. Это ещё НЕ подтверждение оплаты.";
+    } catch(e) {
+      feedback.textContent = "Заказ не создан: " + String(e.message);
+      create.disabled = false;
+    }
+  });
+  check.addEventListener("click", async () => {
+    if (!orderId) return;
+    check.disabled = true;
+    try {
+      const data = await api("/v1/kaspi/orders/" + encodeURIComponent(orderId));
+      document.getElementById("order-state").textContent =
+        data.status === "paid" ? "Подтверждён продавцом; лицензия передаётся вручную" : "Ожидает подтверждения";
+    } catch(e) {
+      feedback.textContent = "Проверка статуса недоступна: " + String(e.message);
+    } finally { check.disabled = false; }
+  });
+})();
+</script>
+</body>
+</html>
