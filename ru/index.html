@@ -43,7 +43,7 @@
     .box{border:1px solid rgba(255,255,255,.075);border-radius:18px;background:linear-gradient(150deg,rgba(255,255,255,.047),rgba(255,255,255,.017));padding:23px}
     .box .icon{display:grid;place-items:center;width:42px;height:42px;border-radius:11px;background:rgba(237,31,61,.13);color:#ff7188;font-size:20px;margin-bottom:19px}
     .box h3{font-size:18px;line-height:1.3;margin:0 0 9px}.box p{font-size:14px;color:var(--muted);margin:0}
-    .workflow{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:31px}
+    .workflow{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;margin-top:31px}
     .step{border:1px solid var(--line);background:#111116;padding:17px;border-radius:15px;font-weight:750;font-size:13px}.step small{display:block;font-size:11px;color:#ff5b77;margin-bottom:6px}
     .showcase{display:grid;grid-template-columns:1.08fr .92fr;gap:22px;align-items:center;margin-top:28px}
     .showcase-text{padding:8px 0}.showcase-text p{color:var(--muted)}.showcase-text strong{color:var(--fg)}
@@ -94,6 +94,19 @@
 .anri-lang-switch a[aria-current="page"]{background:#34343e;color:#fff}
 @media(max-width:700px){.nav{height:auto;min-height:70px;flex-wrap:wrap;padding-top:10px;padding-bottom:10px;row-gap:10px}.brand{order:0}.anri-lang-switch{order:1;margin-left:auto}.navlinks{order:2;flex-basis:100%}.anri-header-cta{order:2}}
 @media(max-width:400px){.anri-lang-switch a{min-width:32px;padding:7px 7px}}
+.anri-extra-heading{font-size:22px;margin:30px 0 8px}
+.anri-controls{display:flex;flex-wrap:wrap;gap:8px}
+.anri-controls span{padding:8px 10px;border:1px solid var(--line);border-radius:999px;background:#101015;color:#c8c8d0;font-size:12px}
+.anri-section-actions{margin-top:18px;display:flex;flex-wrap:wrap;gap:10px}
+.anri-section-actions a{display:inline-flex;align-items:center;padding:10px 13px;border:1px solid rgba(237,31,61,.36);border-radius:11px;background:rgba(237,31,61,.1);color:#ffe2e7;font-size:13px;font-weight:750}
+@media(min-width:701px) and (max-width:1020px){.workflow{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:700px){.workflow{grid-template-columns:repeat(2,minmax(0,1fr))}}
+/* Supplemental breakpoints to align the existing card and row counts in EN, RU and KZ */
+@media(min-width:901px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}.workflow{grid-template-columns:repeat(6,minmax(0,1fr))}}
+@media(min-width:901px) and (max-width:930px){.hero{grid-template-columns:1.02fr .98fr}}
+@media(max-width:900px){.shots{grid-template-columns:1fr}.anri-artbox{grid-template-columns:1fr}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.workflow{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(min-width:621px) and (max-width:700px){.faq,.legal-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:620px){.grid,.faq,.legal-grid{grid-template-columns:1fr}.workflow{grid-template-columns:repeat(2,minmax(0,1fr))}}
 </style>
 </head>
 <body>
@@ -128,12 +141,19 @@
         <article class="box"><span class="icon">◉</span><h3>ANALYZE</h3><p>Анализ аудиоматериала и формирование MIDI-нот для дальнейшей работы.</p></article>
         <article class="box"><span class="icon">▦</span><h3>Piano Roll</h3><p>Наглядное редактирование высоты, начала и длительности нот рядом с исходной волной.</p></article>
         <article class="box"><span class="icon">✦</span><h3>Редактор MIDI</h3><p>Перемещение и изменение нот, корректировка velocity и другие инструменты редактирования.</p></article>
+        <article class="box"><span class="icon">≈</span><h3>Match Audio</h3><p>Согласование динамики MIDI с громкостью исходного исполнения для более естественных значений velocity.</p></article>
         <article class="box"><span class="icon">⌗</span><h3>Quantize и Snap</h3><p>Корректировка ритмической сетки и точная настройка расположения событий.</p></article>
-        <article class="box"><span class="icon">▷</span><h3>Preview</h3><p>Предварительное прослушивание и проверка результата до переноса MIDI в проект.</p></article>
+        <article class="box"><span class="icon">▷</span><h3>Preview</h3><p>Предварительное прослушивание и проверка результата до переноса MIDI в проект. Масштабирование помогает детально проверить фразу и положение нот.</p></article>
         <article class="box"><span class="icon">↗</span><h3>Drag &amp; Drop / SEND MIDI</h3><p>Перенос MIDI и передача подготовленных нот в рабочий процесс Logic Pro.</p></article>
+        <article class="box"><span class="icon">⇄</span><h3>Маршрутизация MIDI</h3><p>Выбор MIDI-канала, вывод через хост или внешний MIDI, транспонирование и диапазон нот.</p></article>
+        <article class="box"><span class="icon">±</span><h3>Творческие MIDI-инструменты</h3><p>Randomise, Musical, Up +1 и Down -1 для быстрых музыкальных вариаций.</p></article>
+        <article class="box"><span class="icon">≋</span><h3>Детекция артикуляций</h3><p>Параметры Legato, Tremolo, Pitch, Expression, Vibrato, Breath и Articul рядом с MIDI.</p></article>
       </div>
+      <h3 class="anri-extra-heading">Настройки анализа</h3>
+      <p class="intro" style="margin-bottom:12px">Регулируйте параметры определения нот под исходное аудио.</p>
+      <div class="anri-controls" aria-label="Настройки распознавания"><span>Polyphony</span><span>Threshold</span><span>Sensitivity</span><span>Pitch Accuracy</span><span>Stability</span><span>Onset</span><span>Min Note</span><span>Release</span></div>
       <div class="workflow" aria-label="Последовательность работы">
-        <div class="step"><small>01</small>Загрузить аудио</div><div class="step"><small>02</small>Нажать ANALYZE</div><div class="step"><small>03</small>Отредактировать Piano Roll</div><div class="step"><small>04</small>Перенести MIDI в Logic Pro</div>
+        <div class="step"><small>01</small>Загрузить аудио</div><div class="step"><small>02</small>Нажать ANALYZE</div><div class="step"><small>03</small>Просмотреть Piano Roll</div><div class="step"><small>04</small>Отредактировать MIDI</div><div class="step"><small>05</small>Match / Quantize / Snap</div><div class="step"><small>06</small>Перенести MIDI в Logic Pro</div>
       </div>
     </div>
   </section>
@@ -153,7 +173,7 @@
   <div class="anri-artcaption">Реальная панель управления: ANALYZE и REC ARTICULATION.</div>
 </div>
 </section>
-<section class="section" style="padding-top:0">
+<section class="section" id="screenshots" style="padding-top:0">
     <div class="wrap">
       <span class="eyebrow">Интерфейс программы</span>
       <h2>Скриншоты из реальной версии</h2>
@@ -184,6 +204,39 @@
         </div>
       </div>
     </div>
+  </section>
+
+  <section class="section" id="how-to-buy">
+    <div class="wrap"><span class="eyebrow">После официального запуска</span><h2>Как приобрести лицензию</h2>
+      <p class="intro">Покупка пока недоступна. Добровольная поддержка проекта не является заказом, оплатой или бронированием лицензии.</p>
+      <div class="grid">
+        <article class="box"><span class="icon">♡</span><h3>Добровольная поддержка</h3><p>Boosty и PayPal предназначены для добровольной поддержки разработки, а не покупки лицензии.</p><div class="anri-section-actions"><a href="/ru/support-development/">Поддержать разработку</a></div></article>
+        <article class="box"><span class="icon">◈</span><h3>Официальные платежи</h3><p>Платёжная система ProEducation указывает ИП «Анрипрод» поставщиком, а ТОО «ПРО ЭДЮКЕЙШН» — стороной, принимающей оплату на внешней платформе.</p><div class="anri-section-actions"><a href="contacts/">Реквизиты продавца</a></div></article>
+        <article class="box"><span class="icon">✓</span><h3>Выдача лицензии</h3><p>После подтверждения оплаты планируется выдача лицензии через Anri Cloud. Почтовые уведомления и восстановление доступа ещё проходят проверку.</p></article>
+      </div>
+    </div>
+  </section>
+  <section class="section" id="license">
+    <div class="wrap"><span class="eyebrow">Лицензия и активация</span><h2>Условия активации</h2>
+      <p class="intro">Ниже указаны планируемые условия. Они будут утверждены до открытия оплаты.</p>
+      <div class="grid">
+        <article class="box"><span class="icon">2</span><h3>До двух устройств</h3><p>Планируется персональная лицензия с активацией до двух устройств и управлением активациями.</p></article>
+        <article class="box"><span class="icon">∞</span><h3>39 USD — без подписки</h3><p>Единовременная оплата за бессрочную лицензию. Правила возврата и обновлений будут опубликованы до начала продаж.</p></article>
+        <article class="box"><span class="icon">🔐</span><h3>My License</h3><p>Безопасный поиск и восстановление лицензии разрабатываются. Доступ будет выдаваться после проверки принадлежности покупки.</p></article>
+      </div>
+    </div>
+  </section>
+  <section class="section" id="compatibility">
+    <div class="wrap"><h2>Совместимость</h2><div class="box"><p><strong>macOS:</strong> Audio Unit (AUv2) для Logic Pro. <strong>Windows VST3:</strong> разрабатывается отдельно и не входит в текущий выпуск.</p></div></div>
+  </section>
+  <section class="section" id="download">
+    <div class="wrap"><span class="eyebrow">Установщик — скоро</span><h2>Скачать ANRI AUDIO MIDI</h2><div class="box"><p>Подписанный установщик macOS пока не опубликован. После релиза появятся официальная загрузка, системные требования и инструкция по активации. Предзаказов, открытой оплаты и публичной тестовой версии сейчас нет.</p><div class="anri-section-actions"><a href="#screenshots">Посмотреть скриншоты</a></div></div></div>
+  </section>
+  <section class="section" id="support-development">
+    <div class="wrap"><span class="eyebrow">Отдельно от покупки лицензии</span><h2>♡ Поддержать разработку</h2><div class="box"><p>Добровольная поддержка ANRI AUDIO не предоставляет лицензионный ключ, дополнительные функции, предзаказ или приоритетный доступ. Для покупки лицензии дождитесь официального запуска.</p><div class="anri-section-actions"><a href="/ru/support-development/">Способы поддержки</a></div></div></div>
+  </section>
+  <section class="section" id="support">
+    <div class="wrap"><span class="eyebrow">Помощь покупателям</span><h2>Техническая поддержка</h2><div class="box"><p>По вопросам установки, активации, восстановления лицензии и проверки оплаты пишите на <a href="mailto:anribitzzz10@gmail.com" style="color:#ff8ea0;text-decoration:underline">anribitzzz10@gmail.com</a>. Условия продажи и возврата будут утверждены до запуска. Не передавайте данные карты и лицензионные ключи в комментариях к пожертвованиям.</p></div></div>
   </section>
   <section class="section" id="seller">
     <div class="wrap">
@@ -235,6 +288,6 @@
     </div>
   </section>
 </main>
-<footer><div class="wrap"><span>© 2026 ANRI AUDIO • ANRI AUDIO MIDI</span><span>Русская версия • <a href="../kk/" style="color:#dad5db" lang="kk">Қазақша</a> • <a href="terms/" style="color:#dad5db">Условия покупки</a> • <a href="contacts/" style="color:#dad5db">Контакты</a> • <a href="../" style="color:#dad5db">Основной сайт / EN ↗</a> • <a href="../support-development/" style="color:#dad5db">Поддержать разработку</a></span></div></footer>
+<footer><div class="wrap"><span>© 2026 ANRI AUDIO • ANRI AUDIO MIDI</span><span>Русская версия • <a href="../kk/" style="color:#dad5db" lang="kk">Қазақша</a> • <a href="terms/" style="color:#dad5db">Условия покупки</a> • <a href="contacts/" style="color:#dad5db">Контакты</a> • <a href="../" style="color:#dad5db">Основной сайт / EN ↗</a> • <a href="/ru/support-development/" style="color:#dad5db">Поддержать разработку</a> • <a href="#how-to-buy" style="color:#dad5db">Покупка</a> • <a href="#download" style="color:#dad5db">Загрузка</a></span></div></footer>
 </body>
 </html>
