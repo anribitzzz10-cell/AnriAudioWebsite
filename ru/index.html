@@ -101,6 +101,12 @@
 .anri-section-actions a{display:inline-flex;align-items:center;padding:10px 13px;border:1px solid rgba(237,31,61,.36);border-radius:11px;background:rgba(237,31,61,.1);color:#ffe2e7;font-size:13px;font-weight:750}
 @media(min-width:701px) and (max-width:1020px){.workflow{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:700px){.workflow{grid-template-columns:repeat(2,minmax(0,1fr))}}
+/* Supplemental breakpoints to align the existing card and row counts in EN, RU and KZ */
+@media(min-width:901px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}.workflow{grid-template-columns:repeat(6,minmax(0,1fr))}}
+@media(min-width:901px) and (max-width:930px){.hero{grid-template-columns:1.02fr .98fr}}
+@media(max-width:900px){.shots{grid-template-columns:1fr}.anri-artbox{grid-template-columns:1fr}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.workflow{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(min-width:621px) and (max-width:700px){.faq,.legal-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:620px){.grid,.faq,.legal-grid{grid-template-columns:1fr}.workflow{grid-template-columns:repeat(2,minmax(0,1fr))}}
 </style>
 </head>
 <body>
