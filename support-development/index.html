@@ -34,10 +34,14 @@ h1{font-size:clamp(44px,7vw,74px);line-height:1;letter-spacing:-.05em;margin:22p
 .payment-note{font-size:13px!important;color:#bcbcc7!important;margin:16px 0 0!important}
 .payment-group.boosty{border-color:rgba(237,31,61,.18)}
 @media(max-width:600px){.payment-group{padding:19px 16px}.payment-row{align-items:flex-start;flex-direction:column;gap:10px}.payment-action{width:100%;justify-content:space-between;gap:8px}.payment-action code{font-size:13px}.pay-link{width:100%}.payment-group h2{font-size:21px}}
+.anri-support-languages{display:inline-flex;gap:4px;border:1px solid var(--line);border-radius:999px;padding:3px;background:#15151b;white-space:nowrap}
+.anri-support-languages a{color:#c8c7d0;font-size:12px;font-weight:800;padding:6px 9px;border-radius:999px;text-decoration:none}
+.anri-support-languages a[aria-current="page"]{background:#34343e;color:white}
+@media(max-width:720px){.nav{height:auto;min-height:70px;flex-wrap:wrap;padding:10px 0}.anri-support-languages{margin-left:auto}}
 </style>
 </head>
 <body>
-<header><div class="wrap nav"><a class="brand" href="/"><span class="logo">A</span><span>Anri Audio</span></a><a class="back" href="/">← Back to Anri Audio</a></div></header>
+<header><div class="wrap nav"><a class="brand" href="/"><span class="logo">A</span><span>Anri Audio</span></a><a class="back" href="/">← Back to Anri Audio</a><nav class="anri-support-languages" aria-label="Language switcher"><a href="/support-development/" lang="en" aria-current="page">EN</a><a href="/ru/support-development/" lang="ru">RU</a><a href="/kk/support-development/" lang="kk">KZ</a></nav></div></header>
 <main><div class="wrap"><section class="hero"><span class="tag"><span class="dot"></span> Completely optional</span><h1>♡ Support Development</h1><p class="emphasis">Voluntary support is NOT a license purchase.</p><p>ANRI AUDIO MIDI is being prepared for a separate paid release. You are welcome to support independent development voluntarily, but these payments do not include a license key, paid features, preorder, priority access or entitlement to the upcoming plugin. Official purchase links will appear on the <a href="/#how-to-buy" style="color:#ffd7de;text-decoration:underline">ANRI AUDIO MIDI license page</a> when sales are ready.</p></section>
 <div class="payment-groups">
 <section class="payment-group boosty" id="boosty" aria-labelledby="boostyTitle">
@@ -59,6 +63,6 @@ h1{font-size:clamp(44px,7vw,74px);line-height:1;letter-spacing:-.05em;margin:22p
 </div>
 <aside class="note"><p><strong>Support is completely optional and separate from commercial purchases.</strong> Support payments through these links will NOT issue an ANRI AUDIO MIDI license. For a paid license, wait for an official purchase checkout. Always verify the recipient and amount on your payment service; Qplus invoice links can expire or be one-time use.</p></aside>
 </div></main>
-<footer><div class="wrap">© <span id="year"></span> ANRI AUDIO • Voluntary support, not a license sale • <a href="/legal/" style="color:#d6c4ca">Legal information</a></div></footer>
+<footer><div class="wrap">© <span id="year"></span> ANRI AUDIO • Voluntary support, not a license sale • <a href="/legal/" style="color:#d6c4ca">Legal information</a> • <a href="/terms/" style="color:#d6c4ca">Purchase terms</a></div></footer>
 <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
 </body></html>
