@@ -34,6 +34,12 @@ dialog{width:min(520px,calc(100% - 32px));border:1px solid #303039;border-radius
 .anri-lang-switch a[aria-current="page"]{background:#34343e;color:#fff}
 @media(max-width:700px){.nav{height:auto;min-height:70px;flex-wrap:wrap;padding-top:10px;padding-bottom:10px;row-gap:10px}.brand{order:0}.anri-lang-switch{order:1;margin-left:auto}.navlinks{order:2;flex-basis:100%}.anri-header-cta{order:2}}
 @media(max-width:400px){.anri-lang-switch a{min-width:32px;padding:7px 7px}}
+.anri-two-col{grid-template-columns:repeat(2,minmax(0,1fr))}
+.anri-faq-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}
+.anri-faq-grid .card{min-height:145px}
+.anri-legal-rows{display:grid;grid-template-columns:140px minmax(0,1fr);gap:9px 14px;font-size:14px}
+.anri-legal-rows dt{color:var(--muted)}.anri-legal-rows dd{margin:0;overflow-wrap:anywhere}
+@media(max-width:620px){.anri-two-col,.anri-faq-grid{grid-template-columns:1fr}.anri-legal-rows{grid-template-columns:1fr;gap:2px}.anri-legal-rows dd{margin-bottom:12px}}
 </style>
 <!-- Paid-release preview. Payment scripts intentionally not loaded until verified live checkout is approved. -->
   <link rel="icon" href="/favicon.ico" sizes="any">
@@ -163,6 +169,10 @@ dialog{width:min(520px,calc(100% - 32px));border:1px solid #303039;border-radius
 </div>
 </div></section>
 
+<section class="features" id="compatibility"><div class="wrap"><div class="support-box">
+<h2 class="title">Compatibility</h2>
+<p><strong>macOS:</strong> Audio Unit (AUv2) for Logic Pro. <strong>Windows VST3:</strong> a separate version is in development and is not included in the current release.</p>
+</div></div></section>
 <section class="features" id="download"><div class="wrap">
 <div class="support-box">
 <span class="tag"><span class="dot"></span> Installer status: coming soon</span>
@@ -185,9 +195,41 @@ dialog{width:min(520px,calc(100% - 32px));border:1px solid #303039;border-radius
 <p>Questions about installation, activation, license recovery or payment verification? Contact <a href="mailto:anribitzzz10@gmail.com" style="color:#ff8ea0;text-decoration:underline">anribitzzz10@gmail.com</a>. Final purchase and refund terms will be published before checkout opens. Do not send account details, license keys or payment information through donation comments.</p>
 <p class="muted-label">Commercial support and voluntary creator support are separate.</p>
 </div></div></section>
+
+<section class="features" id="seller"><div class="wrap">
+<h2 class="title">Developer and seller</h2>
+<p class="sub">ANRI AUDIO MIDI is proprietary software developed by the independent Kazakhstan-based business Individual Entrepreneur “Anriprod”. Commercial sales have not opened.</p>
+<div class="cards anri-two-col">
+<article class="card"><h3>Seller details</h3>
+<dl class="anri-legal-rows">
+<dt>Registered business</dt><dd>ИП «Анрипрод» — Безручкин Андрей Александрович</dd>
+<dt>Identification number</dt><dd>921007301843</dd>
+<dt>Jurisdiction</dt><dd>Republic of Kazakhstan</dd>
+<dt>Registered address</dt><dd>25 RU-6 Street, Apartment 2, Kokshoky Microdistrict, Shieli Settlement, Shieli District, Kyzylorda Region, Kazakhstan</dd>
+<dt>Business activity</dt><dd>Software publishing (OKED 58290)</dd>
+<dt>Contact</dt><dd><a href="mailto:anribitzzz10@gmail.com">anribitzzz10@gmail.com</a></dd>
+</dl><p style="margin-top:14px"><a href="/legal/" class="boosty-link">Full legal information ↗</a></p></article>
+<article class="card"><h3>Supply and licensing</h3>
+<dl class="anri-legal-rows">
+<dt>Platform</dt><dd>macOS AUv2 for Logic Pro</dd>
+<dt>Windows</dt><dd>VST3 version in development, not currently included</dd>
+<dt>Delivery</dt><dd>Digital license and installer instructions after launch and verified purchase</dd>
+<dt>Subscription</dt><dd>Not required</dd>
+<dt>Purchase terms</dt><dd>Final terms and refund rules to be published before checkout opens</dd>
+<dt>Status</dt><dd>Pre-release information; no orders accepted</dd>
+</dl><p style="margin-top:14px"><a href="/terms/" class="boosty-link">Draft purchase terms ↗</a></p></article>
+</div></div></section>
+<section class="features" id="faq"><div class="wrap">
+<h2 class="title">License and release FAQ</h2>
+<div class="anri-faq-grid">
+<article class="card"><h3>Can I buy it now?</h3><p>No. Online sales will open after payment verification and publication of the signed installer.</p></article>
+<article class="card"><h3>Is there a monthly subscription?</h3><p>No. The planned model is a single USD 39 perpetual license.</p></article>
+<article class="card"><h3>Does it work on Windows?</h3><p>Windows VST3 is under separate development. The initial release is intended for macOS AUv2 and Logic Pro.</p></article>
+<article class="card"><h3>How do I get help?</h3><p>Use the <a href="/legal/">official seller contacts</a> or email <a href="mailto:anribitzzz10@gmail.com">anribitzzz10@gmail.com</a>.</p></article>
+</div></div></section>
 </main>
 
-<footer><div class="wrap">© <span id="year"></span> ANRI AUDIO • <a href="#pricing">Licensing</a> • <a href="#how-to-buy">Purchase information</a> • <a href="#download">Downloads</a> • <a href="/support-development/">Optional support</a> • <a href="/legal/">Legal information</a> • <a href="https://boosty.to/anriproduct" target="_blank" rel="noopener noreferrer">Official Boosty profile ↗</a></div></footer>
+<footer><div class="wrap">© <span id="year"></span> ANRI AUDIO • <a href="#pricing">Licensing</a> • <a href="#how-to-buy">Purchase information</a> • <a href="#download">Downloads</a> • <a href="/support-development/">Optional support</a> • <a href="/legal/">Legal information</a> • <a href="/terms/">Purchase terms</a> • <a href="https://boosty.to/anriproduct" target="_blank" rel="noopener noreferrer">Official Boosty profile ↗</a></div></footer>
 <script>
 document.getElementById("year").textContent = new Date().getFullYear();
 // No payment SDK, order endpoints, customer data capture or automatic licensing
