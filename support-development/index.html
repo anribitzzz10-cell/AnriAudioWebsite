@@ -39,17 +39,13 @@ h1{font-size:clamp(44px,7vw,74px);line-height:1;letter-spacing:-.05em;margin:22p
 <body>
 <header><div class="wrap nav"><a class="brand" href="/"><span class="logo">A</span><span>Anri Audio</span></a><a class="back" href="/">← Back to Anri Audio</a></div></header>
 <main><div class="wrap"><section class="hero"><span class="tag"><span class="dot"></span> Completely optional</span><h1>♡ Support Development</h1><p class="emphasis">Voluntary support is NOT a license purchase.</p><p>ANRI AUDIO MIDI is being prepared for a separate paid release. You are welcome to support independent development voluntarily, but these payments do not include a license key, paid features, preorder, priority access or entitlement to the upcoming plugin. Official purchase links will appear on the <a href="/#how-to-buy" style="color:#ffd7de;text-decoration:underline">ANRI AUDIO MIDI license page</a> when sales are ready.</p></section>
-<p class="copy-confirm" id="copyStatus" role="status" aria-live="polite"></p>
 <div class="payment-groups">
 <section class="payment-group boosty" id="boosty" aria-labelledby="boostyTitle">
 <h2 id="boostyTitle">♡ Boosty — All supporters</h2><p class="group-intro">Official Anri prod. / Anri Audio profile. Support via Boosty is now available. Thank you for supporting independent development.</p>
 <div class="payment-row"><div class="payment-label"><strong>Boosty</strong><span>For supporters from any country</span></div><a class="pay-link" href="https://boosty.to/anriproduct" target="_blank" rel="noopener noreferrer">Support on Boosty ↗</a></div>
 </section>
 <section class="payment-group" id="kazakhstan" aria-labelledby="kzTitle">
-<h2 id="kzTitle">🇰🇿 Kazakhstan</h2><p class="group-intro">Voluntary support via Kazakhstan bank cards or Qplus. Tap Copy to transfer the card number.</p>
-<div class="payment-row"><div class="payment-label"><strong>Kaspi Bank</strong><span>Bank card</span></div><div class="payment-action"><code>4400 4306 4724 9090</code><button class="copy-button" type="button" data-copy="4400430647249090" aria-label="Copy Kaspi Bank number">Copy</button></div></div>
-<div class="payment-row"><div class="payment-label"><strong>Halyk Bank</strong><span>Bank card</span></div><div class="payment-action"><code>4146 2130 8044 1187</code><button class="copy-button" type="button" data-copy="4146213080441187" aria-label="Copy Halyk Bank number">Copy</button></div></div>
-<div class="payment-row"><div class="payment-label"><strong>Alatau City Bank</strong><span>Bank card</span></div><div class="payment-action"><code>5395 4550 2350 2758</code><button class="copy-button" type="button" data-copy="5395455023502758" aria-label="Copy Alatau City Bank number">Copy</button></div></div>
+<h2 id="kzTitle">🇰🇿 Kazakhstan</h2><p class="group-intro">Voluntary support via Qplus. Boosty and PayPal are also available on this page.</p>
 <div class="payment-row"><div class="payment-label"><strong>Qplus</strong><span>External payment form</span></div><a class="pay-link" href="https://qpay-payform.qiwi.kz/form/invoice?invoiceUid=cec6cb48-cca3-4960-913b-34de8cb7e95b" target="_blank" rel="noopener noreferrer">Open ↗</a></div>
 </section>
 <section class="payment-group" id="russia" aria-labelledby="ruTitle">
@@ -61,27 +57,8 @@ h1{font-size:clamp(44px,7vw,74px);line-height:1;letter-spacing:-.05em;margin:22p
 <div class="payment-row"><div class="payment-label"><strong>PayPal</strong><span>paypal.me/anribeats</span></div><a class="pay-link" href="https://paypal.me/anribeats" target="_blank" rel="noopener noreferrer">Open ↗</a></div>
 </section>
 </div>
-<aside class="note"><p><strong>Support is completely optional and separate from commercial purchases.</strong> Sending money through any link or bank account on this page will NOT issue an ANRI AUDIO MIDI license. For a paid license, wait for an official purchase checkout. Always verify the recipient and amount on your payment service; Qplus invoice links can expire or be one-time use.</p></aside>
+<aside class="note"><p><strong>Support is completely optional and separate from commercial purchases.</strong> Support payments through these links will NOT issue an ANRI AUDIO MIDI license. For a paid license, wait for an official purchase checkout. Always verify the recipient and amount on your payment service; Qplus invoice links can expire or be one-time use.</p></aside>
 </div></main>
-<footer><div class="wrap">© <span id="year"></span> ANRI AUDIO • Voluntary support, not a license sale</div></footer>
+<footer><div class="wrap">© <span id="year"></span> ANRI AUDIO • Voluntary support, not a license sale • <a href="/legal/" style="color:#d6c4ca">Legal information</a></div></footer>
 <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
-<script>
-(function(){
-  const status = document.getElementById('copyStatus');
-  document.querySelectorAll('[data-copy]').forEach(function(button){
-    button.addEventListener('click', async function(){
-      const value=button.getAttribute('data-copy');
-      let ok=false;
-      try {
-        if (navigator.clipboard && window.isSecureContext) {await navigator.clipboard.writeText(value);ok=true;}
-        else {
-          const temp=document.createElement('textarea');temp.value=value;temp.setAttribute('readonly','');temp.style.position='fixed';temp.style.opacity='0';document.body.appendChild(temp);temp.select();ok=document.execCommand('copy');temp.remove();
-        }
-      } catch(e){ok=false;}
-      if(ok){button.textContent='Copied ✓';status.textContent='Copied to clipboard';setTimeout(function(){button.textContent='Copy';status.textContent='';},2200);}
-      else {status.textContent='Could not copy automatically. Press and hold the number to copy it.';}
-    });
-  });
-})();
-</script>
 </body></html>
