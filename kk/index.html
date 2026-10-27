@@ -12,26 +12,64 @@
 <link rel="icon" type="image/png" href="../favicon-32x32.png" sizes="32x32">
 <link rel="apple-touch-icon" href="../apple-touch-icon.png">
 <style>
-:root{--bg:#0a0a0d;--panel:#141419;--line:#2d2c34;--text:#f4f4f7;--muted:#aaa9b4;--red:#ed1f3d}
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(900px 520px at 77% -50px,rgba(237,31,61,.16),transparent 67%),var(--bg);color:var(--text);font:16px/1.65 Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}
-a{color:#ff9bac;text-underline-offset:3px}a:focus-visible{outline:2px solid white;outline-offset:4px}
-.wrap{width:min(980px,calc(100% - 44px));margin-inline:auto}
-header{position:sticky;top:0;z-index:10;border-bottom:1px solid rgba(255,255,255,.08);background:rgba(10,10,13,.94);backdrop-filter:blur(14px)}
-.nav{min-height:70px;display:flex;justify-content:space-between;align-items:center;gap:16px}
-.brand{text-decoration:none;color:white;display:inline-flex;align-items:center;gap:12px;font-weight:850;letter-spacing:.02em;white-space:nowrap}
-.brand-mark{width:37px;height:37px;border-radius:11px;background:linear-gradient(145deg,var(--red),#96132a);display:grid;place-items:center;font-size:20px;font-weight:900}
-.navlinks{display:flex;align-items:center;gap:16px;font-size:13px}.navlinks a{color:#c8c7d0;text-decoration:none}.navlinks a[aria-current="page"]{color:#fff;border-bottom:2px solid var(--red)}
-h1{font-size:clamp(34px,6vw,58px);line-height:1.12;letter-spacing:-.04em;margin:20px 0}h2{font-size:22px;line-height:1.3;margin:0 0 12px;letter-spacing:-.02em}
-.hero{padding:65px 0 25px}.eyebrow{color:#ff8496;font-size:12px;text-transform:uppercase;letter-spacing:.12em;font-weight:800}
-.lead{color:var(--muted);max-width:770px;font-size:17px}.draft{padding:17px 20px;background:#281720;border:1px solid rgba(237,31,61,.4);border-radius:14px;color:#f4dbe1;margin:24px 0;font-size:14px}
-.paper{display:grid;gap:18px;padding:24px 0 60px}.section{padding:24px 28px;background:linear-gradient(145deg,rgba(255,255,255,.045),rgba(255,255,255,.015));border:1px solid rgba(255,255,255,.08);border-radius:18px}
-.section p{margin:0 0 12px;color:#d6d5de}.section p:last-child{margin-bottom:0}.section ul{margin:0;padding-left:22px;color:#d6d5de}.section li{margin-bottom:7px}
-dl{display:grid;grid-template-columns:190px minmax(0,1fr);gap:12px 20px;margin:0}dt{color:#a5a3af}dd{margin:0;overflow-wrap:anywhere}
-.note{color:#d6c3ca;font-size:14px}.chip{display:inline-flex;padding:6px 10px;border-radius:999px;background:rgba(237,31,61,.12);border:1px solid rgba(237,31,61,.3);font-size:12px;color:#ffbac5;font-weight:700}
-footer{padding:26px 0 42px;border-top:1px solid var(--line);font-size:13px;color:#a19fab}
-footer .wrap{display:flex;flex-wrap:wrap;gap:15px;justify-content:space-between}footer a{color:#d7d5dd;text-decoration:none}
-@media(max-width:680px){.wrap{width:calc(100% - 30px)}.nav{flex-wrap:wrap;padding:12px 0}.navlinks{gap:12px;flex-wrap:wrap}.hero{padding-top:46px}.paper{gap:12px}.section{padding:20px}dl{grid-template-columns:1fr;gap:3px}dd{margin-bottom:13px}}
-
+    :root {--bg:#0a0a0d;--panel:#141419;--panel2:#101015;--line:#2d2c34;--fg:#f4f4f7;--muted:#aaa9b4;--red:#ed1f3d;--cream:#ffd8df}
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;background:radial-gradient(900px 520px at 77% -50px,rgba(237,31,61,.17),transparent 67%),var(--bg);color:var(--fg);font:16px/1.62 Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}
+    a{color:inherit;text-decoration:none} a:focus-visible,button:focus-visible{outline:2px solid white;outline-offset:4px}
+    .wrap{width:min(1120px,calc(100% - 44px));margin-inline:auto}
+    header{position:sticky;top:0;z-index:10;border-bottom:1px solid rgba(255,255,255,.08);background:rgba(10,10,13,.89);backdrop-filter:blur(16px)}
+    .nav{min-height:70px;display:flex;justify-content:space-between;align-items:center;gap:22px}
+    .brand{display:inline-flex;align-items:center;gap:12px;font-weight:850;letter-spacing:.02em;white-space:nowrap}
+    .brand-mark{width:37px;height:37px;border-radius:11px;background:linear-gradient(145deg,var(--red),#96132a);display:grid;place-items:center;font-weight:950;font-size:20px;box-shadow:0 0 22px rgba(237,31,61,.18)}
+    .navlinks{display:flex;gap:23px;align-items:center;color:#c8c7d0;font-size:13px;font-weight:650;white-space:nowrap}
+    .navlinks a:hover,.enlink:hover{color:white}.enlink{border:1px solid var(--line);border-radius:999px;padding:8px 12px;color:#c8c7d0;font-size:12px;font-weight:750}
+    .hero{padding:88px 0 66px;display:grid;grid-template-columns:1.02fr .98fr;align-items:center;gap:55px}
+    .chip{display:inline-flex;align-items:center;gap:9px;border:1px solid rgba(237,31,61,.36);background:rgba(237,31,61,.09);border-radius:999px;color:#ffc9d3;font-size:12px;font-weight:750;padding:8px 12px}
+    .red-dot{width:7px;height:7px;background:var(--red);border-radius:50%}
+    h1{font-size:clamp(45px,6vw,76px);line-height:.99;letter-spacing:-.058em;margin:26px 0 23px;font-weight:850}
+    .accent{color:#ff4965}.lead{font-size:18px;line-height:1.65;color:#b8b7c1;max-width:590px}
+    .hero-foot{margin-top:26px;display:flex;gap:8px;flex-wrap:wrap;color:#c8c7d0;font-size:12px}
+    .hero-foot span{border:1px solid var(--line);border-radius:999px;padding:7px 11px;background:#15151b}
+    .cta-row{display:flex;flex-wrap:wrap;gap:12px;margin:30px 0 0}
+    .btn{display:inline-flex;justify-content:center;align-items:center;border-radius:13px;padding:13px 20px;font-weight:800;font-size:14px;min-height:47px;border:1px solid var(--line)}
+    .btn-red{background:var(--red);color:white;border-color:var(--red)}.btn-ghost{background:#17171e}
+    .image-frame{overflow:hidden;padding:12px;border:1px solid #34333d;background:linear-gradient(145deg,#23232b,#111116);border-radius:24px;box-shadow:0 25px 75px rgba(0,0,0,.42)}
+    .image-frame img{width:100%;height:auto;display:block;border-radius:14px;background:#0c0c10}
+    .eyebrow{display:block;color:#ff8394;text-transform:uppercase;letter-spacing:.16em;font-size:11px;font-weight:850;margin-bottom:12px}
+    .section{padding:73px 0}.section h2{font-size:clamp(30px,4.2vw,43px);line-height:1.12;letter-spacing:-.035em;margin:0 0 16px}
+    .section .intro{color:var(--muted);max-width:720px;font-size:16px;margin:0 0 28px}
+    .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px}
+    .box{border:1px solid rgba(255,255,255,.075);border-radius:18px;background:linear-gradient(150deg,rgba(255,255,255,.047),rgba(255,255,255,.017));padding:23px}
+    .box .icon{display:grid;place-items:center;width:42px;height:42px;border-radius:11px;background:rgba(237,31,61,.13);color:#ff7188;font-size:20px;margin-bottom:19px}
+    .box h3{font-size:18px;line-height:1.3;margin:0 0 9px}.box p{font-size:14px;color:var(--muted);margin:0}
+    .workflow{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;margin-top:31px}
+    .step{border:1px solid var(--line);background:#111116;padding:17px;border-radius:15px;font-weight:750;font-size:13px}.step small{display:block;font-size:11px;color:#ff5b77;margin-bottom:6px}
+    .showcase{display:grid;grid-template-columns:1.08fr .92fr;gap:22px;align-items:center;margin-top:28px}
+    .showcase-text{padding:8px 0}.showcase-text p{color:var(--muted)}.showcase-text strong{color:var(--fg)}
+    .shots{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:28px}
+    figure{margin:0;overflow:hidden;border-radius:19px;border:1px solid var(--line);background:#14141a}
+    figure img{display:block;width:100%;height:auto;min-height:130px;object-fit:contain;background:#0c0c11}
+    figcaption{padding:13px 16px;font-size:13px;color:#bbb9c6}figcaption b{display:block;color:white;font-size:14px;margin-bottom:2px}
+    .price-shell{margin-top:10px;border:1px solid rgba(237,31,61,.38);border-radius:25px;padding:38px;background:linear-gradient(145deg,rgba(237,31,61,.16),rgba(255,255,255,.02));display:grid;grid-template-columns:1.25fr .75fr;gap:30px;align-items:center}
+    .price{font-size:clamp(60px,8vw,89px);font-weight:900;letter-spacing:-.07em;line-height:1;margin:20px 0 8px}.price .usd{font-size:16px;vertical-align:middle;color:#e1dbe0;letter-spacing:0}
+    .price-note{font-size:14px;color:#ddd4d9}.checks{margin:18px 0 0;padding:0;list-style:none;color:#eae8eb;font-size:15px}.checks li{margin-bottom:8px}.checks li::before{content:'✓';color:#ff627d;font-weight:800;margin-right:10px}
+    .block-soon{border:1px solid var(--line);border-radius:18px;padding:20px;background:#111117;color:#bdbac5}
+    .block-soon .disabled{cursor:not-allowed;width:100%;padding:15px;border:0;border-radius:12px;background:#62202b;color:#f6c6ce;font-weight:800;font-size:14px;opacity:.83}
+    .block-soon p{margin:12px 0 0;font-size:12px;line-height:1.6}
+    .small{font-size:13px;color:var(--muted)}
+    .legal-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+    .legal-panel{border:1px solid var(--line);border-radius:19px;background:#14141a;padding:23px}
+    .legal-panel h3{margin:0 0 18px;font-size:20px}.legal-panel dl{display:grid;grid-template-columns:150px minmax(0,1fr);gap:10px 16px;margin:0;font-size:14px}
+    .legal-panel dt{color:#aaa8b3}.legal-panel dd{margin:0;overflow-wrap:anywhere}
+    .placeholder{display:inline-block;color:#ffc2cc;background:rgba(237,31,61,.09);border:1px dashed rgba(237,31,61,.55);padding:2px 6px;border-radius:6px}
+    .notice{margin-top:20px;padding:17px 19px;border-radius:14px;background:#23171e;border:1px solid rgba(237,31,61,.32);color:#e2c9cf;font-size:13px}
+    .faq{display:grid;grid-template-columns:1fr 1fr;gap:15px}.faq .box{min-height:140px}
+    footer{margin-top:56px;padding:30px 0 45px;border-top:1px solid var(--line);color:#918e9a;font-size:13px}
+    footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+    @media(max-width:930px){.hero,.showcase,.price-shell{grid-template-columns:1fr}.hero{padding-top:60px}.navlinks{gap:12px}.price-shell{padding:28px}.grid{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:700px){.navlinks{display:none}.hero{gap:28px}.grid,.shots,.legal-grid,.faq{grid-template-columns:1fr}.workflow{grid-template-columns:1fr 1fr}.wrap{width:min(100% - 30px,1120px)}.section{padding:50px 0}.price-shell{padding:20px}.legal-panel dl{grid-template-columns:1fr;gap:3px}.legal-panel dd{margin-bottom:10px}h1{font-size:50px}}
+  
 /* Articulation feature — mirrored from the existing English presentation */
 .anri-art{padding:24px 0 70px}
 .anri-artbox{display:grid;grid-template-columns:.92fr 1.08fr;gap:28px;align-items:center;padding:28px;border-radius:26px;border:1px solid rgba(237,31,61,.25);background:linear-gradient(145deg,rgba(237,31,61,.11),rgba(255,255,255,.02))}
@@ -42,22 +80,12 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:15px;justify-content:space-between}
 .anri-artchips{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
 .anri-artchip{padding:8px 11px;border-radius:999px;border:1px solid rgba(255,255,255,.12);background:#101015;color:#dedce5;font-size:12px;font-weight:700}
 .anri-artvisual{padding:10px;border-radius:20px;background:#0f0f14;border:1px solid rgba(255,255,255,.09)}
-.anri-artvisual img{display:block;width:100%;height:auto;border-radius:13px}
+.anri-artvisual img{display:block;width:auto;max-width:100%;height:auto;margin-inline:auto;border-radius:13px}
 .anri-artfull{margin-top:18px;padding:12px;border-radius:20px;background:#0f0f14;border:1px solid rgba(255,255,255,.09)}
-.anri-artfull img{display:block;width:100%;height:auto;border-radius:14px}
+.anri-artfull img{display:block;width:auto;max-width:100%;height:auto;margin-inline:auto;border-radius:14px}
 .anri-artcaption{margin-top:9px;color:#aaa9b4;font-size:13px}
 @media(max-width:850px){.anri-artbox{grid-template-columns:1fr;gap:24px}}
 @media(max-width:700px){.anri-art{padding:16px 0 48px}.anri-artbox{padding:18px;border-radius:20px}.anri-artfull{padding:8px}}
-
-
-.anri-gallery-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px;margin-top:22px}
-.anri-gallery-card{margin:0;min-width:0;overflow:hidden;border-radius:17px;background:#101015;border:1px solid rgba(255,255,255,.12)}
-.anri-gallery-card img{display:block;width:100%;height:auto;object-fit:contain;aspect-ratio:1106/904;background:#0c0c11}
-.anri-gallery-card figcaption{padding:14px;color:#cbc9d4;font-size:13px;line-height:1.55}
-.anri-gallery-card figcaption strong{display:block;color:#f5f4f8;font-size:14px;margin-bottom:6px}
-.anri-gallery-card figcaption span{display:block}
-@media(max-width:850px){.anri-gallery-grid{grid-template-columns:1fr 1fr}}
-@media(max-width:600px){.anri-gallery-grid{grid-template-columns:1fr}}
 
 /* Same language switch in the top-right header of all three locales. */
 .anri-lang-switch{display:inline-flex;align-items:center;justify-content:center;gap:3px;flex:0 0 auto;margin-left:auto;padding:3px;border:1px solid #2d2c34;border-radius:999px;background:#15151b;white-space:nowrap}
@@ -66,69 +94,66 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:15px;justify-content:space-between}
 .anri-lang-switch a[aria-current="page"]{background:#34343e;color:#fff}
 @media(max-width:700px){.nav{height:auto;min-height:70px;flex-wrap:wrap;padding-top:10px;padding-bottom:10px;row-gap:10px}.brand{order:0}.anri-lang-switch{order:1;margin-left:auto}.navlinks{order:2;flex-basis:100%}.anri-header-cta{order:2}}
 @media(max-width:400px){.anri-lang-switch a{min-width:32px;padding:7px 7px}}
+.anri-extra-heading{font-size:22px;margin:30px 0 8px}
+.anri-controls{display:flex;flex-wrap:wrap;gap:8px}
+.anri-controls span{padding:8px 10px;border:1px solid var(--line);border-radius:999px;background:#101015;color:#c8c8d0;font-size:12px}
+.anri-section-actions{margin-top:18px;display:flex;flex-wrap:wrap;gap:10px}
+.anri-section-actions a{display:inline-flex;align-items:center;padding:10px 13px;border:1px solid rgba(237,31,61,.36);border-radius:11px;background:rgba(237,31,61,.1);color:#ffe2e7;font-size:13px;font-weight:750}
+@media(min-width:701px) and (max-width:1020px){.workflow{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:700px){.workflow{grid-template-columns:repeat(2,minmax(0,1fr))}}
+/* Supplemental breakpoints to align the existing card and row counts in EN, RU and KZ */
+@media(min-width:901px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}.workflow{grid-template-columns:repeat(6,minmax(0,1fr))}}
+@media(min-width:901px) and (max-width:930px){.hero{grid-template-columns:1.02fr .98fr}}
+@media(max-width:900px){.shots{grid-template-columns:1fr}.anri-artbox{grid-template-columns:1fr}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.workflow{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(min-width:621px) and (max-width:700px){.faq,.legal-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:620px){.grid,.faq,.legal-grid{grid-template-columns:1fr}.workflow{grid-template-columns:repeat(2,minmax(0,1fr))}}
 
-/* Additive locale parity: reuse the existing dark cards, radii and accent */
-@media(min-width:850px){.hero{display:grid;grid-template-columns:1.02fr .98fr;align-items:center;gap:28px}}
-.anri-hero-visual{padding:12px;border:1px solid #34333d;border-radius:24px;background:linear-gradient(145deg,#23232b,#111116);box-shadow:0 25px 75px rgba(0,0,0,.4)}
-.anri-hero-visual img{width:100%;height:auto;border-radius:14px;display:block}
-.anri-parity-subtitle{font-size:19px;margin:28px 0 12px}
-.anri-parity-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px;margin-top:20px}
-.anri-parity-pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px;margin-top:20px}
-.anri-parity-box{min-width:0;border:1px solid rgba(255,255,255,.09);border-radius:18px;padding:20px;background:linear-gradient(150deg,rgba(255,255,255,.045),rgba(255,255,255,.016))}
-.anri-parity-box h3{font-size:17px;line-height:1.35;margin:0 0 10px}.anri-parity-box p{font-size:14px;color:var(--muted);margin:0 0 10px}.anri-parity-box p:last-child{margin-bottom:0}
-.anri-parity-icon{display:grid;place-items:center;width:42px;height:42px;border-radius:12px;background:rgba(237,31,61,.13);color:#ff8699;font-size:20px;margin-bottom:18px}
-.anri-parity-controls{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
-.anri-parity-controls span{padding:8px 10px;border:1px solid var(--line);border-radius:999px;background:#101015;color:#c8c8d0;font-size:12px}
-.anri-parity-workflow{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:9px;margin-top:15px}
-.anri-parity-step{min-width:0;border:1px solid var(--line);border-radius:14px;background:#111116;padding:12px 9px;font-size:12px;font-weight:750;text-align:center}
-.anri-parity-step small{display:block;color:#ff637c;font-size:11px}
-.anri-parity-box dl{grid-template-columns:120px minmax(0,1fr);font-size:13px}
-@media(max-width:970px){.anri-parity-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.anri-parity-workflow{grid-template-columns:repeat(3,minmax(0,1fr))}}
-@media(max-width:600px){.anri-parity-grid,.anri-parity-pair{grid-template-columns:1fr}.anri-parity-workflow{grid-template-columns:repeat(2,minmax(0,1fr))}.anri-parity-box dl{grid-template-columns:1fr;gap:3px}.anri-hero-visual{margin-top:8px}}
-.anri-cta-row{display:flex;flex-wrap:wrap;gap:12px;margin:22px 0 0}.anri-cta{display:inline-flex;justify-content:center;align-items:center;padding:12px 17px;min-height:45px;border:1px solid var(--line);background:#17171e;color:white;text-decoration:none;border-radius:13px;font-size:14px;font-weight:800}.anri-cta-primary{background:var(--red);border-color:var(--red)}
-.anri-hero-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}.anri-hero-chips span{border:1px solid var(--line);border-radius:999px;background:#15151b;padding:6px 10px;color:#d0cdd5;font-size:12px}
-.anri-price-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:22px;align-items:center}
-.anri-price-aside{border:1px solid var(--line);border-radius:18px;padding:20px;background:#111117}
-.anri-price-aside h3{margin:0 0 8px;font-size:19px}.anri-price-aside p{font-size:14px}
-@media(min-width:901px){.anri-parity-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.anri-parity-workflow{grid-template-columns:repeat(6,minmax(0,1fr))}}
-@media(max-width:900px){.hero{grid-template-columns:1fr}.anri-artbox{grid-template-columns:1fr}.anri-gallery-grid{grid-template-columns:1fr}.anri-parity-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.anri-parity-workflow{grid-template-columns:repeat(3,minmax(0,1fr))}.anri-price-grid{grid-template-columns:1fr}}
-@media(max-width:620px){.anri-parity-grid,.anri-parity-pair{grid-template-columns:1fr}.anri-parity-workflow{grid-template-columns:repeat(2,minmax(0,1fr))}}
+/* Original English Support Development panels, shared by all locales */
+.anri-english-support-box{margin-top:20px;padding:28px;border:1px solid rgba(237,31,61,.2);border-radius:26px;background:linear-gradient(145deg,rgba(237,31,61,.075),rgba(255,255,255,.018))}
+.anri-english-support-box p{max-width:780px;color:var(--muted);font-size:15px;line-height:1.6}
+.anri-english-support-box .anri-section-actions{margin-top:18px}
+@media(max-width:700px){.anri-english-support-box{padding:20px;border-radius:20px}}
+
+/* Kazakh text helpers within the Russian reference layout */
+.anri-gallery-card{margin:0}
+.anri-art .anri-artvisual img,.anri-art .anri-artfull img{width:auto;max-width:100%;margin-inline:auto}
+@media(max-width:900px){.shots{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 <header><div class="wrap nav">
 <a class="brand" href="./"><span class="brand-mark">A</span><span>ANRI AUDIO</span></a>
-<nav class="navlinks" aria-label="Бөлімдер"><a href="./" aria-current="page">Бағдарлама</a><a href="#articulations">Артикуляциялар</a><a href="terms/" >Сатып алу шарттары</a><a href="contacts/" >Байланыс</a></nav>
+<nav class="navlinks" aria-label="Бөлімдер"><a href="#product">Бағдарлама</a><a href="#functions">Мүмкіндіктер</a><a href="#articulations">Артикуляциялар</a><a href="#price">Лицензия</a><a href="#seller">Әзірлеуші</a><a href="#faq">Сұрақтар</a></nav>
 <nav class="anri-lang-switch" aria-label="Language switcher">
 <a href="/" lang="en" hreflang="en">EN</a>
 <a href="/ru/" lang="ru" hreflang="ru">RU</a>
 <a href="/kk/" lang="kk" hreflang="kk" aria-current="page">KZ</a>
 </nav>
 </div></header>
-<main class="wrap"><section class="hero"><div><span class="eyebrow">Музыкалық бағдарламалық жасақтама</span><h1>Аудиодан MIDI-ге. Бір терезеде.</h1><p class="lead">ANRI AUDIO MIDI — музыкалық аудионы өңделетін MIDI ноталарына айналдыруға арналған плагин. Нәтижені Piano Roll терезесінде көріп, түзетіп, Logic Pro жобасына тасымалдаңыз.</p><div class="anri-cta-row"><a class="anri-cta anri-cta-primary" href="#price">Толық лицензия — $39</a><a class="anri-cta" href="#functions">Мүмкіндіктерді көру</a></div><div class="anri-hero-chips"><span>macOS</span><span>Audio Unit (AUv2)</span><span>Logic Pro</span><span>Біржолғы төлем</span></div><div class="draft"><strong>Назар аударыңыз.</strong> Коммерциялық шығарылым әзірленіп жатыр. Тапсырыстар мен төлемдер әзірге қабылданбайды.</div></div><div class="anri-hero-visual"><img src="../assets/anri-showcase-note-editing-20261023.webp" alt="ANRI AUDIO MIDI Piano Roll редакторы: бастапқы аудиотолқын мен өңделетін MIDI ноталары" width="1106" height="904" decoding="async" fetchpriority="high"></div></section>
-<div class="paper">
-<section class="section" id="functions"><h2>Бағдарлама мүмкіндіктері</h2><ul><li><strong>ANALYZE:</strong> аудиоматериалды талдау және MIDI ноталарын құрастыру</li><li><strong>Piano Roll:</strong> ноталардың биіктігін, басталу уақытын, ұзақтығын және velocity мәндерін өңдеу</li><li><strong>Preview:</strong> MIDI нәтижесін алдын ала тыңдау</li><li><strong>Quantize және Snap:</strong> ырғақтық торға туралау</li><li><strong>Drag &amp; Drop және SEND MIDI:</strong> MIDI деректерін Logic Pro жобасына тасымалдау</li></ul>
-<h3 class="anri-parity-subtitle">Мүмкіндіктердің толық тізімі</h3>
-<div class="anri-parity-grid" aria-label="ANRI AUDIO MIDI мүмкіндіктері">
-<article class="anri-parity-box"><span class="anri-parity-icon">◉</span><h3>ANALYZE</h3><p>Бастапқы аудионы талдап, өңделетін MIDI ноталарын алу.</p></article>
-<article class="anri-parity-box"><span class="anri-parity-icon">▦</span><h3>Piano Roll және бастапқы аудио</h3><p>Ноталарды уақыт пен биіктік торында бастапқы аудиотолқынмен салыстыру.</p></article>
-<article class="anri-parity-box"><span class="anri-parity-icon">✦</span><h3>MIDI ноталарын өңдеу</h3><p>Ноталарды жылжыту, ұзарту, қосу, жою, velocity мәнін өзгерту және дыбысын тыңдау.</p></article>
-<article class="anri-parity-box"><span class="anri-parity-icon">≈</span><h3>Match Audio</h3><p>МIDI динамикасын бастапқы орындаудың дыбыс қаттылығына сәйкестендіру.</p></article>
-<article class="anri-parity-box"><span class="anri-parity-icon">⌗</span><h3>Quantize және Snap</h3><p>Ноталардың уақытын ырғақ торына туралау және дәл орналастыру.</p></article>
-<article class="anri-parity-box"><span class="anri-parity-icon">↗</span><h3>Drag &amp; Drop / SEND MIDI</h3><p>Дайын MIDI ноталарын жобаға тасымалдау немесе Logic Pro арқылы жіберу.</p></article>
-<article class="anri-parity-box"><span class="anri-parity-icon">⇄</span><h3>MIDI бағыттау</h3><p>Хост немесе сыртқы MIDI шығысы, MIDI арнасы, транспозиция және ноталар диапазоны.</p></article>
-<article class="anri-parity-box"><span class="anri-parity-icon">⌕</span><h3>Масштаб және Preview</h3><p>Фразаны үлкейтіп не кішірейтіп, ойнату, тоқтату және нақты бөлігін тексеру.</p></article>
-<article class="anri-parity-box"><span class="anri-parity-icon">±</span><h3>Шығармашылық MIDI құралдары</h3><p>Randomise, Musical, Up +1 және Down -1 көмегімен жаңа нұсқаларды жасау.</p></article>
-<article class="anri-parity-box"><span class="anri-parity-icon">≋</span><h3>Артикуляцияны анықтау</h3><p>Legato, Tremolo, Pitch, Expression, Vibrato, Breath және Articul параметрлерін көру.</p></article>
+<main><section class="wrap hero" id="product"><div><span class="eyebrow">Музыкалық бағдарламалық жасақтама</span><h1>Аудиодан MIDI-ге. Бір терезеде.</h1><p class="lead">ANRI AUDIO MIDI — музыкалық аудионы өңделетін MIDI ноталарына айналдыруға арналған плагин. Нәтижені Piano Roll терезесінде көріп, түзетіп, Logic Pro жобасына тасымалдаңыз.</p><div class="cta-row"><a class="btn btn-red" href="#price">Толық лицензия — $39</a><a class="btn btn-ghost" href="#functions">Мүмкіндіктерді көру</a></div><div class="hero-foot"><span>macOS</span><span>Audio Unit (AUv2)</span><span>Logic Pro</span><span>Біржолғы төлем</span></div><div class="notice"><strong>Назар аударыңыз.</strong> Коммерциялық шығарылым әзірленіп жатыр. Тапсырыстар мен төлемдер әзірге қабылданбайды.</div></div><div class="image-frame"><img src="../assets/anri-showcase-note-editing-20261023.webp" alt="ANRI AUDIO MIDI Piano Roll редакторы: бастапқы аудиотолқын мен өңделетін MIDI ноталары" width="1106" height="904" decoding="async" fetchpriority="high"></div></section>
+
+<section class="section" id="functions"><div class="wrap"><h2>Бағдарлама мүмкіндіктері</h2>
+<h3 class="anri-extra-heading">Мүмкіндіктердің толық тізімі</h3>
+<div class="grid" aria-label="ANRI AUDIO MIDI мүмкіндіктері">
+<article class="box"><span class="icon">◉</span><h3>ANALYZE</h3><p>Бастапқы аудионы талдап, өңделетін MIDI ноталарын алу.</p></article>
+<article class="box"><span class="icon">▦</span><h3>Piano Roll және бастапқы аудио</h3><p>Ноталарды уақыт пен биіктік торында бастапқы аудиотолқынмен салыстыру.</p></article>
+<article class="box"><span class="icon">✦</span><h3>MIDI ноталарын өңдеу</h3><p>Ноталарды жылжыту, ұзарту, қосу, жою, velocity мәнін өзгерту және дыбысын тыңдау.</p></article>
+<article class="box"><span class="icon">≈</span><h3>Match Audio</h3><p>МIDI динамикасын бастапқы орындаудың дыбыс қаттылығына сәйкестендіру.</p></article>
+<article class="box"><span class="icon">⌗</span><h3>Quantize және Snap</h3><p>Ноталардың уақытын ырғақ торына туралау және дәл орналастыру.</p></article>
+<article class="box"><span class="icon">⌕</span><h3>Масштаб және Preview</h3><p>Фразаны үлкейтіп не кішірейтіп, ойнату, тоқтату және нақты бөлігін тексеру.</p></article>
+<article class="box"><span class="icon">↗</span><h3>Drag &amp; Drop / SEND MIDI</h3><p>Дайын MIDI ноталарын жобаға тасымалдау немесе Logic Pro арқылы жіберу.</p></article>
+<article class="box"><span class="icon">⇄</span><h3>MIDI бағыттау</h3><p>Хост немесе сыртқы MIDI шығысы, MIDI арнасы, транспозиция және ноталар диапазоны.</p></article>
+<article class="box"><span class="icon">±</span><h3>Шығармашылық MIDI құралдары</h3><p>Randomise, Musical, Up +1 және Down -1 көмегімен жаңа нұсқаларды жасау.</p></article>
+<article class="box"><span class="icon">≋</span><h3>Артикуляцияны анықтау</h3><p>Legato, Tremolo, Pitch, Expression, Vibrato, Breath және Articul параметрлерін көру.</p></article>
 </div>
-<h3 class="anri-parity-subtitle">Анықтау параметрлері</h3>
+<h3 class="anri-extra-heading">Анықтау параметрлері</h3>
 <p>Аудио түріне сәйкес ноталарды анықтау сезімталдығын реттеңіз.</p>
-<div class="anri-parity-controls" aria-label="Анықтау параметрлері"><span>Polyphony</span><span>Threshold</span><span>Sensitivity</span><span>Pitch Accuracy</span><span>Stability</span><span>Onset</span><span>Min Note</span><span>Release</span></div>
-<h3 class="anri-parity-subtitle">Жұмыс реті</h3>
-<div class="anri-parity-workflow" aria-label="Алты жұмыс қадамы">
-<div class="anri-parity-step"><small>01</small>Аудио</div><div class="anri-parity-step"><small>02</small>ANALYZE</div><div class="anri-parity-step"><small>03</small>Piano Roll</div><div class="anri-parity-step"><small>04</small>Өңдеу</div><div class="anri-parity-step"><small>05</small>Match / Quantize / Snap</div><div class="anri-parity-step"><small>06</small>Drag / SEND MIDI</div>
-</div></section>
-<section class="anri-art" id="articulations" aria-labelledby="articulations-heading">
+<div class="anri-controls" aria-label="Анықтау параметрлері"><span>Polyphony</span><span>Threshold</span><span>Sensitivity</span><span>Pitch Accuracy</span><span>Stability</span><span>Onset</span><span>Min Note</span><span>Release</span></div>
+<h3 class="anri-extra-heading">Жұмыс реті</h3>
+<div class="workflow" aria-label="Алты жұмыс қадамы">
+<div class="step"><small>01</small>Аудио</div><div class="step"><small>02</small>ANALYZE</div><div class="step"><small>03</small>Piano Roll</div><div class="step"><small>04</small>Өңдеу</div><div class="step"><small>05</small>Match / Quantize / Snap</div><div class="step"><small>06</small>Drag / SEND MIDI</div>
+</div></div></section>
+<section class="anri-art wrap" id="articulations" aria-labelledby="articulations-heading">
 <div class="anri-artbox">
   <div class="anri-artcopy">
     <span class="anri-art-tag">Орындау мәнерінің ерекшеліктері</span>
@@ -144,46 +169,59 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:15px;justify-content:space-between}
   <div class="anri-artcaption">Нақты интерфейс: ANALYZE және REC ARTICULATION басқару элементтері.</div>
 </div>
 </section>
-<section class="section" id="screenshots" aria-labelledby="screenshots-title">
+<section class="section" id="screenshots" aria-labelledby="screenshots-title"><div class="wrap">
   <span class="eyebrow">Бағдарламаның нақты интерфейсі</span>
-  <h2 id="screenshots-title" style="margin-top:10px">ANRI AUDIO MIDI — скриншоттар</h2>
+  <h2 id="screenshots-title">ANRI AUDIO MIDI — скриншоттар</h2>
   <p>Плагиннің нақты жұмыс көріністері: бастапқы аудиомен бірге MIDI ноталарын өңдеу, артикуляцияны көру және Piano Roll ішінде нотаны дәл өзгерту.</p>
-  <div class="anri-gallery-grid">
-   <figure class="anri-gallery-card"><img src="../assets/anri-showcase-piano-roll-20261023.webp" alt="ANRI AUDIO MIDI Piano Roll: MIDI ноталары және бастапқы аудиотолқын" loading="lazy" width="1106" height="904"><figcaption><strong>Piano Roll және бастапқы аудио</strong><span>MIDI ноталарының биіктігі мен уақытын бастапқы аудиотолқынмен салыстырып өңдеңіз.</span></figcaption></figure>
-   <figure class="anri-gallery-card"><img src="../assets/anri-showcase-articulations-20261023.webp" alt="ANRI AUDIO MIDI: MIDI оқиғалары мен артикуляция параметрлері" loading="lazy" width="1106" height="904"><figcaption><strong>Артикуляциялар мен орындау мәнері</strong><span>MIDI оқиғаларын орындау параметрлерімен және түрлі түсті көрсеткіштермен бірге қараңыз.</span></figcaption></figure>
-   <figure class="anri-gallery-card"><img src="../assets/anri-showcase-note-editing-20261023.webp" alt="ANRI AUDIO MIDI: таңдалған MIDI нотасы мен бастапқы аудиотолқын" loading="lazy" width="1106" height="904"><figcaption><strong>MIDI ноталарын дәл өңдеу</strong><span>Жеке бөліктерді үлкейтіп, ноталардың орнын және ұзақтығын өзгертіп, нәтижені тексеріңіз.</span></figcaption></figure>
+  <div class="shots">
+   <figure><img src="../assets/anri-showcase-piano-roll-20261023.webp" alt="ANRI AUDIO MIDI Piano Roll: MIDI ноталары және бастапқы аудиотолқын" loading="lazy" width="1106" height="904"><figcaption><b>Piano Roll және бастапқы аудио</b><span>MIDI ноталарының биіктігі мен уақытын бастапқы аудиотолқынмен салыстырып өңдеңіз.</span></figcaption></figure>
+   <figure><img src="../assets/anri-showcase-articulations-20261023.webp" alt="ANRI AUDIO MIDI: MIDI оқиғалары мен артикуляция параметрлері" loading="lazy" width="1106" height="904"><figcaption><b>Артикуляциялар мен орындау мәнері</b><span>MIDI оқиғаларын орындау параметрлерімен және түрлі түсті көрсеткіштермен бірге қараңыз.</span></figcaption></figure>
+   <figure><img src="../assets/anri-showcase-note-editing-20261023.webp" alt="ANRI AUDIO MIDI: таңдалған MIDI нотасы мен бастапқы аудиотолқын" loading="lazy" width="1106" height="904"><figcaption><b>MIDI ноталарын дәл өңдеу</b><span>Жеке бөліктерді үлкейтіп, ноталардың орнын және ұзақтығын өзгертіп, нәтижені тексеріңіз.</span></figcaption></figure>
   </div>
-</section>
+</div></section>
 
-<section class="section" id="price"><div class="anri-price-grid"><div><span class="chip">Жоспарланған коммерциялық нұсқа</span><h2 style="margin-top:14px">Біржолғы лицензия — 39 USD</h2><p><strong>Бағасы: 39 АҚШ доллары (USD).</strong> Бір рет төленетін мерзімсіз лицензия. Ай сайынғы немесе жыл сайынғы міндетті жазылым жоқ.</p><p>Екі құрылғыда белсендіру — іске қосылғанға дейін түпкілікті бекітілетін жоспарланған шарт. Нақты төлем валютасы мен төлем тәсілдері төлем беті іске қосылғанда көрсетіледі.</p><button type="button" disabled style="padding:11px 16px;background:#49212b;border:1px solid #89404f;color:#fff;opacity:.7;border-radius:10px;font-weight:700;cursor:not-allowed">39 USD — сату әлі ашылған жоқ</button><p class="note" style="margin-top:14px">Бұл бет төлемдерді немесе банк карталарының деректерін қабылдамайды.</p><p><a href="terms/">Сатып алу шарттарының жобасы</a> · <a href="contacts/">Сатушының деректемелері</a></p></div><aside class="anri-price-aside"><h3>Сатып алу мәртебесі</h3><p>39 USD — жоспарланған біржолғы лицензия. Сатылым ашылғанша тапсырыстар, төлемдер және лицензиялық кілттер берілмейді.</p><p><a href="terms/">Сатып алу шарттары</a> · <a href="contacts/">Сатушы туралы</a></p></aside></div></section>
-<section class="section" id="how-to-buy"><h2>Лицензияны қалай сатып алуға болады</h2><p>Сатылым әзірге ашылған жоқ. Ерікті қолдау төлемдері лицензияны сатып алу немесе алдын ала тапсырыс беру болып саналмайды.</p>
-<div class="anri-parity-grid">
-<article class="anri-parity-box"><span class="anri-parity-icon">♡</span><h3>Әзірлеушіні ерікті қолдау</h3><p>Boosty және PayPal лицензия сату үшін емес, тек ерікті қолдау үшін қолданылады.</p><p><a href="/kk/support-development/">Қолдау тәсілдері</a></p></article>
-<article class="anri-parity-box"><span class="anri-parity-icon">◈</span><h3>Ресми төлем ақпараты</h3><p>ProEducation сыртқы платформасында сатушы — «Анрипрод» ЖК, ал төлемді қабылдайтын ұйым — «ПРО ЭДЮКЕЙШН» ЖШС.</p><p><a href="contacts/">Сатушы туралы мәліметтер</a></p></article>
-<article class="anri-parity-box"><span class="anri-parity-icon">✓</span><h3>Лицензияны алу</h3><p>Төлем расталған соң Anri Cloud арқылы лицензия беру жоспарланған. Пошта хабарламалары мен қолжетімділікті қалпына келтіру тексерілуде.</p></article>
-</div></section>
-<section class="section" id="license"><h2>Лицензия және белсендіру</h2><p>Бұл шарттар әзірге жоспарланып отыр, сату ашылғанға дейін түпкілікті бекітіледі.</p>
-<div class="anri-parity-grid">
-<article class="anri-parity-box"><span class="anri-parity-icon">2</span><h3>Екі құрылғыға дейін</h3><p>Бір лицензияны екі құрылғыда белсендіру және құрылғыларды басқару жоспарланған.</p></article>
-<article class="anri-parity-box"><span class="anri-parity-icon">∞</span><h3>39 USD — жазылымсыз</h3><p>Мерзімсіз лицензия үшін біржолғы төлем. Ақшаны қайтару мен жаңарту ережелері сатылымға дейін жарияланады.</p></article>
-<article class="anri-parity-box"><span class="anri-parity-icon">🔐</span><h3>My License</h3><p>Лицензияны қауіпсіз іздеу және қалпына келтіру әзірленуде; сатып алу құқығы тексеріледі.</p></article>
-</div></section>
-<section class="section" id="compatibility"><h2>Үйлесімділік</h2><p><strong>macOS:</strong> Logic Pro бағдарламасына арналған Audio Unit (AUv2) плагині.</p><p><strong>Windows VST3:</strong> жеке әзірленіп жатыр, қазіргі ұсынысқа кірмейді.</p></section>
-<section class="section" id="download"><h2>ANRI AUDIO MIDI жүктеп алу</h2><p>macOS үшін қолтаңбаланған орнатқыш әзірге жарияланған жоқ. Шығарылымнан кейін ресми жүктеу, жүйелік талаптар және белсендіру нұсқаулығы беріледі. Алдын ала тапсырыс, ашық төлем немесе жалпыға қолжетімді сынақ нұсқасы қазір жоқ.</p><p><a href="#screenshots">Нақты скриншоттар</a></p></section>
-<section class="section" id="support-development"><h2>♡ Әзірлеуді қолдау</h2><p>Ерікті қолдау лицензиялық кілт, қосымша мүмкіндіктер, алдын ала тапсырыс не басымдықты қолжетімділік бермейді. Лицензияны сатып алу үшін ресми төлем бетінің ашылуын күтіңіз.</p><p><a href="/kk/support-development/">Қолдау тәсілдерін көру</a></p></section>
-<section class="section" id="support"><h2>Техникалық қолдау</h2><p>Орнату, белсендіру, лицензияны қалпына келтіру немесе төлемді тексеру сұрақтары бойынша <a href="mailto:anribitzzz10@gmail.com">anribitzzz10@gmail.com</a> поштасына жазыңыз. Лицензия кілттерін немесе карта деректерін ерікті қолдау пікірлерінде жібермеңіз.</p></section>
-<section class="section" id="seller"><h2>Әзірлеуші және сатушы</h2><p>ANRI AUDIO MIDI бағдарламасын Қазақстан Республикасында тіркелген <strong>«Анрипрод» ЖК — Безручкин Андрей Александрович</strong> әзірлейді және сатуға дайындайды.</p><p>ЖСН: 921007301843. Қызмет түрі: ЭҚЖЖ 58290 — өзге бағдарламалық қамтамасыз етуді шығару.</p><p>Заңды мекенжай мен байланыс деректері: <a href="contacts/">Сатушы туралы мәліметтер</a>.</p>
-<div class="anri-parity-pair">
-<div class="anri-parity-box"><h3>Сатушының деректемелері</h3><dl><dt>Сатушы</dt><dd>«Анрипрод» ЖК — Безручкин Андрей Александрович</dd><dt>ЖСН / БСН</dt><dd>921007301843</dd><dt>Мекенжай</dt><dd>Қазақстан, Қызылорда облысы, Шиелі ауданы, Шиелі кенті, Көкшоқы шағын ауданы, РУ-6 көшесі, 25-үй, 2-пәтер</dd><dt>Электрондық пошта</dt><dd><a href="mailto:anribitzzz10@gmail.com">anribitzzz10@gmail.com</a></dd><dt>Телефон</dt><dd><a href="tel:+77753659432">+7 775 365 94 32</a></dd></dl></div>
-<div class="anri-parity-box"><h3>Ұсыну шарттары</h3><dl><dt>Платформа</dt><dd>macOS AUv2, Logic Pro</dd><dt>Windows</dt><dd>VST3 әзірленуде, қазіргі шығарылымға кірмейді</dd><dt>Лицензия</dt><dd>Біржолғы төлем, жазылымсыз</dd><dt>Берілетін құжаттар</dt><dd>Сатылым басталғаннан кейін лицензия мен орнату нұсқаулығы</dd><dt>Мәртебе</dt><dd>Тапсырыс қабылданбайды</dd></dl></div>
-</div></section>
-<section class="section" id="faq"><h2>Лицензия және шығарылым туралы сұрақтар</h2>
-<div class="anri-parity-pair">
-<article class="anri-parity-box"><h3>Қазір сатып алуға бола ма?</h3><p>Жоқ. Төлем тәсілі тексеріліп, орнатқыш қолтаңбаланғаннан кейін сату ашылады.</p></article>
-<article class="anri-parity-box"><h3>Ай сайынғы жазылым керек пе?</h3><p>Жоқ. Жоспарланған баға — мерзімсіз лицензия үшін бір рет 39 USD.</p></article>
-<article class="anri-parity-box"><h3>Windows жүйесінде жұмыс істей ме?</h3><p>Windows VST3 бөлек әзірленуде. Қазіргі жоспарланған нұсқа macOS AUv2 және Logic Pro жүйесіне арналған.</p></article>
-<article class="anri-parity-box"><h3>Көмекті қайдан алуға болады?</h3><p>Ресми <a href="contacts/">байланыс арналарын</a> немесе <a href="mailto:anribitzzz10@gmail.com">электрондық поштаны</a> қолданыңыз.</p></article>
-</div></section>
-</div></main>
-<footer><div class="wrap"><span>© 2026 ANRI AUDIO • ANRI AUDIO MIDI</span><span><a href="./">Бағдарлама</a> · <a href="terms/">Шарттар</a> · <a href="contacts/">Байланыс</a> · <a href="/kk/support-development/">Әзірлеуді қолдау</a> · <a href="#download">Жүктеу</a> · <a href="../ru/" lang="ru">Русский</a></span></div></footer>
+<section class="section" id="price" style="padding-top:20px"><div class="wrap">
+<span class="eyebrow">Баға және сатып алу тәртібі</span>
+<div class="price-shell"><div>
+<span class="chip"><span class="red-dot"></span> ANRI AUDIO MIDI • толық нұсқа</span>
+<h2 style="margin:22px 0 4px">Мерзімсіз лицензия</h2>
+<div class="price">$39 <span class="usd">USD</span></div>
+<p class="price-note">Бағдарламаны пайдалану лицензиясы үшін біржолғы төлем. Бұл жазылым емес.</p>
+<ul class="checks"><li>Сатып алынған нұсқаны мерзімсіз пайдалану құқығы</li><li>Ай сайынғы немесе жыл сайынғы төлемдер жоқ</li><li>Екі құрылғыға дейін белсендіру — жоспарланған шарт</li><li>Шығарылымнан кейін: төлем расталғанда лицензия беріледі</li></ul>
+<p class="small">Баға АҚШ долларымен көрсетілген. Түпкілікті төлем валютасы мен төлем тәсілдері төлем беті ашылғанда жарияланады.</p>
+</div><div class="block-soon">
+<button class="disabled" type="button" disabled aria-describedby="not-open">39 USD — сату әлі ашылған жоқ</button>
+<p id="not-open">Сатылым әлі ашылған жоқ. Бұл бет төлемдерді немесе банк картасының деректерін қабылдамайды. Ресми төлем беті провайдер тексеріліп, шығарылым дайын болғаннан кейін қосылады.</p>
+<p><strong>Ерікті қолдау төлемдері лицензияны сатып алу болып саналмайды.</strong></p>
+</div></div></div></section>
+<section class="section" id="how-to-buy"><div class="wrap"><h2>Лицензияны қалай сатып алуға болады</h2><p>Сатылым әзірге ашылған жоқ. Ерікті қолдау төлемдері лицензияны сатып алу немесе алдын ала тапсырыс беру болып саналмайды.</p>
+<div class="grid">
+<article class="box"><span class="icon">♡</span><h3>Әзірлеушіні ерікті қолдау</h3><p>Boosty және PayPal лицензия сату үшін емес, тек ерікті қолдау үшін қолданылады.</p><p><a href="/kk/support-development/">Қолдау тәсілдері</a></p></article>
+<article class="box"><span class="icon">◈</span><h3>Ресми төлем ақпараты</h3><p>ProEducation сыртқы платформасында сатушы — «Анрипрод» ЖК, ал төлемді қабылдайтын ұйым — «ПРО ЭДЮКЕЙШН» ЖШС.</p><p><a href="contacts/">Сатушы туралы мәліметтер</a></p></article>
+<article class="box"><span class="icon">✓</span><h3>Лицензияны алу</h3><p>Төлем расталған соң Anri Cloud арқылы лицензия беру жоспарланған. Пошта хабарламалары мен қолжетімділікті қалпына келтіру тексерілуде.</p></article>
+</div></div></section>
+<section class="section" id="license"><div class="wrap"><h2>Лицензия және белсендіру</h2><p>Бұл шарттар әзірге жоспарланып отыр, сату ашылғанға дейін түпкілікті бекітіледі.</p>
+<div class="grid">
+<article class="box"><span class="icon">2</span><h3>Екі құрылғыға дейін</h3><p>Бір лицензияны екі құрылғыда белсендіру және құрылғыларды басқару жоспарланған.</p></article>
+<article class="box"><span class="icon">∞</span><h3>39 USD — жазылымсыз</h3><p>Мерзімсіз лицензия үшін біржолғы төлем. Ақшаны қайтару мен жаңарту ережелері сатылымға дейін жарияланады.</p></article>
+<article class="box"><span class="icon">🔐</span><h3>My License</h3><p>Лицензияны қауіпсіз іздеу және қалпына келтіру әзірленуде; сатып алу құқығы тексеріледі.</p></article>
+</div></div></section>
+<section class="section" id="compatibility"><div class="wrap"><h2>Үйлесімділік</h2><p><strong>macOS:</strong> Logic Pro бағдарламасына арналған Audio Unit (AUv2) плагині.</p><p><strong>Windows VST3:</strong> жеке әзірленіп жатыр, қазіргі ұсынысқа кірмейді.</p></div></section>
+<section class="section" id="download"><div class="wrap"><h2>ANRI AUDIO MIDI жүктеп алу</h2><p>macOS үшін қолтаңбаланған орнатқыш әзірге жарияланған жоқ. Шығарылымнан кейін ресми жүктеу, жүйелік талаптар және белсендіру нұсқаулығы беріледі. Алдын ала тапсырыс, ашық төлем немесе жалпыға қолжетімді сынақ нұсқасы қазір жоқ.</p><p><a href="#screenshots">Нақты скриншоттар</a></p></div></section>
+<section class="section" id="support-development"><div class="wrap"><h2>♡ Әзірлеуді қолдау</h2><div class="anri-english-support-box"><p>Ерікті қолдау лицензиялық кілт, қосымша мүмкіндіктер, алдын ала тапсырыс не басымдықты қолжетімділік бермейді. Лицензияны сатып алу үшін ресми төлем бетінің ашылуын күтіңіз.</p><p><a href="/kk/support-development/">Қолдау тәсілдерін көру</a></p></div></div></section>
+<section class="section" id="support"><div class="wrap"><h2>Техникалық қолдау</h2><div class="anri-english-support-box"><p>Орнату, белсендіру, лицензияны қалпына келтіру немесе төлемді тексеру сұрақтары бойынша <a href="mailto:anribitzzz10@gmail.com">anribitzzz10@gmail.com</a> поштасына жазыңыз. Лицензия кілттерін немесе карта деректерін ерікті қолдау пікірлерінде жібермеңіз.</p></div></div></section>
+<section class="section" id="seller"><div class="wrap"><h2>Әзірлеуші және сатушы</h2><p>ANRI AUDIO MIDI бағдарламасын Қазақстан Республикасында тіркелген <strong>«Анрипрод» ЖК — Безручкин Андрей Александрович</strong> әзірлейді және сатуға дайындайды.</p><p>ЖСН: 921007301843. Қызмет түрі: ЭҚЖЖ 58290 — өзге бағдарламалық қамтамасыз етуді шығару.</p><p>Заңды мекенжай мен байланыс деректері: <a href="contacts/">Сатушы туралы мәліметтер</a>.</p>
+<div class="legal-grid">
+<div class="legal-panel"><h3>Сатушының деректемелері</h3><dl><dt>Сатушы</dt><dd>«Анрипрод» ЖК — Безручкин Андрей Александрович</dd><dt>ЖСН / БСН</dt><dd>921007301843</dd><dt>Мекенжай</dt><dd>Қазақстан, Қызылорда облысы, Шиелі ауданы, Шиелі кенті, Көкшоқы шағын ауданы, РУ-6 көшесі, 25-үй, 2-пәтер</dd><dt>Электрондық пошта</dt><dd><a href="mailto:anribitzzz10@gmail.com">anribitzzz10@gmail.com</a></dd><dt>Телефон</dt><dd><a href="tel:+77753659432">+7 775 365 94 32</a></dd></dl></div>
+<div class="legal-panel"><h3>Ұсыну шарттары</h3><dl><dt>Платформа</dt><dd>macOS AUv2, Logic Pro</dd><dt>Windows</dt><dd>VST3 әзірленуде, қазіргі шығарылымға кірмейді</dd><dt>Лицензия</dt><dd>Біржолғы төлем, жазылымсыз</dd><dt>Берілетін құжаттар</dt><dd>Сатылым басталғаннан кейін лицензия мен орнату нұсқаулығы</dd><dt>Мәртебе</dt><dd>Тапсырыс қабылданбайды</dd></dl></div>
+</div></div></section>
+<section class="section" id="faq"><div class="wrap"><h2>Лицензия және шығарылым туралы сұрақтар</h2>
+<div class="faq">
+<article class="box"><h3>Қазір сатып алуға бола ма?</h3><p>Жоқ. Төлем тәсілі тексеріліп, орнатқыш қолтаңбаланғаннан кейін сату ашылады.</p></article>
+<article class="box"><h3>Ай сайынғы жазылым керек пе?</h3><p>Жоқ. Жоспарланған баға — мерзімсіз лицензия үшін бір рет 39 USD.</p></article>
+<article class="box"><h3>Windows жүйесінде жұмыс істей ме?</h3><p>Windows VST3 бөлек әзірленуде. Қазіргі жоспарланған нұсқа macOS AUv2 және Logic Pro жүйесіне арналған.</p></article>
+<article class="box"><h3>Көмекті қайдан алуға болады?</h3><p>Ресми <a href="contacts/">байланыс арналарын</a> немесе <a href="mailto:anribitzzz10@gmail.com">электрондық поштаны</a> қолданыңыз.</p></article>
+</div></div></section>
+</main>
+<footer><div class="wrap"><span>© 2026 ANRI AUDIO • ANRI AUDIO MIDI</span><span>Қазақша нұсқа • <a href="/ru/" lang="ru">Русский</a> • <a href="terms/">Сатып алу шарттары</a> • <a href="contacts/">Байланыс</a> • <a href="/" lang="en">English</a> • <a href="/kk/support-development/">Әзірлеуді қолдау</a> • <a href="#how-to-buy">Сатып алу</a> • <a href="#download">Жүктеу</a></span></div></footer>
 </body></html>
