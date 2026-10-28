@@ -25,7 +25,7 @@ $('create').addEventListener('submit', async e=>{
  e.preventDefault(); if(!(enabled && CHECKOUT_ENABLED)) return;
  $('buy').disabled=true;
  try {
-  prepared=await post('create',{customer_email:$('email').value});
+  prepared=await post('create',{customer_email:$('email').value,locale:lang});
   if(!/^anri-full-[0-9a-f]{32}$/.test(prepared.order_num)||!/^[A-Za-z0-9_-]{43}$/.test(prepared.claim_credential))throw new Error();
   const local={order_num:prepared.order_num,claim_credential:prepared.claim_credential};
   sessionStorage.setItem(storageKey,JSON.stringify(local));
