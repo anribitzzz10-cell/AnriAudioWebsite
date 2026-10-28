@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="referrer" content="no-referrer"><meta name="robots" content="noindex,nofollow">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'self'; img-src 'self'; form-action https://anriprod.proeducation.kz; base-uri 'none'; object-src 'none'; frame-ancestors 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'self' https://anri-cloud-api-staging-staging.up.railway.app; img-src 'self'; form-action https://anriprod.proeducation.kz; base-uri 'none'; object-src 'none'; frame-ancestors 'none'">
 <title>ANRI AUDIO MIDI — Private 100 KZT payment pilot</title>
 <link rel="stylesheet" href="/checkout/style.css"><script type="module" src="/pilot/order.js"></script></head>
 <body><main><a href="/">ANRI AUDIO</a><nav aria-label="Language"><a href="/pilot/" lang="en">EN</a> · <a href="/ru/pilot/" lang="ru">RU</a> · <a href="/kk/pilot/" lang="kk">KK</a></nav>
@@ -19,7 +19,7 @@
 <button id="payButton" type="button" disabled>Pay 100 ₸ with ProEducation</button></section>
 <hr><form id="claimForm">
 <label id="labelOrder" for="order">Order number</label><input id="order" required maxlength="64" autocomplete="off" spellcheck="false">
-<label id="labelSecret" for="credential">Private order code</label><input id="credential" type="password" required minlength="43" maxlength="43" autocomplete="off" spellcheck="false">
+<label id="labelSecret" for="credential">Private order code</label><input id="credential" type="password" required minlength="64" maxlength="64" autocomplete="off" spellcheck="false">
 <button id="checkButton" type="submit" disabled>Check payment and get FULL key</button></form>
 <p id="message" role="status" aria-live="polite"></p><pre id="key" hidden></pre>
 <button id="clearButton" type="button">Clear browser session</button>

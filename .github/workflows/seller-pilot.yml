@@ -1,0 +1,20 @@
+name: Seller pilot claim browser
+on:
+  push:
+    branches: ["feature/railway-seller-claim-20261029"]
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  claim:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-save @playwright/test
+      - run: npx playwright install --with-deps chromium
+      - run: |
+          python3 -m http.server 8765 --bind 127.0.0.1 > /tmp/http.log 2>&1 &
+          npx playwright test tests/seller_pilot.spec.js --workers=1
