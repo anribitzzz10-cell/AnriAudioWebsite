@@ -12,8 +12,8 @@ This branch prepares the existing public website for a **future paid** ANRI AUDI
 ## Commercial messaging
 
 - ANRI AUDIO MIDI is moving toward a one-time perpetual license, with two-device activation intended.
-- **Approved price: $39 USD** for a one-time perpetual license (full version), with intended activation on up to two devices and no subscription. Page prominently shows $39.
-- No working purchase link is confirmed. The **Buy for $39 — coming soon** button is visibly disabled, with no checkout event handler. Boosty official profile `https://boosty.to/anriproduct` is listed only as a profile, **not** as checkout.
+- **Original price: $39 USD; proposed launch offer: $15 USD** for a one-time perpetual license (full version), with intended activation on up to two devices and no subscription. Page prominently shows proposed $15 launch offer, with $39 as previous price.
+- No working purchase link is confirmed. The **Buy for $15 — coming soon** button is visibly disabled, with no checkout event handler. Boosty official profile `https://boosty.to/anriproduct` is listed only as a profile, **not** as checkout.
 - Boosty currently requires manual independent payment confirmation; no official payment-verifying webhook is integrated.
 - Paddle Sandbox code has been excluded from the rendered main page; production Paddle checkout is not operational/verified.
 - No installer is published yet and the public license lookup/email recovery workflow is still under testing.
@@ -23,14 +23,14 @@ This branch prepares the existing public website for a **future paid** ANRI AUDI
 
 ## Files changed
 
-- `index.html`: $39 USD price block, permanently disabled prelaunch Buy button, how-to-buy, license details, downloads and safe prelaunch copy. No active Paddle JavaScript, paid transaction fetches, or free-mode dialogs.
+- `index.html`: $15 USD introductory offer and crossed-out $39 USD price block, permanently disabled prelaunch Buy button, how-to-buy, license details, downloads and safe prelaunch copy. No active Paddle JavaScript, paid transaction fetches, or free-mode dialogs.
 - `support-development/index.html`: clear warnings that donations/transfers never create or reserve a license.
 
 Other files including screenshots, favicons and webmanifest remain untouched.
 
 ## Release gates (not fulfilled)
 
-1. Price is confirmed at **$39 USD**. Before checkout opens, confirm user-approved Terms of Sale, refund policy, privacy policy, merchant identity/contact, any payment-provider fees/taxes disclosures, and support contact.
+1. Regular price is **$39 USD**; proposed introductory price is **$15 USD**. Final provider KZT amount/currency still require independent verification. Before checkout opens, confirm user-approved Terms of Sale, refund policy, privacy policy, merchant identity/contact, any payment-provider fees/taxes disclosures, and support contact.
 2. Complete payment route validation for target markets, independent proof of payment and merchant payout.
 3. Confirm license activation in the signed ANRI AUDIO MIDI plugin, with two-device policy and secure recovery.
 4. Finish Resend delivery and receipt tests, sender/recipient controls and safe retry behavior.
@@ -41,3 +41,6 @@ Other files including screenshots, favicons and webmanifest remain untouched.
 Railway production uses branch `main` with auto-deploy. Never merge directly without the release gates and an explicit production approval. Railway new builds were reported paused on 20 Oct 2026; no live site deployment is attempted here.
 
 The payment and license feature implementations live in **separate** `anribitzzz10-cell/Anri-cloud` branches and are NOT included or exposed in this static website branch.
+
+## 2026-10-28 sale preparation
+The $15/USD promotional UI is draft only, across EN/RU/KK and purchase terms. ProEducation checkout remains unavailable in the live merchant settings (DEMO selected, notification URL blank). Never activate purchase links or fulfill permanent licenses based on test-mode redirects. See docs/PROEDUCATION_LAUNCH_OFFER_15USD_GATE_20261028_RU.md.
