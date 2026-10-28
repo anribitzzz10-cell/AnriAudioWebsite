@@ -23,7 +23,7 @@ test('secret stays in POST body and recovery returns existing key', async ({page
   expect(req.url()).not.toContain(credential);
   expect(req.headers()['referer']).toBeUndefined();
   if(req.url().endsWith('/create')){
-   expect(req.postDataJSON()).toEqual({customer_email:'buyer@example.invalid'});
+   expect(req.postDataJSON()).toEqual({customer_email:'buyer@example.invalid',locale:'en'});
    await route.fulfill({json:{order_num:order,claim_credential:credential,amount_minor:650000,currency:'KZT',merchant_form_action:'https://anriprod.proeducation.kz/',method:'POST',fields:[{name:'order_id',value:order}]}});
   }else{
    expect(req.postDataJSON()).toEqual({order_num:order,claim_credential:credential});
@@ -49,3 +49,20 @@ test('secret stays in POST body and recovery returns existing key', async ({page
  expect(calls.length).toBe(3);
  expect(await page.evaluate(()=>sessionStorage.getItem('anri-private-order'))).toBeNull();
 });
+
+for (const [path, locale] of [['/ru/checkout/','ru'],['/kk/checkout/','kk']]) {
+ test('server receives order language '+locale, async ({page})=>{
+  await page.route('**/checkout/config.js', route=>route.fulfill({contentType:'text/javascript',body:`export const API_ORIGIN='${base}'; export const CHECKOUT_ENABLED=true;`}));
+  await page.route('**/v1/checkout/proeducation/create', async route=>{
+   const req=route.request();
+   expect(req.method()).toBe('POST');
+   expect(req.postDataJSON()).toEqual({customer_email:'buyer@example.invalid',locale});
+   await route.fulfill({json:{order_num:order,claim_credential:credential,amount_minor:650000,currency:'KZT',merchant_form_action:'https://anriprod.proeducation.kz/',method:'POST',fields:[]}});
+  });
+  await page.goto(base+path);
+  await page.locator('#email').fill('buyer@example.invalid');
+  await page.locator('#buy').click();
+  await expect(page.locator('#prepared')).toBeVisible();
+  await expect(page).toHaveURL(base+path);
+ });
+}
