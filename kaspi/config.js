@@ -5,6 +5,6 @@
  */
 window.ANRI_KASPI_KZ = Object.freeze({
   enabled: false,
-  paymentUrl: "",
+  paymentUrl: "https://pay.kaspi.kz/pay/zxqekc5w",
   amountKzt: null
 });
