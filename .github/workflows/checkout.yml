@@ -18,4 +18,4 @@ jobs:
       - name: Synthetic browser flow (no merchant or backend traffic)
         run: |
           python3 -m http.server 8765 --bind 127.0.0.1 > /tmp/anri-static-http.log 2>&1 &
-          npx playwright test tests/checkout.spec.js --workers=1
+          npx playwright test tests/checkout.spec.js tests/micro_pilot.spec.js --workers=1
