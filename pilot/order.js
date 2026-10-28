@@ -9,90 +9,40 @@ const strings = {
  kk: {title:'Жабық төлем сынағы · 100 ₸',intro:'Бір нақты сынақ төлемі. ProEducation парағында телефон нөмірі қажет, email міндетті емес. Кілт тек төлем расталғаннан кейін беріледі.',invite:'Жеке шақыру коды',create:'Бір сынақ тапсырысын жасау',order:'Тапсырыс нөмірі',secret:'Тапсырыстың құпия коды',save:'Төлеу алдында нөмір мен құпия кодты сақтаңыз.',copy:'Құпия кодты көшіру',saved:'Нөмір мен құпия кодты сақтадым',pay:'ProEducation арқылы 100 ₸ төлеу',check:'Төлемді тексеру және FULL кілтін алу',clear:'Браузер сеансын тазарту',pending:'Төлем әлі расталмаған. Кейін қайта тексеріңіз.',key:'ANRI AUDIO MIDI FULL лицензияңыз:',error:'Тапсырыс қолжетімсіз немесе сынақ жабық. Құпия кодты тексеріңіз.',created:'Тапсырыс жасалды. Төлеу алдында екі мәнді де сақтаңыз.',privacy:'Осы параққа қайту төлемді растамайды. Құпия кодты ешкімге бермеңіз.'}
 }[lang];
 for(const [id,key] of Object.entries({title:'title',intro:'intro',labelInvite:'invite',createButton:'create',labelOrder:'order',labelSecret:'secret',saveHint:'save',copyButton:'copy',labelSaved:'saved',payButton:'pay',checkButton:'check',clearButton:'clear',privacy:'privacy'})) $(id).textContent=strings[key];
-const enabled = PILOT_ENABLED && API_ORIGIN === location.origin;
-$('createButton').disabled=!enabled;
+const expected='https://anri-cloud-api-staging-staging.up.railway.app';
+const enabled=PILOT_ENABLED && API_ORIGIN===expected;
+$('createForm').hidden=true;
+$('prepared').hidden=true;
 $('checkButton').disabled=!enabled;
-const store='anri-private-micro-100kzt';
-let merchantFields=null;
-try {
- const x=JSON.parse(sessionStorage.getItem(store));
- if(x && /^anri-micro-[0-9a-f]{32}$/.test(x.order_num) && /^[A-Za-z0-9_-]{43}$/.test(x.claim_credential)){
-   $('order').value=x.order_num;
-   $('credential').value=x.claim_credential;
- }
-} catch {}
-async function post(action,payload){
- const r=await fetch(API_ORIGIN+'/v1/checkout/proeducation/'+action,{
-  method:'POST',headers:{'Content-Type':'application/json'},
-  body:JSON.stringify(payload),cache:'no-store',credentials:'omit',
-  referrerPolicy:'no-referrer',redirect:'error'
- });
- if(!r.ok)throw new Error('Request unavailable');
- return r.json();
-}
-$('createForm').addEventListener('submit',async e=>{
- e.preventDefault();if(!enabled)return;
- $('createButton').disabled=true;
- try{
-  const result=await post('micro/create',{invite_code:$('invite').value,locale:lang});
-  if(!/^anri-micro-[0-9a-f]{32}$/.test(result.order_num) ||
-     !/^[A-Za-z0-9_-]{43}$/.test(result.claim_credential) ||
-     result.amount_minor!==10000 || result.currency!=='KZT' ||
-     result.method!=='POST' || result.merchant_form_action!=='https://anriprod.proeducation.kz/' ||
-     !Array.isArray(result.fields)) throw new Error('Invalid fixed pilot');
-  const stored={order_num:result.order_num,claim_credential:result.claim_credential};
-  sessionStorage.setItem(store,JSON.stringify(stored));
-  $('order').value=result.order_num;
-  $('credential').value=result.claim_credential;
-  $('invite').value='';
-  $('preparedOrder').textContent=result.order_num;
-  $('preparedSecret').value=result.claim_credential;
-  merchantFields=result.fields;
-  $('prepared').hidden=false;
-  $('message').textContent=strings.created;
- }catch{
-  $('message').textContent=strings.error;
-  $('createButton').disabled=false;
- }finally{$('invite').value='';}
-});
-$('copyButton').addEventListener('click',async()=>{
- try{await navigator.clipboard.writeText($('preparedSecret').value);}
- catch{$('preparedSecret').focus();$('preparedSecret').select();}
-});
-$('saved').addEventListener('change',()=>{$('payButton').disabled=!(merchantFields && $('saved').checked);});
-$('payButton').addEventListener('click',()=>{
- if(!enabled||!$('saved').checked||!merchantFields)return;
- const names=new Set();
- const form=document.createElement('form');
- form.method='POST';form.action='https://anriprod.proeducation.kz/';
- for(const item of merchantFields){
-  if(typeof item.name!=='string'||typeof item.value!=='string' ||
-     item.name==='claim_credential'||item.name==='invite_code'||names.has(item.name))return;
-  names.add(item.name);
-  const input=document.createElement('input');input.type='hidden';
-  input.name=item.name;input.value=item.value;form.append(input);
- }
- if(!names.has('order_id')||!names.has('signature')||!names.has('currency'))return;
- document.body.append(form);form.submit();
-});
+$('credential').minLength=64;$('credential').maxLength=64;
+$('intro').textContent={
+ en:'Enter your private order number and code. The owner confirms the merchant statement before your FULL key is available.',
+ ru:'Введите номер заказа и секретный код. FULL-ключ станет доступен после ручной сверки поступления владельцем.',
+ kk:'Жеке тапсырыс нөмірі мен құпия кодты енгізіңіз. FULL кілті иесі төлемді тексергеннен кейін беріледі.'
+}[lang];
 $('claimForm').addEventListener('submit',async e=>{
  e.preventDefault();if(!enabled)return;
- $('key').textContent='';$('key').hidden=true;$('checkButton').disabled=true;
+ $('key').hidden=true;$('key').textContent='';$('checkButton').disabled=true;
  try{
-  const r=await post('claim',{order_num:$('order').value,claim_credential:$('credential').value});
-  if(r.status==='fulfilled' && /^ANRI-[A-Z2-9]{5}(?:-[A-Z2-9]{5}){3}$/.test(r.license_key)){
-   $('message').textContent=strings.key;
-   $('key').textContent=r.license_key;$('key').hidden=false;
-  }else{$('message').textContent=strings.pending;}
+  const order=$('order').value.trim(), secret=$('credential').value.trim();
+  if(!/^ANRI100-[A-Z0-9]{16,40}$/.test(order)||! /^[0-9a-f]{64}$/.test(secret))throw Error();
+  const r=await fetch(expected+'/v1/seller-pilot/claim',{
+   method:'POST',headers:{'Content-Type':'application/json'},
+   body:JSON.stringify({order_num:order,claim_secret:secret}),
+   cache:'no-store',credentials:'omit',referrerPolicy:'no-referrer',redirect:'error'
+  });
+  if(!r.ok)throw Error();
+  const data=await r.json(), key=data.license?.key;
+  if(data.order_num!==order||data.license?.edition!=='full'||
+     !/^ANRI-[A-Z2-9]{5}(?:-[A-Z2-9]{5}){3}$/.test(key))throw Error();
+  $('key').textContent=key;$('key').hidden=false;$('message').textContent=strings.key;
  }catch{$('message').textContent=strings.error;}
- finally{$('checkButton').disabled=false;}
+ finally{$('checkButton').disabled=!enabled;}
 });
 $('clearButton').addEventListener('click',()=>{
- sessionStorage.removeItem(store);merchantFields=null;
- $('invite').value='';$('order').value='';$('credential').value='';
- $('preparedSecret').value='';$('preparedOrder').textContent='';
- $('prepared').hidden=true;$('key').hidden=true;$('key').textContent='';
- $('saved').checked=false;$('payButton').disabled=true;$('message').textContent='';
- $('createButton').disabled=!enabled;
+ $('order').value='';$('credential').value='';$('key').textContent='';
+ $('key').hidden=true;$('message').textContent='';
 });
-addEventListener('pagehide',()=>{$('key').textContent='';$('key').hidden=true;});
+addEventListener('pagehide',()=>{
+ $('credential').value='';$('key').textContent='';$('key').hidden=true;
+});

@@ -1,3 +1,2 @@
-// Fail closed on the public website. Only the separate private pilot host may enable this.
-export const API_ORIGIN='';
+export const API_ORIGIN='https://anri-cloud-api-staging-staging.up.railway.app';
 export const PILOT_ENABLED=false;
