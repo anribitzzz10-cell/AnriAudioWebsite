@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="ANRI AUDIO MIDI — secure ProEducation checkout, payment verification, and perpetual FULL license.">
+<title>ANRI AUDIO MIDI — Secure Checkout</title>
+<style>
+:root{color-scheme:dark;font:16px/1.6 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#080c15;color:#f2f3f8}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at top,#171d2c,#080c15 65%)}
+.wrap{max-width:800px;margin:auto;padding:26px 20px 100px}
+header{display:flex;align-items:center;justify-content:space-between;padding:16px 0 30px;border-bottom:1px solid #323947}
+.brand{color:#fff;text-decoration:none;font-weight:800;letter-spacing:.08em}
+.lang{display:flex;gap:14px}.lang a{color:#bbc3d7;text-decoration:none;padding:3px 5px}.lang a[aria-current]{color:#ff677f}
+h1{font-size:clamp(30px,5vw,54px);line-height:1.2;margin:40px 0 16px}
+.red{color:#ff617b}p{color:#bbc3d7}.card{margin-top:24px;padding:26px;border:1px solid #354054;border-radius:20px;background:#141a27}
+.price{font-size:48px;line-height:1.2;font-weight:800;margin:16px 0}.old{font-size:24px;color:#808a9c;text-decoration:line-through;margin-left:15px}
+.small{font-size:14px;line-height:1.5;color:#bbc3d7}
+label{display:block;margin:16px 0 7px;font-weight:700}
+input[type=email]{width:100%;font:inherit;border:1px solid #505c72;border-radius:10px;background:#0d1220;color:#fff;padding:14px 16px}
+.terms{display:flex;gap:12px;align-items:flex-start;margin:20px 0}.terms label{font-weight:400;margin:0}
+button{width:100%;border:0;border-radius:12px;background:#d72d4d;color:white;font:700 17px/1.2 inherit;padding:18px;cursor:pointer}
+button:disabled{opacity:.5;cursor:not-allowed}a{color:#ff8295}a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid #ff8295;outline-offset:3px}
+#status{margin-top:20px;padding:15px;border:1px solid #4f5a73;border-radius:12px;white-space:pre-line}
+footer{color:#919db2;font-size:14px;margin-top:45px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header><a href="/" class="brand">ANRI AUDIO</a><nav class="lang" aria-label="Language"><a href="?lang=ru" data-lang="ru">RU</a><a href="?lang=en" data-lang="en">EN</a><a href="?lang=kk" data-lang="kk">KZ</a></nav></header>
+<main>
+<h1 id="heading">ANRI AUDIO MIDI <span class="red">— покупка</span></h1>
+<p id="intro">Полная версия для macOS / Logic Pro. Разовая бессрочная лицензия, без подписки и пробной версии.</p>
+<section class="card" aria-labelledby="payTitle">
+<h2 id="payTitle">Стартовая цена</h2>
+<div class="price">$15 <span class="old">$39</span></div>
+<p id="currency" class="small">Списание производится в валюте, указанной платёжной платформой ProEducation. Точная сумма и валюта будут показаны до подтверждения оплаты.</p>
+<form id="orderForm">
+<label for="email" id="emailLabel">Электронная почта для получения лицензии</label>
+<input type="email" name="email" id="email" autocomplete="email" inputmode="email" maxlength="254" required placeholder="you@example.com">
+<div class="terms"><input type="checkbox" id="accept" required><label for="accept" id="termsLabel">Я ознакомился с условиями покупки.</label></div>
+<button type="submit" id="buyButton" disabled>Купить за $15</button>
+</form>
+<div id="status" role="status" aria-live="polite">Реальная оплата пока не открыта. Данные банковских карт на этом сайте не запрашиваются.</div>
+</section>
+<p id="support">Если возник вопрос, напишите на <a href="mailto:anribitzzz10@gmail.com">anribitzzz10@gmail.com</a>.</p>
+</main>
+<footer>© 2026 ANRI AUDIO · <a href="/">anriaudio.com</a> · ProEducation checkout · <span id="footerNote">FULL perpetual license</span></footer>
+</div>
+<script>
+"use strict";
+// Fail-closed until a dedicated production Anri Cloud backend is LIVE and tested.
+// Changing these settings alone is insufficient: backend verification and
+// email delivery must be enabled and a REAL paid test must have passed.
+const COMMERCE_ENABLED = false;
+const API_BASE = "";
+const MERCHANT_ACTION = "https://anriprod.proeducation.kz/";
+
+const words = {
+ru:{heading:"ANRI AUDIO MIDI — покупка",intro:"Полная версия для macOS / Logic Pro. Разовая бессрочная лицензия, без подписки и пробной версии.",payTitle:"Стартовая цена",currency:"Списание производится в валюте, указанной платёжной платформой ProEducation. Точная сумма и валюта будут показаны до подтверждения оплаты.",email:"Электронная почта для получения лицензии",terms:"Я ознакомился с условиями покупки.",buy:"Купить за $15",closed:"Реальная оплата пока не открыта. Данные банковских карт на этом сайте не запрашиваются.",waiting:"Проверяем состояние заказа по серверным данным. Переход на эту страницу не подтверждает оплату.",pending:"Ожидание подтверждения платежа.",hold:"Оплата зарегистрирована, лицензия проходит проверку. Обратитесь в поддержку, если статус не меняется.",fulfilled:"Лицензия создана. Проверьте электронную почту.",qa:"Тестовый платёж получен. Коммерческая лицензия не выдаётся.",error:"Не удалось проверить заказ. Напишите в поддержку.",processing:"Формируем безопасный заказ...",support:"Если возник вопрос, напишите на ",footer:"FULL, бессрочная лицензия"},
+en:{heading:"ANRI AUDIO MIDI — checkout",intro:"Full version for macOS / Logic Pro. One-time perpetual license, no subscription or trial.",payTitle:"Launch offer",currency:"Payment is processed in the currency shown by ProEducation. The actual charged amount and currency are displayed before confirmation.",email:"Email for license delivery",terms:"I have read and accept the purchase terms.",buy:"Buy for $15",closed:"Checkout is not open yet. This site never collects your card information.",waiting:"Checking the order with our server. A redirect to this page does not prove payment.",pending:"Awaiting confirmed payment.",hold:"Payment recorded. License delivery is under review. Contact support if this persists.",fulfilled:"License issued. Check your email.",qa:"QA payment confirmed. No commercial license was issued.",error:"Could not check your order. Please contact support.",processing:"Creating your secure order...",support:"Questions? Contact ",footer:"FULL perpetual license"},
+kk:{heading:"ANRI AUDIO MIDI — сатып алу",intro:"macOS / Logic Pro үшін толық нұсқа. Бір рет төленетін мерзімсіз лицензия, жазылымсыз және сынақ нұсқасынсыз.",payTitle:"Бастапқы ұсыныс",currency:"Төлем ProEducation платформасында көрсетілген валютада жүргізіледі. Түпкілікті сома мен валюта төлемді растағанға дейін көрсетіледі.",email:"Лицензияны алу үшін электрондық пошта",terms:"Сатып алу шарттарымен таныстым және келісемін.",buy:"15 долларға сатып алу",closed:"Төлем әлі ашылған жоқ. Бұл сайт банк картасының деректерін жинамайды.",waiting:"Тапсырысты серверден тексерудеміз. Бұл бетке оралу төлемді дәлелдемейді.",pending:"Төлем расталуын күтеміз.",hold:"Төлем тіркелді. Лицензия тексерілуде. Қажет болса, қолдау қызметіне хабарласыңыз.",fulfilled:"Лицензия берілді. Электрондық поштаңызды тексеріңіз.",qa:"Сынақ төлемі расталды. Коммерциялық лицензия берілмеді.",error:"Тапсырысты тексеру мүмкін болмады. Қолдау қызметіне жазыңыз.",processing:"Қауіпсіз тапсырыс жасалуда...",support:"Сұрақтар бойынша хабарласыңыз: ",footer:"FULL мерзімсіз лицензия"}
+};
+const qs = new URLSearchParams(location.search);
+const lang = Object.prototype.hasOwnProperty.call(words,qs.get("lang")) ? qs.get("lang") : "ru";
+const t = words[lang];
+document.documentElement.lang = lang;
+document.querySelectorAll("[data-lang]").forEach(a=>{a.setAttribute("aria-current",a.dataset.lang===lang?"page":"false")});
+const setText=(id,val)=>document.getElementById(id).textContent=val;
+for(const field of ["heading","intro","payTitle","currency"]){setText(field, t[field])}
+setText("emailLabel",t.email);
+const termsHref = lang==="en"?"/terms/":lang==="kk"?"/kk/terms/":"/ru/terms/";
+document.getElementById("termsLabel").innerHTML="";
+const termsLink=document.createElement("a");
+termsLink.href=termsHref;termsLink.textContent=t.terms;
+document.getElementById("termsLabel").append(termsLink);
+setText("buyButton",t.buy);setText("footerNote",t.footer);
+document.getElementById("support").firstChild.textContent=t.support;
+const status=document.getElementById("status");
+const btn=document.getElementById("buyButton");
+status.textContent=t.closed;
+function activeAPI(){return COMMERCE_ENABLED && /^https:\/\/[a-z0-9.-]+$/i.test(API_BASE)}
+btn.disabled=!activeAPI();
+async function checkOrder(order){
+ if(!activeAPI())return;
+ status.textContent=t.waiting;
+ try{
+   const res=await fetch(API_BASE+"/v1/checkout/proeducation/status/"+encodeURIComponent(order),{cache:"no-store"});
+   if(!res.ok)throw new Error("status "+res.status);
+   const data=await res.json();
+   const msg=data.status==="fulfilled"?t.fulfilled:data.status==="paid_qa"?t.qa:data.status==="paid_hold"?t.hold:t.pending;
+   status.textContent=msg;
+ }catch{status.textContent=t.error;}
+}
+if(qs.get("order"))checkOrder(qs.get("order"));
+document.getElementById("orderForm").addEventListener("submit",async(event)=>{
+ event.preventDefault();
+ if(!activeAPI())return;
+ btn.disabled=true;status.textContent=t.processing;
+ try{
+   const email=document.getElementById("email").value.trim();
+   const response=await fetch(API_BASE+"/v1/checkout/proeducation/create",{
+     method:"POST",headers:{"Content-Type":"application/json"},
+     body:JSON.stringify({customer_email:email}),credentials:"omit"
+   });
+   if(!response.ok)throw new Error("checkout unavailable");
+   const order=await response.json();
+   if(order.merchant_form_action!==MERCHANT_ACTION || order.method!=="POST" || order.currency!=="KZT" || !Array.isArray(order.fields)){
+     throw new Error("unexpected merchant response");
+   }
+   const form=document.createElement("form");form.method="POST";form.action=MERCHANT_ACTION;
+   for(const field of order.fields){
+     if(typeof field.name!=="string" || typeof field.value!=="string")throw new Error("invalid field");
+     const hidden=document.createElement("input");hidden.type="hidden";
+     hidden.name=field.name;hidden.value=field.value;form.append(hidden);
+   }
+   document.body.append(form);form.submit();
+ }catch{status.textContent=t.error;btn.disabled=false}
+});
+</script>
+</body></html>
