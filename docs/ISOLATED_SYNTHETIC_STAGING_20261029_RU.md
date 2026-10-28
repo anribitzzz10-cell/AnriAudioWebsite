@@ -18,3 +18,9 @@ Browser suite на deployed frontend SHA PASS: https://github.com/anribitzzz10-c
 Новый staging использует отдельную FREE PG17 anri-synthetic-commerce-20261029 с ограниченным сроком жизни до 28.11.2026 00:08 Asia/Qyzylorda. Никакой production durability этим не подтверждается.
 Live по-прежнему NO-GO: точный официальный KZ callback с подписанной валютой или reconciliation API; backup/restore старой SQLite; production issuer/client pin и история лицензий.
 Никаких реальных платежей, customer email, AU-проверок, merge или изменений pilot.
+
+## Финальная браузерная проверка PASS
+Фактический Chrome, без перехвата/mock API: RU-форма создала второй заказ; отдельное HMAC-подписанное synthetic событие вернуло HTTP 200 fulfilled. RU buyer view показал ключ. При переходе в EN и KK sessionStorage восстановил order+credential; POST claim показал ТОТ ЖЕ ключ во всех трёх языках. В KK отключён перевод только страницы для проверки исходного казахского текста. После проверки кнопка очистки убрала номер/credential/ключ из браузерной сессии.
+Итог новой PostgreSQL: orders=2, fulfilled=2, licenses=2, claims=2, email_deliveries=0.
+Публичные checkout HTML/JS/config проверены: proxy token, synthetic payment secret и merchant domain отсутствуют.
+Состояние PR после code/docs изменений: #23 draft/unmerged, #11 draft/unmerged. Код deployed по SHA выше; дополнительные docs-коммиты не развёртывались, auto-deploy OFF.
