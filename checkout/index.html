@@ -4,6 +4,7 @@
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'self'; img-src 'self'; form-action https://anriprod.proeducation.kz; base-uri 'none'; object-src 'none'">
 <title>ANRI AUDIO — Order</title><link rel="stylesheet" href="/checkout/style.css"><script type="module" src="/checkout/order.js"></script></head>
 <body><main><a href="/">ANRI AUDIO</a><nav aria-label="Language"><a href="/checkout/" lang="en">EN</a> · <a href="/ru/checkout/" lang="ru">RU</a> · <a href="/kk/checkout/" lang="kk">KK</a></nav>
+<p class="license-status-link"><a href="/license/">Check existing license status</a></p>
 <h1 id="heading">Your order</h1><p id="notice" role="status">Checkout is closed.</p>
 <form id="create"><label id="email-label" for="email">Email</label><input id="email" type="email" required maxlength="254" autocomplete="email"><button id="buy" disabled>Create order</button></form>
 <section id="prepared" hidden><p id="save-label">Save your private order credential before payment.</p><output id="amount"></output><output id="order-reference"></output><input id="new-credential" type="password" readonly autocomplete="off" aria-label="Private order credential"><button id="copy" type="button">Copy credential</button><label><input id="saved" type="checkbox"><span id="saved-label">I saved my order number and private credential.</span></label><button id="pay" type="button" disabled>Continue to payment</button></section>
