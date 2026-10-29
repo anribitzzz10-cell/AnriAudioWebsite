@@ -54,7 +54,7 @@ def main():
     try:
         status, _, data = request(opener, "/health")
         body = json.loads(data.decode())
-        ok = status == 200 and body.get("mode") == "preview" and body.get("checkout_enabled") is False and body.get("proxy_configured") is False and body.get("external_payment_verified") is False
+        ok = status == 200 and body.get("mode") == "pg_preview" and body.get("checkout_enabled") is False and body.get("proxy_configured") is True and body.get("external_payment_verified") is False
     except Exception:
         ok = False
     print(("PASS " if ok else "FAIL ") + "GET /health (checkout off)", flush=True)
@@ -62,7 +62,7 @@ def main():
         failures.append("/health")
     try:
         status, _, body = request(opener, "/checkout/config.js")
-        ok = status == 200 and b"CHECKOUT_ENABLED=false" in body and b"API_ORIGIN=''" in body
+        ok = status == 200 and b"CHECKOUT_ENABLED=false" in body and b"API_ORIGIN=location.origin" in body
     except Exception:
         ok = False
     print(("PASS " if ok else "FAIL ") + "GET /checkout/config.js (closed)", flush=True)
@@ -72,12 +72,15 @@ def main():
         try:
             status, headers, data = request(opener, path, invalid_post=True)
             body = json.loads(data.decode())
-            ok = status == 503 and body == {"detail": "Commerce proxy disabled"}
+            ok = status == 422 and isinstance(body.get("detail"), list)
+            ok &= bool(body["detail"]) and all(
+                row.get("type") == "missing" for row in body["detail"]
+            )
             ok &= "no-store" in headers.get("cache-control", "")
             ok &= headers.get("referrer-policy") == "no-referrer"
         except Exception:
             ok = False
-        print(("PASS " if ok else "FAIL ") + "POST " + path + " (disabled)", flush=True)
+        print(("PASS " if ok else "FAIL ") + "POST " + path + " (invalid JSON rejected by real PG API)", flush=True)
         if not ok:
             failures.append(path)
     print("PREVIEW_NO_PAYMENT_SMOKE_" + ("FAIL" if failures else "PASS"))
