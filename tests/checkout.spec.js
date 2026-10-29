@@ -3,7 +3,16 @@ const base = 'http://127.0.0.1:8765';
 const order = 'anri-full-'+'a'.repeat(32);
 const credential = 'c'.repeat(43);
 const key = ['ANRI','ABCDE','FGHJK','LMNPQ','RSTUV'].join('-');
-const fields = [{name:'order_id',value:order},{name:'currency',value:'kzt'},{name:'signature',value:'a'.repeat(64)}];
+const fields = [
+ {name:'order_id',value:order},
+ {name:'currency',value:'kzt'},
+ {name:'customer_email',value:'buyer@example.invalid'},
+ {name:'sys',value:'anriaudio'},
+ {name:'urlSuccess',value:'https://anriaudio.com/checkout/'},
+ {name:'urlReturn',value:'https://anriaudio.com/checkout/'},
+ {name:'urlNotification',value:'https://anri-cloud.onrender.com/v1/payments/proeducation/webhook'},
+ {name:'signature',value:'a'.repeat(64)}
+];
 
 for (const [path, heading] of [['/checkout/','Your order'],['/ru/checkout/','Ваш заказ'],['/kk/checkout/','Сіздің тапсырысыңыз']]) {
  test('closed checkout '+path, async ({page})=>{
