@@ -14,6 +14,10 @@ jobs:
           node-version: '22'
       - run: npm install --no-save @playwright/test
       - run: npx playwright install --with-deps chromium
+      - name: Install isolated website gateway dependencies
+        run: python3 -m pip install -r requirements-commerce.txt
+      - name: Offline production gateway contract (no network)
+        run: python3 -m unittest discover -s tests -p test_commerce_gateway.py -v
       - name: Offline checkout proxy smoke checker contract (no network)
         run: python3 -m unittest discover -s tests -p test_checkout_proxy_smoke.py -v
       - name: Order recovery security checks
