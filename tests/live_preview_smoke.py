@@ -71,7 +71,7 @@ def main():
             status, headers, data = request(opener, path, invalid_post=True)
             body = json.loads(data.decode())
             ok = status == 503 and body == {"detail": "Commerce proxy disabled"}
-            ok &= "no-store" in headers.get("Cache-Control", "")
+            ok &= "no-store" in headers.get("cache-control", "")
             ok &= headers.get("referrer-policy") == "no-referrer"
         except Exception:
             ok = False
