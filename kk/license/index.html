@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#0a0a0d">
 <meta name="referrer" content="no-referrer">
+<meta name="robots" content="noindex,nofollow">
 <meta name="description" content="ANRI AUDIO MIDI лицензиясының ағымдағы мәртебесін тексеру.">
 <title>Лицензия мәртебесін тексеру | ANRI AUDIO</title>
 <link rel="canonical" href="https://anriaudio.com/kk/license/">
@@ -27,9 +28,26 @@
       <input id="license-key" name="license_key" type="password" required maxlength="128" minlength="10" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="ANRI-XXXXX-XXXXX-XXXXX-XXXXX">
       <button id="check-button" type="submit">Лицензияны тексеру</button>
     </form>
-    <p class="privacy">Құпиялылық: кілт тек осы тексеру үшін ANRI Cloud қызметіне тікелей жіберіледі. Браузер қоймасында сақталмайды және URL мекенжайына жазылмайды. Кілтті чатта немесе скриншотта бөліспеңіз.</p>
+    <p class="privacy">Құпиялылық: кілт осы тексеру үшін сайттың қорғалған шлюзі арқылы ANRI Cloud қызметіне жіберіледі. Браузер қоймасында сақталмайды және URL мекенжайына жазылмайды. Кілтті чатта немесе скриншотта бөліспеңіз.</p>
     <div id="license-result" class="result" role="status" aria-live="polite" hidden></div>
-    <a class="back" href="/kk/">← ANRI AUDIO басты бетіне</a>
+    <section class="recovery-section" aria-labelledby="recovery-title">
+      <h2 id="recovery-title">Төлем жасадыңыз, бірақ тапсырыс нөмірін немесе құпия кодты жоғалттыңыз ба?</h2>
+      <p class="intro">Тапсырыс кезінде көрсеткен электрондық пошта арқылы лицензияны қалпына келтіріңіз. Сол поштаға бір реттік растау кодын жібереміз.</p>
+      <form id="recovery-request-form">
+        <label for="recovery-email">Сатып алу кезіндегі электрондық пошта</label>
+        <input id="recovery-email" name="email" type="email" required maxlength="320" autocomplete="email" placeholder="you@example.com">
+        <button id="recovery-send-button" type="submit">Растау кодын жіберу</button>
+      </form>
+      <form id="recovery-verify-form" hidden>
+        <label for="recovery-code">Хаттағы 6 таңбалы растау коды</label>
+        <input id="recovery-code" name="code" type="text" required minlength="6" maxlength="6" pattern="[0-9]{6}" inputmode="numeric" autocomplete="one-time-code" placeholder="123456">
+        <button id="recovery-verify-button" type="submit">Поштаны растау және лицензияларды қалпына келтіру</button>
+      </form>
+      <div id="recovery-result" class="result" role="status" aria-live="polite" hidden></div>
+      <p class="privacy">Код 10 минут жарамды және бір рет қолданылады. Лицензия кілттері тек код расталғаннан кейін көрсетіледі және браузер қоймасында сақталмайды.</p>
+    </section>
+    <a class="back" href="/kk/checkout/">Төлем жасадыңыз ба? Кілтті қалпына келтіру</a>
+  <a class="back" href="/kk/">← ANRI AUDIO басты бетіне</a>
   </section>
 </main>
 <footer>© 2026 ANRI AUDIO</footer>

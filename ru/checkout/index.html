@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<meta name="robots" content="noindex,nofollow">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'self'; img-src 'self'; form-action https://anriprod.proeducation.kz; base-uri 'none'; object-src 'none'">
+<title>ANRI AUDIO — Заказ</title>
+<link rel="stylesheet" href="/checkout/style.css">
+<script type="module" src="/checkout/order.js"></script>
+</head>
+<body>
+<main>
+<a href="/">ANRI AUDIO</a>
+<nav aria-label="Язык"><a href="/checkout/" lang="en">EN</a> · <a href="/ru/checkout/" lang="ru" aria-current="page">RU</a> · <a href="/kk/checkout/" lang="kk">KK</a></nav>
+<p class="license-status-link"><a href="/ru/license/">Проверить статус лицензии</a></p>
+<h1 id="heading">Ваш заказ</h1>
+<p id="notice" role="status">Покупка закрыта до завершения проверки production-оплаты.</p>
+<form id="create">
+<label id="email-label" for="email">Email (обязательно; для восстановления лицензии)</label>
+<input id="email" type="email" required maxlength="254" autocomplete="email">
+<button id="buy" disabled>Создать заказ</button>
+</form>
+<section id="prepared" hidden>
+<p id="save-label">Сохранять номер заказа или секретный код не нужно. Для восстановления лицензии достаточно почты, указанной при покупке.</p>
+<output id="amount"></output>
+<button id="pay" type="button" disabled>Перейти к оплате</button>
+</section>
+<p id="privacy">После оплаты ANRI Cloud проверяет уведомление от ProEducation. Сам возврат со страницы оплаты не подтверждает платёж. Временная ссылка на заказ хранится только в этой вкладке для автоматического получения лицензии. Если она потеряется, восстановите лицензию по email, указанному при покупке.</p>
+<p><a id="recover-link" href="/ru/license/">Восстановить лицензию по email</a></p>
+<p id="result" role="status" aria-live="polite"></p>
+<pre id="key" hidden></pre>
+</main>
+</body>
+</html>

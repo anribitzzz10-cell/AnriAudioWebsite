@@ -1,0 +1,1 @@
+{"name":"anri-official-site","private":true,"scripts":{"start":"node server.cjs","test":"node --test tests/proxy.node.cjs && node tests/order-claim.node.cjs"}}
