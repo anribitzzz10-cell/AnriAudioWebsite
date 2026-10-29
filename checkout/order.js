@@ -45,7 +45,7 @@ function validQuote(q){
    const f=new Map(q.fields.map(entry=>[entry.name,entry.value]));
    const price=String(Math.floor(q.amount_minor/100))+'.'+String(q.amount_minor%100).padStart(2,'0');
    const returnUrl=location.origin+location.pathname;
-   return f.size===13 &&
+   return f.size===14 &&
     f.get('do')==='pay' && f.get('sys')==='anriaudio' &&
     f.get('order_id')===q.order_num && f.get('currency')==='kzt' &&
     f.get('customer_email') && f.get('payments_limit')==='1' &&
