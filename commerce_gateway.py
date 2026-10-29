@@ -262,4 +262,30 @@ async def static_pages(raw_path: str):
     target = (ROOT / relative).resolve()
     if not target.is_relative_to(ROOT) or not target.is_file():
         return Response(status_code=404)
+    if mode() == "license_preview" and relative in (
+        "checkout/index.html", "ru/checkout/index.html", "kk/checkout/index.html"
+    ):
+        warning = {
+            "checkout/index.html": (
+                "TEST PREVIEW ONLY — connected to an empty disposable database. "
+                "Do not enter a real license key."
+            ),
+            "ru/checkout/index.html": (
+                "ТОЛЬКО ТЕСТОВЫЙ ПРЕДПРОСМОТР — подключена пустая временная база. "
+                "Не вводите настоящий лицензионный ключ."
+            ),
+            "kk/checkout/index.html": (
+                "ТЕК ТЕСТІК АЛДЫН АЛА ҚАРАУ — бос уақытша дерекқор. "
+                "Нақты лицензия кілтін енгізбеңіз."
+            ),
+        }[relative]
+        page = target.read_text(encoding="utf-8")
+        if "<body>" not in page:
+            return Response(status_code=500)
+        page = page.replace(
+            "<body>",
+            '<body><aside class="preview-warning" role="alert">' + warning + "</aside>",
+            1,
+        )
+        return Response(page, media_type="text/html; charset=utf-8")
     return FileResponse(target)
