@@ -218,10 +218,13 @@ async function run() {
     assert.equal(f.ensure('email').value, 'buyer@example.invalid');
   });
 
-  await check('pagehide cancels polling and clears the displayed key', async () => {
-    const f = fixture();
+  await check('pagehide cancels pending polling and clears the displayed key', async () => {
+    const f = fixture({fetcher: async () => ({
+      ok: true, json: async () => ({status: 'pending', license_key: null})
+    })});
     f.events.pageshow();
     await flush();
+    assert.equal(f.timers.size, 1);
     f.events.pagehide();
     assert.equal(f.ensure('key').hidden, true);
     assert.equal(f.timers.size, 0);
