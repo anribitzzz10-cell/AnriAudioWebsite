@@ -26,3 +26,9 @@ button:disabled{opacity:.58;cursor:wait}
 .back{display:inline-block;margin-top:24px;color:var(--cream);text-underline-offset:4px}
 footer{padding:20px;text-align:center;color:#777580;font-size:12px;border-top:1px solid rgba(255,255,255,.06)}
 @media(max-width:520px){.site-header{align-items:flex-start}.langs{gap:10px}main{margin-top:12px}.panel{border-radius:14px}}
+
+[hidden]{display:none!important}
+.recovery-section{border-top:1px solid var(--line);margin-top:34px;padding-top:26px}
+.recovery-section h2{font-size:clamp(22px,3.5vw,28px);line-height:1.25;letter-spacing:-.02em;margin:0 0 12px}
+.recovery-section .intro{margin-bottom:20px}
+#recovery-result{margin-top:18px}
