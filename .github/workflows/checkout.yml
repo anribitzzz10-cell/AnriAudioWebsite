@@ -1,0 +1,25 @@
+name: Official checkout closed release
+on:
+  pull_request:
+  push:
+    branches: [feature/official-closed-checkout-20261029]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm test
+      - run: npm install --no-save @playwright/test
+      - run: npx playwright install --with-deps chromium
+      - name: Offline browser tests
+        run: |
+          node tests/static-server.cjs > /tmp/anri-static-http.log 2>&1 &
+          npx playwright test tests/checkout.spec.js --workers=1
+      - name: Production container build
+        run: docker build -t anri-official-closed .
