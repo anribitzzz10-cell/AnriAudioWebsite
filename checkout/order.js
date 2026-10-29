@@ -1,116 +1,302 @@
 import {API_ORIGIN, CHECKOUT_ENABLED} from './config.js';
-// Never use provider return parameters as payment proof or credentials.
+
+// A provider return is never treated as proof of payment or as a credential.
 history.replaceState(null, '', location.pathname);
 const $ = id => document.getElementById(id);
 const lang = document.documentElement.lang;
-const translations = {
- en: ['Your order','Checkout is closed. Secure order access will be enabled after verification.','Email','Create order','Save your order number and private credential before payment.','Copy credential','I saved my order number and private credential.','Continue to payment','Check order / recover key','Order number','Private order credential','Check order','Clear this browser session','Keep your credential private. It restores the same key. A return from the payment page does not confirm payment.','Payment has not been confirmed yet.','Your license key:','Order unavailable. Check your private credential or contact support.','Credential copied.','Credential ready. Save it before payment.'],
- ru: ['Ваш заказ','Покупка закрыта. Защищённый доступ к заказу будет включён после проверки.','Email','Создать заказ','До оплаты сохраните номер заказа и его секретный код.','Копировать код','Я сохранил номер заказа и секретный код.','Перейти к оплате','Проверить заказ / восстановить ключ','Номер заказа','Секретный код заказа','Проверить заказ','Очистить эту сессию браузера','Храните код в тайне. Он восстанавливает тот же ключ. Возврат со страницы оплаты не подтверждает платёж.','Оплата пока не подтверждена.','Ваш лицензионный ключ:','Заказ недоступен. Проверьте секретный код или обратитесь в поддержку.','Код скопирован.','Код готов. Сохраните его до оплаты.'],
- kk: ['Сіздің тапсырысыңыз','Сатып алу жабық. Тапсырысқа қауіпсіз қол жеткізу тексеруден кейін қосылады.','Email','Тапсырыс жасау','Төлемге дейін тапсырыс нөмірі мен құпия кодын сақтаңыз.','Кодты көшіру','Тапсырыс нөмірі мен құпия кодын сақтадым.','Төлемге өту','Тапсырысты тексеру / кілтті қалпына келтіру','Тапсырыс нөмірі','Тапсырыстың құпия коды','Тексеру','Браузердің осы сессиясын тазалау','Кодты құпия сақтаңыз. Ол сол кілтті қалпына келтіреді. Төлем бетінен оралу төлемді растамайды.','Төлем әлі расталған жоқ.','Лицензиялық кілтіңіз:','Тапсырыс қолжетімсіз. Құпия кодты тексеріңіз немесе қолдау қызметіне хабарласыңыз.','Код көшірілді.','Код дайын. Төлемге дейін сақтаңыз.']
+const messages = {
+  en: {
+    ready: 'Order prepared. You do not need to save an order number or private code. Your purchase email is enough to recover the license.',
+    pending: 'Payment has not been confirmed yet. We will keep checking this order.',
+    paidHold: 'Payment was received, but license delivery is not complete yet. Use email recovery or contact support.',
+    unavailable: 'The license is not available in this browser. Recover it using your purchase email.',
+    license: 'Your license key:',
+    copy: 'Copy license key',
+    copied: 'License key copied.',
+    recovery: 'Recover a license by email'
+  },
+  ru: {
+    ready: 'Заказ подготовлен. Сохранять номер заказа или секретный код не нужно. Для восстановления лицензии достаточно почты, указанной при покупке.',
+    pending: 'Оплата ещё не подтверждена. Мы продолжим проверять заказ.',
+    paidHold: 'Оплата получена, но выдача лицензии ещё не завершена. Воспользуйтесь восстановлением по email или обратитесь в поддержку.',
+    unavailable: 'Лицензия не получена в этом браузере. Восстановите её по email, указанному при покупке.',
+    license: 'Ваш лицензионный ключ:',
+    copy: 'Скопировать ключ',
+    copied: 'Лицензионный ключ скопирован.',
+    recovery: 'Восстановить лицензию по email'
+  },
+  kk: {
+    ready: 'Тапсырыс дайын. Тапсырыс нөмірін немесе құпия кодты сақтаудың қажеті жоқ. Лицензияны сатып алу кезінде көрсетілген email арқылы қалпына келтіруге болады.',
+    pending: 'Төлем әлі расталған жоқ. Тапсырысты тексеруді жалғастырамыз.',
+    paidHold: 'Төлем қабылданды, бірақ лицензияны беру әлі аяқталған жоқ. Email арқылы қалпына келтіріңіз немесе қолдау қызметіне хабарласыңыз.',
+    unavailable: 'Бұл браузерде лицензия алынбады. Оны сатып алу кезінде көрсетілген email арқылы қалпына келтіріңіз.',
+    license: 'Лицензия кілтіңіз:',
+    copy: 'Лицензия кілтін көшіру',
+    copied: 'Лицензия кілті көшірілді.',
+    recovery: 'Лицензияны email арқылы қалпына келтіру'
+  }
 };
-const t = translations[lang] || translations.en;
-['heading','notice','email-label','buy','save-label','copy','saved-label','pay','recover-heading','order-label','credential-label','check','forget','privacy'].forEach((id,i)=>$(id).textContent=t[i]);
+const t = messages[lang] || messages.en;
 const enabled = API_ORIGIN === location.origin;
-$('check').disabled = !enabled;
-$('buy').disabled = !(enabled && CHECKOUT_ENABLED);
 const storageKey = 'anri-private-order';
-let prepared;
+let prepared = null;
+let generation = 0;
+let timer = null;
+let activeRequest = null;
+let currentOrder = '';
+let currentCredential = '';
+
 const validOrder = value => /^anri-full-[0-9a-f]{32}$/.test(value);
 const validCredential = value => /^[A-Za-z0-9_-]{43}$/.test(value);
 const validKey = value => typeof value === 'string' && /^ANRI-[A-Z2-9]{5}(?:-[A-Z2-9]{5}){3}$/.test(value);
-try { const saved = JSON.parse(sessionStorage.getItem(storageKey)); if(saved && validOrder(saved.order_num) && validCredential(saved.claim_credential)){$('order').value=saved.order_num;$('credential').value=saved.claim_credential;} } catch {}
-const extra = ({
- en:['Copy license key','License key copied.','Payment verification paused. Use Check order to retry.'],
- ru:['Скопировать ключ','Ключ скопирован.','Проверка оплаты приостановлена. Нажмите «Проверить заказ» для повтора.'],
- kk:['Кілтті көшіру','Кілт көшірілді.','Төлемді тексеру тоқтатылды. Қайталау үшін «Тексеру» түймесін басыңыз.']
-})[lang] || ['Copy license key','License key copied.','Use Check order to retry.'];
-const copyKey = document.createElement('button');
-copyKey.id='copy-key';copyKey.type='button';copyKey.textContent=extra[0];copyKey.hidden=true;
-$('key').after(copyKey);
-let generation=0, timer, activeRequest;
-function clearKey(){ $('key').textContent='';$('key').hidden=true;copyKey.hidden=true; }
-function stopClaim(){ generation++;clearTimeout(timer);activeRequest?.abort();activeRequest=null;$('check').disabled=!enabled; }
-function identity(){ return {order_num:$('order').value.trim(),claim_credential:$('credential').value.trim()}; }
-function sameIdentity(a,b){return a.order_num===b.order_num && a.claim_credential===b.claim_credential;}
-function validQuote(q){
- return q && validOrder(q.order_num) && validCredential(q.claim_credential) && q.currency==='KZT' &&
-  Number.isSafeInteger(q.amount_minor) && q.amount_minor>0 && q.amount_minor<=100000000 &&
-  q.merchant_form_action==='https://anriprod.proeducation.kz/' && q.method==='POST' && Array.isArray(q.fields) &&
-  q.fields.length>0 && q.fields.length<=100 &&
-  q.fields.every(f=>typeof f.name==='string' && typeof f.value==='string' &&
-   /^(?:do|currency|order_id|customer_email|sys|urlSuccess|urlReturn|urlNotification|payments_limit|signature|products\[0\]\[(?:name|sku|price|quantity)\])$/.test(f.name) &&
-   !f.value.includes(q.claim_credential)) &&
-  new Set(q.fields.map(f=>f.name)).size===q.fields.length &&
-  q.fields.some(f=>f.name==='order_id'&&f.value===q.order_num) &&
-  q.fields.some(f=>f.name==='currency'&&f.value==='kzt') &&
-  q.fields.some(f=>f.name==='signature'&&/^[a-f0-9]{64}$/.test(f.value));
-}
-async function post(path, data){
- const r=await fetch(API_ORIGIN+'/v1/checkout/proeducation/'+path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data),cache:'no-store',credentials:'omit',referrerPolicy:'no-referrer',redirect:'error'});
- if(!r.ok) throw new Error('Order unavailable');
- return r.json();
-}
-$('create').addEventListener('submit', async e=>{
- e.preventDefault(); if(!(enabled && CHECKOUT_ENABLED)) return;
- $('buy').disabled=true;
- try {
-  prepared=await post('create',{customer_email:$('email').value,locale:lang});
-  if(!validQuote(prepared))throw new Error();
-  stopClaim();clearKey();$('saved').checked=false;$('pay').disabled=true;
-  const local={order_num:prepared.order_num,claim_credential:prepared.claim_credential};
-  sessionStorage.setItem(storageKey,JSON.stringify(local));
-  $('order').value=local.order_num;$('credential').value=local.claim_credential;
-  $('order-reference').textContent=local.order_num;$('new-credential').value=local.claim_credential;
-  $('amount').textContent=new Intl.NumberFormat(lang,{style:'currency',currency:'KZT'}).format(prepared.amount_minor/100);
-  $('prepared').hidden=false;$('result').textContent=t[18];
- } catch {prepared=null;$('prepared').hidden=true;$('pay').disabled=true;$('result').textContent=t[16];$('buy').disabled=!(enabled&&CHECKOUT_ENABLED);}
-});
-$('copy').addEventListener('click',async()=>{try{await navigator.clipboard.writeText($('new-credential').value);$('result').textContent=t[17];}catch{$('new-credential').focus();$('new-credential').select();}});
-$('saved').addEventListener('change',()=>{$('pay').disabled=!(prepared && validQuote(prepared) && $('saved').checked);});
-$('pay').addEventListener('click',()=>{
- if(!enabled||!validQuote(prepared)||!$('saved').checked||!CHECKOUT_ENABLED) return;
- const form=document.createElement('form');form.method='POST';form.action=prepared.merchant_form_action;
- for(const field of prepared.fields){const input=document.createElement('input');input.type='hidden';input.name=field.name;input.value=field.value;form.append(input);}
- document.body.append(form);form.submit();
-});
-async function claimOrder(attempt=0, run, owner){
- if(!enabled || run!==generation || document.hidden || !sameIdentity(owner,identity()))return;
- $('check').disabled=true;
- const controller=new AbortController();activeRequest=controller;
- const timeout=setTimeout(()=>controller.abort(),15000);
- try {
-  const response=await fetch(API_ORIGIN+'/v1/checkout/proeducation/claim',{
-   method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(owner),
-   cache:'no-store',credentials:'omit',referrerPolicy:'no-referrer',redirect:'error',signal:controller.signal
-  });
-  if(!response.ok)throw Error();
-  const result=await response.json();
-  if(run!==generation || !sameIdentity(owner,identity()))return;
-  if(result.status==='fulfilled' && validKey(result.license_key)){
-   $('result').textContent=t[15];$('key').textContent=result.license_key;$('key').hidden=false;copyKey.hidden=false;
-  }else if(['pending','paid_hold'].includes(result.status) && result.license_key==null){
-   $('result').textContent=attempt<23?t[14]:extra[2];
-   if(attempt<23)timer=setTimeout(()=>claimOrder(attempt+1,run,owner),5000);
-  }else{clearKey();$('result').textContent=t[16];}
- }catch{if(run===generation){clearKey();$('result').textContent=extra[2];}}
- finally{clearTimeout(timeout);if(activeRequest===controller)activeRequest=null;if(run===generation)$('check').disabled=!enabled;}
-}
-function startClaim(){
- stopClaim();clearKey();const owner=identity();
- if(enabled && validOrder(owner.order_num) && validCredential(owner.claim_credential))void claimOrder(0,generation,owner);
-}
-$('claim').addEventListener('submit',e=>{e.preventDefault();startClaim();});
-for(const id of ['order','credential'])$(id).addEventListener('input',()=>{stopClaim();clearKey();});
-copyKey.addEventListener('click',async()=>{if(!$('key').hidden && validKey($('key').textContent)){
- try{await navigator.clipboard.writeText($('key').textContent);$('result').textContent=extra[1];}
- catch{$('result').textContent=t[15];}
-}});
-$('forget').addEventListener('click',()=>{stopClaim();try{sessionStorage.removeItem(storageKey);}catch{}prepared=null;for(const id of ['credential','new-credential','order'])$(id).value='';clearKey();$('prepared').hidden=true;$('result').textContent='';$('create').reset();$('saved').checked=false;$('pay').disabled=true;$('buy').disabled=!(enabled&&CHECKOUT_ENABLED);});
-addEventListener('pagehide',()=>{stopClaim();clearKey();$('credential').value='';$('new-credential').value='';});
-addEventListener('pageshow',()=>{
- if(!$('credential').value){try{const s=JSON.parse(sessionStorage.getItem(storageKey));if(s && validOrder(s.order_num)&&validCredential(s.claim_credential)){$('order').value=s.order_num;$('credential').value=s.claim_credential;}}catch{}}
- startClaim();
-});
-document.addEventListener('visibilitychange',()=>{if(document.hidden){stopClaim();clearKey();}else startClaim();});
-// pageshow starts authorized recovery using the saved credential, never the return query.
 
+function loadPrivateOrder() {
+  try {
+    const saved = JSON.parse(sessionStorage.getItem(storageKey));
+    if (saved && validOrder(saved.order_num) && validCredential(saved.claim_credential)) {
+      currentOrder = saved.order_num;
+      currentCredential = saved.claim_credential;
+    }
+  } catch {
+    // Browser storage is optional; email recovery remains the durable fallback.
+  }
+}
+
+function setResult(value) {
+  $('result').textContent = value;
+}
+
+function clearKey() {
+  $('key').textContent = '';
+  $('key').hidden = true;
+  if ($('copy-key')) $('copy-key').hidden = true;
+}
+
+function stopClaim() {
+  generation += 1;
+  clearTimeout(timer);
+  activeRequest?.abort();
+  activeRequest = null;
+}
+
+function identity() {
+  return {order_num: currentOrder, claim_credential: currentCredential};
+}
+
+function sameIdentity(a, b) {
+  return a.order_num === b.order_num && a.claim_credential === b.claim_credential;
+}
+
+function validQuote(q, expectedEmail) {
+  if (!q || !validOrder(q.order_num) || !validCredential(q.claim_credential) ||
+      q.currency !== 'KZT' || !Number.isSafeInteger(q.amount_minor) ||
+      q.amount_minor <= 0 || q.amount_minor > 100000000 ||
+      q.merchant_form_action !== 'https://anriprod.proeducation.kz/' ||
+      q.method !== 'POST' || !Array.isArray(q.fields) ||
+      q.fields.length < 1 || q.fields.length > 100) return false;
+
+  const allowed = /^(?:do|currency|order_id|customer_email|sys|urlSuccess|urlReturn|urlNotification|payments_limit|signature|products\[0\]\[(?:name|sku|price|quantity)\])$/;
+  if (!q.fields.every(f => typeof f.name === 'string' && typeof f.value === 'string' &&
+      allowed.test(f.name) && !f.value.includes(q.claim_credential))) return false;
+  if (new Set(q.fields.map(f => f.name)).size !== q.fields.length) return false;
+
+  const field = name => q.fields.find(f => f.name === name)?.value;
+  if (field('order_id') !== q.order_num || field('currency') !== 'kzt' ||
+      field('sys') !== 'anriaudio' ||
+      field('customer_email')?.trim().toLowerCase() !== expectedEmail.trim().toLowerCase() ||
+      !/^[a-f0-9]{64}$/.test(field('signature') || '')) return false;
+
+  for (const name of ['urlSuccess', 'urlReturn', 'urlNotification']) {
+    try {
+      const url = new URL(field(name));
+      if (url.protocol !== 'https:' || url.username || url.password ||
+          url.search || url.hash) return false;
+      if (name === 'urlNotification' && url.pathname !== '/v1/payments/proeducation/webhook') return false;
+    } catch {
+      return false;
+    }
+  }
+  return true;
+}
+
+async function createOrder(data) {
+  const response = await fetch(API_ORIGIN + '/v1/checkout/proeducation/create', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify(data),
+    cache: 'no-store',
+    credentials: 'omit',
+    referrerPolicy: 'no-referrer',
+    redirect: 'error'
+  });
+  if (!response.ok) throw new Error('Order unavailable');
+  return response.json();
+}
+
+$('create').addEventListener('submit', async event => {
+  event.preventDefault();
+  if (!(enabled && CHECKOUT_ENABLED)) return;
+
+  const email = $('email').value.trim();
+  if (!email || !$('email').reportValidity()) return;
+
+  $('buy').disabled = true;
+  setResult('');
+  try {
+    const quote = await createOrder({customer_email: email, locale: lang});
+    if (!validQuote(quote, email)) throw new Error('Invalid order response');
+
+    stopClaim();
+    clearKey();
+    prepared = quote;
+    currentOrder = quote.order_num;
+    currentCredential = quote.claim_credential;
+
+    // This short-lived same-tab reference enables automatic retrieval after the
+    // provider redirect. It is never shown to the buyer and is not required:
+    // the buyer can always recover through the purchase email.
+    try {
+      sessionStorage.setItem(storageKey, JSON.stringify({
+        order_num: currentOrder,
+        claim_credential: currentCredential
+      }));
+    } catch {
+      // No browser storage must never block a valid payment.
+    }
+
+    $('amount').textContent = new Intl.NumberFormat(
+      lang === 'kk' ? 'kk-KZ' : lang === 'ru' ? 'ru-RU' : 'en-US',
+      {style: 'currency', currency: 'KZT'}
+    ).format(quote.amount_minor / 100);
+    $('prepared').hidden = false;
+    $('pay').disabled = false;
+    $('save-label').textContent = t.ready;
+    setResult(t.ready);
+  } catch {
+    prepared = null;
+    $('prepared').hidden = true;
+    $('pay').disabled = true;
+    setResult(t.unavailable);
+    $('buy').disabled = !(enabled && CHECKOUT_ENABLED);
+  }
+});
+
+$('pay').addEventListener('click', () => {
+  if (!enabled || !CHECKOUT_ENABLED || !prepared ||
+      !validQuote(prepared, $('email').value.trim())) return;
+
+  const form = document.createElement('form');
+  form.method = 'POST';
+  form.action = prepared.merchant_form_action;
+  for (const field of prepared.fields) {
+    const input = document.createElement('input');
+    input.type = 'hidden';
+    input.name = field.name;
+    input.value = field.value;
+    form.append(input);
+  }
+  document.body.append(form);
+  form.submit();
+});
+
+async function claimOrder(attempt, run, owner) {
+  if (!enabled || run !== generation || document.hidden ||
+      !sameIdentity(owner, identity())) return;
+
+  const controller = new AbortController();
+  activeRequest = controller;
+  const timeout = setTimeout(() => controller.abort(), 15000);
+  try {
+    const response = await fetch(API_ORIGIN + '/v1/checkout/proeducation/claim', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(owner),
+      cache: 'no-store',
+      credentials: 'omit',
+      referrerPolicy: 'no-referrer',
+      redirect: 'error',
+      signal: controller.signal
+    });
+    if (!response.ok) throw new Error('Claim unavailable');
+
+    const result = await response.json();
+    if (run !== generation || !sameIdentity(owner, identity())) return;
+
+    if (result.status === 'fulfilled' && validKey(result.license_key)) {
+      try { sessionStorage.removeItem(storageKey); } catch {}
+      currentOrder = '';
+      currentCredential = '';
+      $('key').textContent = result.license_key;
+      $('key').hidden = false;
+      if (!$('copy-key')) {
+        const button = document.createElement('button');
+        button.id = 'copy-key';
+        button.type = 'button';
+        button.textContent = t.copy;
+        button.addEventListener('click', async () => {
+          if ($('key').hidden || !validKey($('key').textContent)) return;
+          try {
+            await navigator.clipboard.writeText($('key').textContent);
+            setResult(t.copied);
+          } catch {
+            setResult(t.license);
+          }
+        });
+        $('key').after(button);
+      }
+      $('copy-key').hidden = false;
+      setResult(t.license);
+    } else if (result.status === 'paid_hold') {
+      setResult(t.paidHold);
+    } else if (result.status === 'pending' && result.license_key == null) {
+      setResult(t.pending);
+      if (attempt < 23) timer = setTimeout(() => claimOrder(attempt + 1, run, owner), 5000);
+      else setResult(t.unavailable);
+    } else {
+      clearKey();
+      setResult(t.unavailable);
+    }
+  } catch {
+    if (run === generation) {
+      clearKey();
+      setResult(t.unavailable);
+    }
+  } finally {
+    clearTimeout(timeout);
+    if (activeRequest === controller) activeRequest = null;
+  }
+}
+
+function startClaim() {
+  stopClaim();
+  clearKey();
+  loadPrivateOrder();
+  const owner = identity();
+  if (enabled && validOrder(owner.order_num) && validCredential(owner.claim_credential)) {
+    void claimOrder(0, generation, owner);
+  }
+}
+
+$('recover-link').textContent = t.recovery;
+$('buy').disabled = !(enabled && CHECKOUT_ENABLED);
+$('pay').disabled = true;
+loadPrivateOrder();
+
+addEventListener('pagehide', () => {
+  stopClaim();
+  clearKey();
+  currentCredential = '';
+});
+
+addEventListener('pageshow', () => {
+  startClaim();
+});
+
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) {
+    stopClaim();
+    clearKey();
+  } else {
+    startClaim();
+  }
+});

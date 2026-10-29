@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0a0a0d">
+<meta name="referrer" content="no-referrer">
+<meta name="robots" content="noindex,nofollow">
+<meta name="description" content="Проверка текущего статуса действующей лицензии ANRI AUDIO MIDI.">
+<title>Проверить статус лицензии | ANRI AUDIO</title>
+<link rel="canonical" href="https://anriaudio.com/ru/license/">
+<link rel="stylesheet" href="/license/status.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="brand" href="/ru/">ANRI AUDIO</a>
+  <nav class="langs" aria-label="Язык">
+    <a href="/license/">EN</a><a href="/ru/license/" aria-current="page">RU</a><a href="/kk/license/">KK</a>
+  </nav>
+</header>
+<main>
+  <section class="panel" aria-labelledby="page-title">
+    <span class="eyebrow">ANRI AUDIO MIDI</span>
+    <h1 id="page-title">Проверить статус лицензии</h1>
+    <p class="intro">Введите существующий ключ ANRI, чтобы проверить его текущее состояние. Проверка не активирует лицензию и ничего в ней не меняет.</p>
+    <form id="license-check-form">
+      <label for="license-key">Лицензионный ключ</label>
+      <input id="license-key" name="license_key" type="password" required maxlength="128" minlength="10" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="ANRI-XXXXX-XXXXX-XXXXX-XXXXX">
+      <button id="check-button" type="submit">Проверить лицензию</button>
+    </form>
+    <p class="privacy">Конфиденциальность: ключ передаётся в ANRI Cloud через защищённый шлюз сайта только для этой проверки. Он не сохраняется в хранилище браузера и не передаётся в URL. Не отправляйте ключ в чатах и на скриншотах.</p>
+    <div id="license-result" class="result" role="status" aria-live="polite" hidden></div>
+    <section class="recovery-section" aria-labelledby="recovery-title">
+      <h2 id="recovery-title">Оплатили, но потеряли номер заказа или секретный код?</h2>
+      <p class="intro">Восстановите лицензию по адресу электронной почты, который указали при заказе. Мы отправим на эту почту одноразовый код подтверждения.</p>
+      <form id="recovery-request-form">
+        <label for="recovery-email">Электронная почта покупки</label>
+        <input id="recovery-email" name="email" type="email" required maxlength="320" autocomplete="email" placeholder="you@example.com">
+        <button id="recovery-send-button" type="submit">Отправить код подтверждения</button>
+      </form>
+      <form id="recovery-verify-form" hidden>
+        <label for="recovery-code">6-значный код из письма</label>
+        <input id="recovery-code" name="code" type="text" required minlength="6" maxlength="6" pattern="[0-9]{6}" inputmode="numeric" autocomplete="one-time-code" placeholder="123456">
+        <button id="recovery-verify-button" type="submit">Подтвердить почту и восстановить лицензии</button>
+      </form>
+      <div id="recovery-result" class="result" role="status" aria-live="polite" hidden></div>
+      <p class="privacy">Код действует 10 минут и используется один раз. Лицензионные ключи показываются только после подтверждения кода и не сохраняются в хранилище браузера.</p>
+    </section>
+    <a class="back" href="/ru/checkout/">Уже оплатили? Получить ключ</a>
+  <a class="back" href="/ru/">← На главную ANRI AUDIO</a>
+  </section>
+</main>
+<footer>© 2026 ANRI AUDIO</footer>
+<script src="/license/status.js" defer></script>
+</body>
+</html>

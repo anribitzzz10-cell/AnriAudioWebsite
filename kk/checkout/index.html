@@ -1,12 +1,36 @@
 <!doctype html>
-<html lang="kk"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="referrer" content="no-referrer"><meta name="robots" content="noindex,nofollow">
+<html lang="kk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<meta name="robots" content="noindex,nofollow">
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'self'; img-src 'self'; form-action https://anriprod.proeducation.kz; base-uri 'none'; object-src 'none'">
-<title>ANRI AUDIO — Order</title><link rel="stylesheet" href="/checkout/style.css"><script type="module" src="/checkout/order.js"></script></head>
-<body><main><a href="/">ANRI AUDIO</a><nav aria-label="Language"><a href="/checkout/" lang="en">EN</a> · <a href="/ru/checkout/" lang="ru">RU</a> · <a href="/kk/checkout/" lang="kk">KK</a></nav>
-<h1 id="heading">Your order</h1><p id="notice" role="status">Checkout is closed.</p>
-<form id="create"><label id="email-label" for="email">Email</label><input id="email" type="email" required maxlength="254" autocomplete="email"><button id="buy" disabled>Create order</button></form>
-<section id="prepared" hidden><p id="save-label">Save your private order credential before payment.</p><output id="amount"></output><output id="order-reference"></output><input id="new-credential" type="password" readonly autocomplete="off" aria-label="Private order credential"><button id="copy" type="button">Copy credential</button><label><input id="saved" type="checkbox"><span id="saved-label">I saved my order number and private credential.</span></label><button id="pay" type="button" disabled>Continue to payment</button></section>
-<hr><h2 id="recover-heading">Check order / recover key</h2><form id="claim"><label id="order-label" for="order">Order number</label><input id="order" required maxlength="64" autocomplete="off" spellcheck="false"><label id="credential-label" for="credential">Private order credential</label><input id="credential" type="password" required minlength="43" maxlength="43" autocomplete="off" spellcheck="false"><button id="check" disabled>Check order</button></form>
-<p id="result" role="status" aria-live="polite"></p><pre id="key" hidden></pre><button id="forget" type="button">Clear this browser session</button><p id="privacy">Keep your credential private. It restores the same key. A return from the payment page does not confirm payment.</p>
-</main></body></html>
+<title>ANRI AUDIO — Тапсырыс</title>
+<link rel="stylesheet" href="/checkout/style.css">
+<script type="module" src="/checkout/order.js"></script>
+</head>
+<body>
+<main>
+<a href="/">ANRI AUDIO</a>
+<nav aria-label="Тіл"><a href="/checkout/" lang="en">EN</a> · <a href="/ru/checkout/" lang="ru">RU</a> · <a href="/kk/checkout/" lang="kk" aria-current="page">KK</a></nav>
+<p class="license-status-link"><a href="/kk/license/">Лицензия мәртебесін тексеру</a></p>
+<h1 id="heading">Тапсырысыңыз</h1>
+<p id="notice" role="status">Нақты төлемді тексеру аяқталғанша сатып алу жабық.</p>
+<form id="create">
+<label id="email-label" for="email">Email (міндетті; лицензияны қалпына келтіру үшін)</label>
+<input id="email" type="email" required maxlength="254" autocomplete="email">
+<button id="buy" disabled>Тапсырыс жасау</button>
+</form>
+<section id="prepared" hidden>
+<p id="save-label">Тапсырыс нөмірін немесе құпия кодты сақтаудың қажеті жоқ. Лицензияны сатып алу кезінде көрсетілген email арқылы қалпына келтіруге болады.</p>
+<output id="amount"></output>
+<button id="pay" type="button" disabled>Төлемге өту</button>
+</section>
+<p id="privacy">Төлемнен кейін ANRI Cloud ProEducation хабарламасын тексереді. Төлем бетінен қайту төлемнің расталғанын білдірмейді. Тапсырысқа арналған уақытша сілтеме лицензияны автоматты алу үшін осы браузер қойындысында ғана сақталады. Ол жоғалса, лицензияны сатып алу кезінде көрсетілген email арқылы қалпына келтіріңіз.</p>
+<p><a id="recover-link" href="/kk/license/">Лицензияны email арқылы қалпына келтіру</a></p>
+<p id="result" role="status" aria-live="polite"></p>
+<pre id="key" hidden></pre>
+</main>
+</body>
+</html>
