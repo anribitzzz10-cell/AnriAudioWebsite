@@ -22,7 +22,7 @@ class NoRedirect(HTTPRedirectHandler):
         return None
 
 
-OPENER = build_opener(NoRedirect())
+OPENER = build_opener()
 
 
 def get(path):
