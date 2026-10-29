@@ -48,7 +48,7 @@ function validQuote(q){
    return f.size===14 &&
     f.get('do')==='pay' && f.get('sys')==='anriaudio' &&
     f.get('order_id')===q.order_num && f.get('currency')==='kzt' &&
-    f.get('customer_email') && f.get('payments_limit')==='1' &&
+    f.get('customer_email')===$('email').value.trim() && f.get('payments_limit')==='1' &&
     f.get('urlSuccess')===returnUrl && f.get('urlReturn')===returnUrl &&
     /^https:\/\/[A-Za-z0-9.-]+\/v1\/payments\/proeducation\/webhook$/.test(f.get('urlNotification')||'') &&
     f.get('products[0][name]')==='ANRI AUDIO MIDI — Perpetual FULL License' &&
