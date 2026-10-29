@@ -9,7 +9,30 @@ const translations = {
  kk: ['Сіздің тапсырысыңыз','Сатып алу жабық. Тапсырысқа қауіпсіз қол жеткізу тексеруден кейін қосылады.','Email','Тапсырыс жасау','Төлемге дейін тапсырыс нөмірі мен құпия кодын сақтаңыз.','Тапсырыс нөмірі мен кодын көшіру','Тапсырыс нөмірі мен құпия кодын сақтадым.','Төлемге өту','Тапсырысты тексеру / кілтті қалпына келтіру','Тапсырыс нөмірі','Тапсырыстың құпия коды','Тексеру','Браузердің осы сессиясын тазалау','Кодты құпия сақтаңыз. Ол сол кілтті қалпына келтіреді. Төлем бетінен оралу төлемді растамайды.','Төлем әлі расталған жоқ.','Лицензиялық кілтіңіз:','Тапсырыс қолжетімсіз. Құпия кодты тексеріңіз немесе қолдау қызметіне хабарласыңыз.','Тапсырыс нөмірі мен құпия коды көшірілді.','Код дайын. Төлемге дейін сақтаңыз.']
 };
 const t = translations[lang] || translations.en;
+const licensePaths = {en:'/license/',ru:'/ru/license/',kk:'/kk/license/'};
+const checkoutPaths = {en:'/checkout/',ru:'/ru/checkout/',kk:'/kk/checkout/'};
+const isLicensePage = location.pathname.split('/').filter(Boolean).at(-1) === 'license';
+const licenseCopy = {
+ en:{heading:'Check License / View License',notice:'Enter the order number and private order code you saved before payment. ANRI Cloud will return the same license key after verified payment.',section:'Check License / View License',check:'Check license',link:'Back to checkout',viewLink:'Check License / View License'},
+ ru:{heading:'Проверить лицензию / Посмотреть ключ',notice:'Введите номер заказа и секретный код, сохранённый до оплаты. ANRI Cloud вернёт тот же ключ только после подтверждения платежа.',section:'Проверить лицензию / Посмотреть ключ',check:'Проверить лицензию',link:'Вернуться к оформлению',viewLink:'Проверить лицензию / Посмотреть ключ'},
+ kk:{heading:'Лицензияны тексеру / Кілтті көру',notice:'Төлемге дейін сақталған тапсырыс нөмірі мен құпия кодты енгізіңіз. ANRI Cloud төлем расталғаннан кейін сол кілтті қайтарады.',section:'Лицензияны тексеру / Кілтті көру',check:'Лицензияны тексеру',link:'Тапсырысқа оралу',viewLink:'Лицензияны тексеру / Кілтті көру'}
+};
 ['heading','notice','email-label','buy','save-label','copy','saved-label','pay','recover-heading','order-label','credential-label','check','forget','privacy'].forEach((id,i)=>$(id).textContent=t[i]);
+$('license-link').href = isLicensePage ? (checkoutPaths[lang] || checkoutPaths.en) : (licensePaths[lang] || licensePaths.en);
+$('license-link').textContent = isLicensePage ? (licenseCopy[lang] || licenseCopy.en).link : (licenseCopy[lang] || licenseCopy.en).viewLink;
+for (const anchor of document.querySelectorAll('nav a[lang]')) {
+  anchor.href = isLicensePage ? (licensePaths[anchor.lang] || licensePaths.en) : (checkoutPaths[anchor.lang] || checkoutPaths.en);
+}
+if (isLicensePage) {
+  const copy = licenseCopy[lang] || licenseCopy.en;
+  document.title = 'ANRI AUDIO — ' + copy.heading;
+  $('heading').textContent = copy.heading;
+  $('notice').textContent = copy.notice;
+  $('create').hidden = true;
+  $('prepared').hidden = true;
+  $('recover-heading').textContent = copy.section;
+  $('check').textContent = copy.check;
+}
 const enabled = API_ORIGIN === location.origin;
 if (enabled && CHECKOUT_ENABLED) {
   const liveText = {
