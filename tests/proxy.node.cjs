@@ -39,7 +39,7 @@ test('license check uses only its dedicated upstream; commerce remains closed',a
  const r=await fetch(base+'/v1/license/check',{method:'POST',headers,body:JSON.stringify({license_key:key})});
  assert.equal(r.status,200);assert.equal(call.url,'https://anri-cloud.onrender.com/v1/license/check');
  assert.equal(call.opts.method,'POST');assert.deepEqual(call.opts.headers,{'Content-Type':'application/json'});
- assert.equal(call.opts.redirect,'error');assert.equal(call.opts.body,JSON.stringify({license_key:key}));
+ assert.equal(call.opts.redirect,'error');assert.equal(call.opts.body.toString(),JSON.stringify({license_key:key}));
  for(const p of ['/v1/checkout/proeducation/create',route]){
   const closed=await fetch(base+p,{method:'POST',headers,body:'{}'});assert.equal(closed.status,503,p);
  }
