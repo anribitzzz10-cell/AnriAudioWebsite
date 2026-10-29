@@ -28,14 +28,22 @@ for (const [path, heading] of [['/checkout/','Your order'],['/ru/checkout/','В�
  });
 }
 
-for (const [path, heading] of [
- ['/license/','Check License / View License'],
- ['/ru/license/','Проверить лицензию / Посмотреть ключ'],
- ['/kk/license/','Лицензияны тексеру / Кілтті көру']
+for (const [path, heading, activeText] of [
+ ['/license/','Check License / View License','License is active'],
+ ['/ru/license/','Проверить лицензию / Посмотреть ключ','Лицензия действующая'],
+ ['/kk/license/','Лицензияны тексеру / Кілтті көру','Лицензия белсенді']
 ]) {
- test('private license lookup page '+path, async ({page})=>{
+ test('public license status and private key recovery '+path, async ({page})=>{
   await page.route('**/checkout/config.js', route=>route.fulfill({contentType:'text/javascript',body:`export const API_ORIGIN='${base}'; export const CHECKOUT_ENABLED=false;`}));
-  let calls=0;
+  let calls=0, statusCalls=0;
+  await page.route('**/v1/license/check', async route=>{
+   statusCalls++;
+   const req=route.request();
+   expect(req.method()).toBe('POST');
+   expect(req.url()).not.toContain(key);
+   expect(req.postDataJSON()).toEqual({license_key:key});
+   await route.fulfill({json:{ok:true,license:{product:'anri_audio_midi',edition:'full',status:'active',active:true,expires_at:null,active_activations:1,max_activations:2}}});
+  });
   await page.route('**/v1/checkout/proeducation/claim', async route=>{
    calls++;
    expect(route.request().method()).toBe('POST');
@@ -47,6 +55,11 @@ for (const [path, heading] of [
   await expect(page).toHaveURL(base+path);
   await expect(page.locator('#heading')).toHaveText(heading);
   await expect(page.locator('#create')).toBeHidden();
+  await expect(page.locator('#check-license')).toBeEnabled();
+  await page.locator('#license-key-check').fill(key.toLowerCase());
+  await page.locator('#license-check').evaluate(form=>form.requestSubmit());
+  await expect(page.locator('#license-status')).toContainText(activeText);
+  expect(statusCalls).toBe(1);
   await expect(page.locator('#check')).toBeEnabled();
   await page.locator('#order').fill(order);
   await page.locator('#credential').fill(credential);
