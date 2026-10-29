@@ -5,6 +5,9 @@ on:
     branches: [feature/automatic-order-claim-20261029]
     paths:
       - 'commerce_gateway.py'
+      - 'index.html'
+      - 'ru/index.html'
+      - 'kk/index.html'
       - 'checkout/**'
       - 'ru/checkout/**'
       - 'kk/checkout/**'
@@ -73,6 +76,15 @@ jobs:
               assert status == 200, (path, status)
               assert expected in body, (path, expected)
               assert headers.get("Cache-Control") == "no-store"
+
+          for path, expected_link in [
+              ("/", 'href="/license/"'),
+              ("/ru/", 'href="/ru/license/"'),
+              ("/kk/", 'href="/kk/license/"'),
+          ]:
+              status, headers, body = request(path)
+              assert status == 200, (path, status)
+              assert expected_link in body, (path, expected_link)
 
           status, headers, body = request("/v1/license/check?key=private", "POST", {"license_key": fake_key}, base)
           assert status == 404, (status, body)
