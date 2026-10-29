@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0a0a0d">
+<meta name="referrer" content="no-referrer">
+<meta name="robots" content="noindex,nofollow">
+<meta name="description" content="Check the current status of an existing ANRI AUDIO MIDI license.">
+<title>Check License Status | ANRI AUDIO</title>
+<link rel="canonical" href="https://anriaudio.com/license/">
+<link rel="stylesheet" href="/license/status.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="brand" href="/">ANRI AUDIO</a>
+  <nav class="langs" aria-label="Language">
+    <a href="/license/" aria-current="page">EN</a><a href="/ru/license/">RU</a><a href="/kk/license/">KK</a>
+  </nav>
+</header>
+<main>
+  <section class="panel" aria-labelledby="page-title">
+    <span class="eyebrow">ANRI AUDIO MIDI</span>
+    <h1 id="page-title">Check license status</h1>
+    <p class="intro">Enter an existing ANRI license key to check its current status. This does not activate or change the license.</p>
+    <form id="license-check-form">
+      <label for="license-key">License key</label>
+      <input id="license-key" name="license_key" type="password" required maxlength="128" minlength="10" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="ANRI-XXXXX-XXXXX-XXXXX-XXXXX">
+      <button id="check-button" type="submit">Check license</button>
+    </form>
+    <p class="privacy">Privacy: the key is sent to ANRI Cloud through the site's secure gateway for this request only. It is not saved in browser storage or placed in the URL. Never share your key in chats or screenshots.</p>
+    <div id="license-result" class="result" role="status" aria-live="polite" hidden></div>
+    <a class="back" href="/checkout/">Already paid? Recover your key</a>
+  <a class="back" href="/">← Back to ANRI AUDIO</a>
+  </section>
+</main>
+<footer>© 2026 ANRI AUDIO</footer>
+<script src="/license/status.js" defer></script>
+</body>
+</html>
