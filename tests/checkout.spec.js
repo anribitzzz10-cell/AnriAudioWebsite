@@ -106,7 +106,7 @@ for(const path of ['/checkout/','/ru/checkout/','/kk/checkout/']){
 
 test('server quote with unapproved sys or substituted price stays non-payable', async ({page})=>{
  await page.route('**/checkout/config.js', r=>r.fulfill({contentType:'text/javascript',body:`export const API_ORIGIN='${base}'; export const CHECKOUT_ENABLED=true;`}));
- for(const [field,value] of [['sys','unapproved'],['products[0][price]','10.00']]){
+ for(const [field,value] of [['sys','unapproved'],['products[0][price]','10.00'],['customer_email','other@example.invalid'],['urlReturn','https://attacker.invalid/checkout/']]){
   await page.route('**/v1/checkout/proeducation/create',r=>r.fulfill({json:{
    order_num:order,claim_credential:credential,amount_minor:650000,currency:'KZT',
    merchant_form_action:'https://anriprod.proeducation.kz/',method:'POST',
