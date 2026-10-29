@@ -38,4 +38,4 @@ jobs:
         with:
           python-version: '3.12'
       - name: Validate localized pages and key-handling contract
-        run: python -m unittest tests/test_license_status_pages.py
+        run: python tests/test_license_status_pages.py
