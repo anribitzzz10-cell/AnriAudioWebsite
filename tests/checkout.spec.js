@@ -28,6 +28,34 @@ for (const [path, heading] of [['/checkout/','Your order'],['/ru/checkout/','В�
  });
 }
 
+for (const [path, heading] of [
+ ['/license/','Check License / View License'],
+ ['/ru/license/','Проверить лицензию / Посмотреть ключ'],
+ ['/kk/license/','Лицензияны тексеру / Кілтті көру']
+]) {
+ test('private license lookup page '+path, async ({page})=>{
+  await page.route('**/checkout/config.js', route=>route.fulfill({contentType:'text/javascript',body:`export const API_ORIGIN='${base}'; export const CHECKOUT_ENABLED=false;`}));
+  let calls=0;
+  await page.route('**/v1/checkout/proeducation/claim', async route=>{
+   calls++;
+   expect(route.request().method()).toBe('POST');
+   expect(route.request().url()).not.toContain(credential);
+   expect(route.request().postDataJSON()).toEqual({order_num:order,claim_credential:credential});
+   await route.fulfill({json:{status:'fulfilled',license_key:key}});
+  });
+  await page.goto(base+path+'?success=true&order=untrusted');
+  await expect(page).toHaveURL(base+path);
+  await expect(page.locator('#heading')).toHaveText(heading);
+  await expect(page.locator('#create')).toBeHidden();
+  await expect(page.locator('#check')).toBeEnabled();
+  await page.locator('#order').fill(order);
+  await page.locator('#credential').fill(credential);
+  await page.locator('#claim').evaluate(form=>form.requestSubmit());
+  await expect(page.locator('#key')).toHaveText(key);
+  expect(calls).toBe(1);
+ });
+}
+
 test('secret stays in POST body and recovery returns existing key', async ({page})=>{
  await page.context().grantPermissions(['clipboard-read','clipboard-write']);
  await page.route('**/checkout/config.js', route=>route.fulfill({contentType:'text/javascript',body:`export const API_ORIGIN='${base}'; export const CHECKOUT_ENABLED=true;`}));
