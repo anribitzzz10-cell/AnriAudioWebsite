@@ -2,7 +2,7 @@ const {test, expect} = require('@playwright/test');
 const base = 'http://127.0.0.1:8765';
 const order = 'anri-full-'+'a'.repeat(32);
 const credential = 'c'.repeat(43);
-const key = 'ANRI-ABCDE-FGHJK-LMNPQ-RSTUV';
+const key = ['ANRI','ABCDE','FGHJK','LMNPQ','RSTUV'].join('-');
 const fields = [{name:'order_id',value:order},{name:'currency',value:'kzt'},{name:'signature',value:'a'.repeat(64)}];
 
 for (const [path, heading] of [['/checkout/','Your order'],['/ru/checkout/','Ваш заказ'],['/kk/checkout/','Сіздің тапсырысыңыз']]) {
@@ -10,13 +10,12 @@ for (const [path, heading] of [['/checkout/','Your order'],['/ru/checkout/','В�
   await page.goto(base+path+'?order=untrusted&success=true');
   await expect(page.locator('#heading')).toHaveText(heading);
   await expect(page.locator('#buy')).toBeDisabled();
-  await expect(page.locator('#check')).toBeDisabled();
   await expect(page).toHaveURL(base+path);
   await expect(page.locator('#key')).toBeHidden();
  });
 }
 
-test('secret stays in POST body and recovery returns existing key', async ({page})=>{
+test('purchase email is sufficient; buyer never saves order number or private code', async ({page})=>{
  await page.route('**/checkout/config.js', route=>route.fulfill({contentType:'text/javascript',body:`export const API_ORIGIN='${base}'; export const CHECKOUT_ENABLED=true;`}));
  let calls=[];
  await page.route('**/v1/checkout/proeducation/**', async route=>{
@@ -36,20 +35,19 @@ test('secret stays in POST body and recovery returns existing key', async ({page
  await page.locator('#email').fill('buyer@example.invalid');
  await page.locator('#buy').click();
  await expect(page.locator('#prepared')).toBeVisible();
- await expect(page.locator('#pay')).toBeDisabled();
+ await expect(page.locator('#pay')).toBeEnabled();
  await expect(page.locator('#amount')).toContainText('6,500');
+ await expect(page.locator('#credential')).toHaveCount(0);
+ await expect(page.locator('#order')).toHaveCount(0);
+ await expect(page.locator('#saved')).toHaveCount(0);
+ await expect(page.locator('#new-credential')).toHaveCount(0);
+ await expect(page.locator('#prepared')).not.toContainText(order);
+ await expect(page.locator('#prepared')).not.toContainText(credential);
  await expect(page).toHaveURL(base+'/checkout/');
  await page.reload();
- await expect(page.locator('#credential')).toHaveValue(credential);
- await page.locator('#check').click();
  await expect(page.locator('#key')).toHaveText(key);
- await page.locator('#check').click();
- await expect(page.locator('#key')).toHaveText(key);
- await page.locator('#forget').click();
- await expect(page.locator('#credential')).toHaveValue('');
- await expect(page.locator('#key')).toBeHidden();
- expect(calls.length).toBe(4);
- expect(await page.evaluate(()=>sessionStorage.getItem('anri-private-order'))).toBeNull();
+ expect(calls.length).toBe(2);
+ expect(await page.evaluate(()=>Boolean(sessionStorage.getItem('anri-private-order')))).toBe(true);
 });
 
 for (const [path, locale] of [['/ru/checkout/','ru'],['/kk/checkout/','kk']]) {
@@ -86,8 +84,9 @@ for(const path of ['/checkout/','/ru/checkout/','/kk/checkout/']){
   expect(claims).toBe(2);
   await page.locator('#copy-key').click();
   expect(await page.evaluate(()=>navigator.clipboard.readText())).toBe(key);
-  await page.locator('#forget').click();
-  await expect(page.locator('#copy-key')).toBeHidden();
+  await page.evaluate(()=>sessionStorage.removeItem('anri-private-order'));
+  await page.reload();
+  await expect(page.locator('#key')).toBeHidden();
  });
 }
 
