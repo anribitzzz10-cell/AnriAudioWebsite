@@ -50,6 +50,17 @@ def main():
         # Only sanitized diagnostics; do not log order body or private claim.
         if isinstance(exc, HTTPError):
             print("REAL_UNPAID_FULL_ORDER_CREATE_FAIL_HTTP",exc.code)
+            try:
+                detail=json.loads(exc.read(2048)).get("detail","")
+                allowed=("Commerce not configured:", "License delivery not enabled",
+                         "Secure claim disabled", "Durable commercial license storage",
+                         "Merchant return origin", "Callback URL",
+                         "Fixed checkout amount", "Merchant signing credentials",
+                         "Approved ProEducation SYS", "FULL retail price")
+                if isinstance(detail,str) and any(detail.startswith(x) for x in allowed):
+                    print("CONFIGURATION_BLOCKER:",detail[:140])
+            except (ValueError,AttributeError,UnicodeError):
+                pass
         else:
             print("REAL_UNPAID_FULL_ORDER_CREATE_FAIL",type(exc).__name__)
         return 1
