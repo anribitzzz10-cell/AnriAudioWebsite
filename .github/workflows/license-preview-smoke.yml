@@ -1,0 +1,111 @@
+name: Isolated public license check preview (no payment)
+
+on:
+  push:
+    branches: [feature/automatic-order-claim-20261029]
+    paths:
+      - 'commerce_gateway.py'
+      - 'index.html'
+      - 'ru/index.html'
+      - 'kk/index.html'
+      - 'checkout/**'
+      - 'ru/checkout/**'
+      - 'kk/checkout/**'
+      - '.github/workflows/license-preview-smoke.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  isolated-preview:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Wait for isolated preview gateway and verify read-only route
+        run: |
+          python - <<'PY'
+          import json, time, urllib.error, urllib.request
+
+          base = "https://anri-license-check-gateway-preview.onrender.com"
+          fake_key = "ANRI-ABCDE-FGHJK-LMNPQ-RSTUV"
+
+          def request(path, method="GET", body=None, origin=None):
+              headers = {}
+              data = None
+              if body is not None:
+                  headers["Content-Type"] = "application/json"
+                  data = json.dumps(body).encode()
+              if origin:
+                  headers["Origin"] = origin
+              req = urllib.request.Request(base + path, data=data, headers=headers, method=method)
+              try:
+                  with urllib.request.urlopen(req, timeout=15) as response:
+                      return response.status, dict(response.headers), response.read().decode()
+              except urllib.error.HTTPError as exc:
+                  return exc.code, dict(exc.headers), exc.read().decode()
+
+          ready = False
+          last = None
+          for attempt in range(60):
+              try:
+                  status, headers, body = request("/health")
+                  health = json.loads(body)
+                  if status == 200 and health.get("ok") and health.get("mode") == "license_preview" and health.get("checkout_enabled") is False:
+                      status, headers, body = request("/v1/license/check", "POST", {"license_key": fake_key}, base)
+                      last = (status, body)
+                      if status == 200 and json.loads(body) == {"ok": False, "license": None}:
+                          pages_ready = True
+                          for page_path, warning in [
+                              ("/license/", "Do not enter a real license key."),
+                              ("/ru/license/", "Не вводите настоящий лицензионный ключ."),
+                              ("/kk/license/", "Нақты лицензия кілтін енгізбеңіз."),
+                          ]:
+                              page_status, _, page_body = request(page_path)
+                              if page_status != 200 or warning not in page_body:
+                                  pages_ready = False
+                                  break
+                          if pages_ready:
+                              ready = True
+                              break
+              except Exception as exc:
+                  last = repr(exc)
+              time.sleep(5)
+          if not ready:
+              raise SystemExit(f"Preview did not become ready with read-only status route: {last!r}")
+
+          for path, expected, warning in [
+              ("/license/", "Check an existing license", "Do not enter a real license key."),
+              ("/ru/license/", "Проверить действующую лицензию", "Не вводите настоящий лицензионный ключ."),
+              ("/kk/license/", "Қолданыстағы лицензияны тексеру", "Нақты лицензия кілтін енгізбеңіз."),
+          ]:
+              status, headers, body = request(path)
+              assert status == 200, (path, status)
+              assert expected in body, (path, expected)
+              assert warning in body, (path, warning)
+              assert headers.get("Cache-Control") == "no-store"
+
+          for path, expected_link in [
+              ("/", 'href="/license/"'),
+              ("/ru/", 'href="/ru/license/"'),
+              ("/kk/", 'href="/kk/license/"'),
+          ]:
+              status, headers, body = request(path)
+              assert status == 200, (path, status)
+              assert expected_link in body, (path, expected_link)
+
+          status, headers, body = request("/v1/license/check?key=private", "POST", {"license_key": fake_key}, base)
+          assert status == 404, (status, body)
+          status, headers, body = request("/v1/checkout/proeducation/claim", "POST", {}, base)
+          assert status == 404, (status, body)
+          status, headers, body = request("/v1/checkout/proeducation/create", "POST", {}, base)
+          assert status == 404, (status, body)
+
+          print("PASS: isolated gateway and disposable ANRI Cloud SQLite route are live.")
+          print("PASS: EN/RU/KK pages render; unknown key is not found; no checkout/claim route is exposed.")
+          print("PASS: no payment, license issuance, activation, or production resource was used.")
+          PY

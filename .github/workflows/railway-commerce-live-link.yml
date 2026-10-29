@@ -1,0 +1,13 @@
+name: Real ProEducation FULL link (safe live read only)
+on:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check real Railway issuer, Mac pin and Render proxy without payments
+        run: python3 tests/real_full_integration_smoke.py

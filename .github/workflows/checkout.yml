@@ -1,7 +1,8 @@
 name: Private order page (offline browser)
 on:
   pull_request:
-    branches: [main]
+  push:
+    branches: [feature/automatic-order-claim-20261029]
   workflow_dispatch:
 permissions:
   contents: read
@@ -15,7 +16,18 @@ jobs:
           node-version: '22'
       - run: npm install --no-save @playwright/test
       - run: npx playwright install --with-deps chromium
+      - name: Install isolated website gateway dependencies
+        run: python3 -m pip install -r requirements-commerce.txt
+      - name: Offline production gateway contract (no network)
+        run: python3 -m unittest discover -s tests -p test_commerce_gateway.py -v
+      - name: Verify connected Railway issuer, license pages and website proxy (no payment)
+        run: python3 tests/real_full_integration_smoke.py
+      - name: Offline checkout proxy smoke checker contract (no network)
+        run: python3 -m unittest discover -s tests -p test_checkout_proxy_smoke.py -v
+      - name: Order recovery security checks
+        run: node tests/order-claim.node.cjs
       - name: Synthetic browser flow (no merchant or backend traffic)
         run: |
-          python3 -m http.server 8765 --bind 127.0.0.1 > /tmp/anri-static-http.log 2>&1 &
+          node tests/static-server.cjs > /tmp/anri-static-http.log 2>&1 &
           npx playwright test tests/checkout.spec.js tests/micro_pilot.spec.js --workers=1
+
