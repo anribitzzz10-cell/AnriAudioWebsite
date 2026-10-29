@@ -71,6 +71,12 @@ class GatewayTests(unittest.TestCase):
         self.assertEqual(self.client.post(
             "/v1/checkout/proeducation/create",
             content=b"x" * 5000, headers={"Content-Type": "application/json"}).status_code, 413)
+        self.assertEqual(self.client.post(
+            "/v1/license/check?key=private", json={}).status_code, 404)
+        self.assertEqual(self.client.get("/v1/license/check").status_code, 405)
+        self.assertEqual(self.client.post(
+            "/v1/license/check",
+            headers={"Origin": "https://attacker.invalid"}, json={}).status_code, 403)
 
     def test_synthetic_live_proxy_shape_no_charge(self):
         self.configure_synthetic()
@@ -122,6 +128,14 @@ class GatewayTests(unittest.TestCase):
         self.assertEqual(calls[0][1], b"{}")
         self.assertTrue(calls[0][2]["X-Staging-Token"].startswith("synthetic-test-only"))
         self.assertNotIn("X-Admin-Key", calls[0][2])
+        with patch.object(gateway.httpx, "AsyncClient", FakeClient):
+            check = self.client.post(
+                "/v1/license/check", json={"license_key": "ANRI-ABCDE-FGHJK-LMNPQ-RSTUV"},
+                headers={"Origin": "https://anri-audio-checkout-gateway-preview.onrender.com"})
+        self.assertEqual(check.status_code, 422)
+        self.assertEqual(calls[1][0], gateway.SYNTHETIC + "/v1/license/check")
+        self.assertEqual(calls[1][1], b'{"license_key":"ANRI-ABCDE-FGHJK-LMNPQ-RSTUV"}')
+        self.assertTrue(calls[1][2]["X-Staging-Token"].startswith("synthetic-test-only"))
 
         class RedirectClient(FakeClient):
             async def post(self, url, content, headers):
