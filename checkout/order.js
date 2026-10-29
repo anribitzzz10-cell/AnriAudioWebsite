@@ -11,6 +11,14 @@ const translations = {
 const t = translations[lang] || translations.en;
 ['heading','notice','email-label','buy','save-label','copy','saved-label','pay','recover-heading','order-label','credential-label','check','forget','privacy'].forEach((id,i)=>$(id).textContent=t[i]);
 const enabled = API_ORIGIN === location.origin;
+if (enabled && CHECKOUT_ENABLED) {
+  const liveText = {
+    en:'18,000 KZT one-time ProEducation payment. Save the private order code before paying. A FULL license appears only after verified payment.',
+    ru:'Разовая оплата 18 000 ₸ через ProEducation. Сохраните секретный код заказа до оплаты. FULL-ключ появится только после подтверждения платежа.',
+    kk:'ProEducation арқылы біржолғы төлем — 18 000 ₸. Төлемге дейін құпия тапсырыс кодын сақтаңыз. FULL-кілт тек төлем расталғаннан кейін беріледі.'
+  };
+  $('notice').textContent = liveText[lang] || liveText.en;
+}
 $('check').disabled = !enabled;
 $('buy').disabled = !(enabled && CHECKOUT_ENABLED);
 const storageKey = 'anri-private-order';
