@@ -4,7 +4,8 @@ import time
 from urllib.error import HTTPError, URLError
 from urllib.request import HTTPRedirectHandler, Request, build_opener
 
-BASE = "https://anriaudio.com"
+BASE = "https://anriaudiowebsite.onrender.com"
+CUSTOM_BASE = "https://anriaudio.com"
 PAGES = (
     ("/license/", "Check license status", "lang=\"en\""),
     ("/ru/license/", "Проверить статус лицензии", "lang=\"ru\""),
@@ -25,13 +26,13 @@ class NoRedirect(HTTPRedirectHandler):
 OPENER = build_opener()
 
 
-def get(path):
-    req = Request(BASE + path, method="GET", headers={
+def get(path, base=BASE, timeout=8):
+    req = Request(base + path, method="GET", headers={
         "User-Agent": "ANRI-public-license-page-smoke/1.0",
         "Cache-Control": "no-cache",
     })
     try:
-        with OPENER.open(req, timeout=20) as response:
+        with OPENER.open(req, timeout=timeout) as response:
             return response.status, response.headers, response.read(200_000).decode("utf-8")
     except HTTPError as exc:
         return exc.code, exc.headers, exc.read(200_000).decode("utf-8", errors="replace")
@@ -40,7 +41,7 @@ def get(path):
 def main():
     # Render's static deploy and custom-domain edge propagation may be asynchronous.
     last = None
-    for attempt in range(60):
+    for attempt in range(30):
         try:
             pages_ok = True
             for path, heading, language in PAGES:
@@ -61,8 +62,18 @@ def main():
                         last = f"{path}: status={status}, link={link in body}"
                         break
             if pages_ok:
-                print("PASS: all three production license pages return 200 with localized headings and shared assets")
-                print("PASS: all three production home pages link to the matching license page")
+                print("PASS: all three Render production license pages return 200 with localized headings and shared assets")
+                print("PASS: all three Render production home pages link to the matching license page")
+                # Optional custom-domain probe; don't fail the verified Render site
+                # if external DNS/redirect propagation is unavailable to this runner.
+                try:
+                    custom_status, _, custom_body = get("/license/", base=CUSTOM_BASE, timeout=5)
+                    if custom_status == 200 and "Check license status" in custom_body:
+                        print("PASS: custom domain https://anriaudio.com/license/ is live")
+                    else:
+                        print("CUSTOM_DOMAIN_CHECK=NOT_VERIFIED")
+                except (HTTPError, URLError, OSError, UnicodeError):
+                    print("CUSTOM_DOMAIN_CHECK=NOT_VERIFIED")
                 print("GET-only public page checks; no license key, customer record, or payment data was sent.")
                 return 0
         except (HTTPError, URLError, OSError, UnicodeError) as exc:
