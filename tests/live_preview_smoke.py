@@ -23,6 +23,8 @@ def request(opener, path, *, invalid_post=False):
     headers = {"User-Agent": "ANRI-preview-no-payment-smoke/1.0"}
     if invalid_post:
         headers["Content-Type"] = "application/json"
+        # Match the browser's real Origin, not an Origin-less CLI call.
+        headers["Origin"] = ORIGIN
     req = Request(
         ORIGIN + path, data=b"{}" if invalid_post else None,
         method="POST" if invalid_post else "GET", headers=headers,
