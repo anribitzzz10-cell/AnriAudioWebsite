@@ -54,7 +54,7 @@ def main():
     try:
         status, _, data = request(opener, "/health")
         body = json.loads(data.decode())
-        ok = status == 200 and body.get("mode") == "pg_preview" and body.get("checkout_enabled") is False and body.get("proxy_configured") is True and body.get("external_payment_verified") is False
+        ok = status == 200 and body.get("mode") == "merchant_preview" and body.get("checkout_enabled") is False and body.get("proxy_configured") is True and body.get("external_payment_verified") is False
     except Exception:
         ok = False
     print(("PASS " if ok else "FAIL ") + "GET /health (checkout off)", flush=True)
