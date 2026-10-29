@@ -22,6 +22,12 @@ test('localized license status pages are public, no-store and linked from checko
   assert.equal(r.headers.get('cache-control'),'no-store',p);
   assert.equal(r.headers.get('referrer-policy'),'no-referrer',p);
   assert.ok(r.headers.get('content-security-policy')?.includes("connect-src 'self'"),p);
+  if(p.endsWith('/license/')){
+   const html=await r.text();
+   assert.ok(html.includes('id="recovery-request-form"'),p);
+   assert.ok(html.includes('id="recovery-verify-form"'),p);
+   assert.ok(html.includes('type="email" required'),p);
+  }
  }
  for(const [p,link] of [['/','href="/license/">Check license'],['/ru/','href="/ru/license/">Проверить лицензию'],['/kk/','href="/kk/license/">Лицензияны тексеру']]){
   const html=await (await fetch(base+p)).text();assert.ok(html.includes(link),p);
