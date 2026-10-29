@@ -18,7 +18,7 @@ app = FastAPI(docs_url=None, redoc_url=None, openapi_url=None)
 ROOT = Path(__file__).resolve().parent
 SYNTHETIC = "https://anri-synthetic-api-20261029.onrender.com"
 LICENSE_CHECK_PREVIEW = "https://anri-cloud-current-code-preview-20261029.onrender.com"
-LICENSE_CHECK_GATEWAY_ORIGIN = "https://anri-license-check-gateway-preview-20261029.onrender.com"
+LICENSE_CHECK_GATEWAY_ORIGIN = "https://anri-license-check-gateway-preview.onrender.com"
 MERCHANT_PREVIEW = "https://anri-proeducation-full-18000-staging.up.railway.app"
 LIVE = "https://api.anriaudio.com"
 MODES = {"preview", "license_preview", "merchant_preview", "production"}
