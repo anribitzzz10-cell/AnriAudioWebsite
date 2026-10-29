@@ -73,7 +73,7 @@ class GatewayTests(unittest.TestCase):
             content=b"x" * 5000, headers={"Content-Type": "application/json"}).status_code, 413)
         self.assertEqual(self.client.post(
             "/v1/license/check?key=private", json={}).status_code, 404)
-        self.assertEqual(self.client.get("/v1/license/check").status_code, 405)
+        self.assertEqual(self.client.get("/v1/license/check").status_code, 404)
         self.assertEqual(self.client.post(
             "/v1/license/check",
             headers={"Origin": "https://attacker.invalid"}, json={}).status_code, 403)
