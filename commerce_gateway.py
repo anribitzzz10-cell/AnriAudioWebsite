@@ -17,8 +17,9 @@ from fastapi.responses import FileResponse, JSONResponse, Response
 app = FastAPI(docs_url=None, redoc_url=None, openapi_url=None)
 ROOT = Path(__file__).resolve().parent
 SYNTHETIC = "https://anri-synthetic-api-20261029.onrender.com"
+MERCHANT_PREVIEW = "https://anri-cloud-pg17-preflight-20261028.onrender.com"
 LIVE = "https://api.anriaudio.com"
-MODES = {"preview", "production"}
+MODES = {"preview", "merchant_preview", "production"}
 PAGE_PATHS = {
     "": "index.html",
     "index.html": "index.html",
@@ -77,7 +78,8 @@ def backend_config():
     target = os.getenv("ANRI_COMMERCE_API_ORIGIN", "").strip()
     if selected not in MODES:
         return None
-    if target != (SYNTHETIC if selected == "preview" else LIVE):
+    trusted = {"preview": SYNTHETIC, "merchant_preview": MERCHANT_PREVIEW, "production": LIVE}
+    if target != trusted[selected]:
         return None
     parts = urlsplit(target)
     if (parts.scheme != "https" or parts.netloc != parts.hostname
