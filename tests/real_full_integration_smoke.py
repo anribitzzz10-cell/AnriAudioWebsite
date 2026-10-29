@@ -73,6 +73,19 @@ def run():
                   and site.get("checkout_enabled") is False)
         print("WEBSITE_SAME_ORIGIN_PROXY:", "PASS" if linked else "FAIL")
         if not linked: errors.append("site proxy")
+        for locale, path in (("EN", "/license/"), ("RU", "/ru/license/"), ("KK", "/kk/license/")):
+            page_status, page_headers, page_body = request(SITE + path)
+            headers = {key.lower(): value for key, value in page_headers.items()}
+            page_ok = (
+                page_status == 200
+                and "no-store" in headers.get("cache-control", "").lower()
+                and headers.get("referrer-policy", "").lower() == "no-referrer"
+                and "form-action 'none'" in headers.get("content-security-policy", "")
+                and b'id="license-link"' in page_body
+                and b'noindex,nofollow' in page_body
+            )
+            print("LICENSE_PAGE_" + locale + ":", "PASS" if page_ok else "FAIL")
+            if not page_ok: errors.append("license page " + locale)
     except (URLError, HTTPError, ValueError, OSError):
         errors.append("site health unavailable")
     for endpoint in ("/v1/checkout/proeducation/create","/v1/checkout/proeducation/claim"):
