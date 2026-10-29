@@ -3,7 +3,19 @@ const base = 'http://127.0.0.1:8765';
 const order = 'anri-full-'+'a'.repeat(32);
 const credential = 'c'.repeat(43);
 const key = 'ANRI-ABCDE-FGHJK-LMNPQ-RSTUV';
-const fields = [{name:'order_id',value:order},{name:'currency',value:'kzt'},{name:'signature',value:'a'.repeat(64)}];
+const fieldsFor = (path,origin=base) => [
+ {name:'do',value:'pay'}, {name:'currency',value:'kzt'}, {name:'order_id',value:order},
+ {name:'customer_email',value:'buyer@example.invalid'}, {name:'sys',value:'anriaudio'},
+ {name:'urlSuccess',value:origin+path},
+ {name:'urlReturn',value:origin+path},
+ {name:'urlNotification',value:'https://api.anriaudio.com/v1/payments/proeducation/webhook'},
+ {name:'payments_limit',value:'1'},
+ {name:'products[0][name]',value:'ANRI AUDIO MIDI — Perpetual FULL License'},
+ {name:'products[0][sku]',value:'ANRI_AUDIO_MIDI_MAC_AUV2'},
+ {name:'products[0][price]',value:'6500.00'},
+ {name:'products[0][quantity]',value:'1'},
+ {name:'signature',value:'a'.repeat(64)}
+];
 
 for (const [path, heading] of [['/checkout/','Your order'],['/ru/checkout/','Ваш заказ'],['/kk/checkout/','Сіздің тапсырысыңыз']]) {
  test('closed checkout '+path, async ({page})=>{
@@ -26,7 +38,7 @@ test('secret stays in POST body and recovery returns existing key', async ({page
   expect(req.headers()['referer']).toBeUndefined();
   if(req.url().endsWith('/create')){
    expect(req.postDataJSON()).toEqual({customer_email:'buyer@example.invalid',locale:'en'});
-   await route.fulfill({json:{order_num:order,claim_credential:credential,amount_minor:650000,currency:'KZT',merchant_form_action:'https://anriprod.proeducation.kz/',method:'POST',fields}});
+   await route.fulfill({json:{order_num:order,claim_credential:credential,amount_minor:650000,currency:'KZT',merchant_form_action:'https://anriprod.proeducation.kz/',method:'POST',fields:fieldsFor(path)}});
   }else{
    expect(req.postDataJSON()).toEqual({order_num:order,claim_credential:credential});
    await route.fulfill({json:{status:'fulfilled',license_key:key}});
@@ -59,7 +71,7 @@ for (const [path, locale] of [['/ru/checkout/','ru'],['/kk/checkout/','kk']]) {
    const req=route.request();
    expect(req.method()).toBe('POST');
    expect(req.postDataJSON()).toEqual({customer_email:'buyer@example.invalid',locale});
-   await route.fulfill({json:{order_num:order,claim_credential:credential,amount_minor:650000,currency:'KZT',merchant_form_action:'https://anriprod.proeducation.kz/',method:'POST',fields}});
+   await route.fulfill({json:{order_num:order,claim_credential:credential,amount_minor:650000,currency:'KZT',merchant_form_action:'https://anriprod.proeducation.kz/',method:'POST',fields:fieldsFor(path)}});
   });
   await page.goto(base+path);
   await page.locator('#email').fill('buyer@example.invalid');
@@ -91,3 +103,20 @@ for(const path of ['/checkout/','/ru/checkout/','/kk/checkout/']){
  });
 }
 
+
+test('server quote with unapproved sys or substituted price stays non-payable', async ({page})=>{
+ await page.route('**/checkout/config.js', r=>r.fulfill({contentType:'text/javascript',body:`export const API_ORIGIN='${base}'; export const CHECKOUT_ENABLED=true;`}));
+ for(const [field,value] of [['sys','unapproved'],['products[0][price]','10.00']]){
+  await page.route('**/v1/checkout/proeducation/create',r=>r.fulfill({json:{
+   order_num:order,claim_credential:credential,amount_minor:650000,currency:'KZT',
+   merchant_form_action:'https://anriprod.proeducation.kz/',method:'POST',
+   fields:fieldsFor('/checkout/').map(f=>f.name===field?{...f,value}:f)
+  }}));
+  await page.goto(base+'/checkout/');
+  await page.locator('#email').fill('buyer@example.invalid');
+  await page.locator('#buy').click();
+  await expect(page.locator('#prepared')).toBeHidden();
+  await expect(page.locator('#pay')).toBeDisabled();
+  await page.unroute('**/v1/checkout/proeducation/create');
+ }
+});
