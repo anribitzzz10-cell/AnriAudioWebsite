@@ -1,0 +1,45 @@
+name: Production license status pages
+
+on:
+  pull_request:
+    paths:
+      - 'index.html'
+      - 'ru/index.html'
+      - 'kk/index.html'
+      - 'license/**'
+      - 'ru/license/**'
+      - 'kk/license/**'
+      - 'tests/test_license_status_pages.py'
+      - 'tests/smoke_live_license_status_api.py'
+      - '.github/workflows/license-status-pages.yml'
+  push:
+    branches:
+      - feature/production-license-status-pages-20261029
+    paths:
+      - 'index.html'
+      - 'ru/index.html'
+      - 'kk/index.html'
+      - 'license/**'
+      - 'ru/license/**'
+      - 'kk/license/**'
+      - 'tests/test_license_status_pages.py'
+      - 'tests/smoke_live_license_status_api.py'
+      - '.github/workflows/license-status-pages.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  static-contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate localized pages and key-handling contract
+        run: python tests/test_license_status_pages.py
+      - name: Smoke-test deployed API using a synthetic unknown key (read-only)
+        run: python tests/smoke_live_license_status_api.py
