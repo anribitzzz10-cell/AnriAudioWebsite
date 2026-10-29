@@ -30,6 +30,22 @@
     </form>
     <p class="privacy">Privacy: the key is sent to ANRI Cloud through the site's secure gateway for this request only. It is not saved in browser storage or placed in the URL. Never share your key in chats or screenshots.</p>
     <div id="license-result" class="result" role="status" aria-live="polite" hidden></div>
+    <section class="recovery-section" aria-labelledby="recovery-title">
+      <h2 id="recovery-title">Already paid but lost your order number or private code?</h2>
+      <p class="intro">Recover your license using the email address you entered when ordering. We will send a one-time verification code to that mailbox.</p>
+      <form id="recovery-request-form">
+        <label for="recovery-email">Purchase email</label>
+        <input id="recovery-email" name="email" type="email" required maxlength="320" autocomplete="email" placeholder="you@example.com">
+        <button id="recovery-send-button" type="submit">Send verification code</button>
+      </form>
+      <form id="recovery-verify-form" hidden>
+        <label for="recovery-code">6-digit email verification code</label>
+        <input id="recovery-code" name="code" type="text" required minlength="6" maxlength="6" pattern="[0-9]{6}" inputmode="numeric" autocomplete="one-time-code" placeholder="123456">
+        <button id="recovery-verify-button" type="submit">Verify email and recover licenses</button>
+      </form>
+      <div id="recovery-result" class="result" role="status" aria-live="polite" hidden></div>
+      <p class="privacy">Your email code expires in 10 minutes and can be used once. License keys are shown only after the code is verified; they are not saved in browser storage.</p>
+    </section>
     <a class="back" href="/checkout/">Already paid? Recover your key</a>
   <a class="back" href="/">← Back to ANRI AUDIO</a>
   </section>
