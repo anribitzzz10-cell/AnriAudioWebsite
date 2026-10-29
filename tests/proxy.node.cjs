@@ -14,6 +14,44 @@ test('official checkout is served closed in all languages with private headers',
  }
  for(const p of [route,'/v1/checkout/proeducation/create']){const r=await fetch(base+p,{method:'POST',headers,body:'{}'});assert.equal(r.status,503);}
 });
+
+test('localized license status pages are public, no-store and linked from checkout',async t=>{
+ const base=await site(t);
+ for(const p of ['/license/','/ru/license/','/kk/license/','/license/status.js','/license/status.css','/ru/checkout/']){
+  const r=await fetch(base+p);assert.equal(r.status,200,p);
+  assert.equal(r.headers.get('cache-control'),'no-store',p);
+  assert.equal(r.headers.get('referrer-policy'),'no-referrer',p);
+  assert.ok(r.headers.get('content-security-policy')?.includes("connect-src 'self'"),p);
+ }
+ for(const [p,link] of [['/','href="/license/">Check license'],['/ru/','href="/ru/license/">Проверить лицензию'],['/kk/','href="/kk/license/">Лицензияны тексеру']]){
+  const html=await (await fetch(base+p)).text();assert.ok(html.includes(link),p);
+ }
+ const ru=await (await fetch(base+'/ru/checkout/')).text();
+ assert.ok(ru.includes('href="/ru/license/">Проверить статус лицензии'));
+});
+
+test('license check uses only its dedicated upstream; commerce remains closed',async t=>{
+ let call;
+ const base=await site(t,{upstream:'',licenseUpstream:'https://anri-cloud.onrender.com',salesEnabled:false,fetcher:async(url,opts)=>{
+  call={url,opts};return new Response(JSON.stringify({ok:false,license:null}),{status:200,headers:{'Content-Type':'application/json'}});
+ }});
+ const key='ANRI-ABCDE-FGHJK-LMNPQ-RSTUV';
+ const r=await fetch(base+'/v1/license/check',{method:'POST',headers,body:JSON.stringify({license_key:key})});
+ assert.equal(r.status,200);assert.equal(call.url,'https://anri-cloud.onrender.com/v1/license/check');
+ assert.equal(call.opts.method,'POST');assert.deepEqual(call.opts.headers,{'Content-Type':'application/json'});
+ assert.equal(call.opts.redirect,'error');assert.equal(call.opts.body,JSON.stringify({license_key:key}));
+ for(const p of ['/v1/checkout/proeducation/create',route]){
+  const closed=await fetch(base+p,{method:'POST',headers,body:'{}'});assert.equal(closed.status,503,p);
+ }
+});
+
+test('license check does not fall back to the commerce upstream',async t=>{
+ let calls=0;
+ const base=await site(t,{upstream:'https://commerce.example.invalid',licenseUpstream:'',salesEnabled:false,fetcher:async()=>{calls++;throw Error('must not call');}});
+ const r=await fetch(base+'/v1/license/check',{method:'POST',headers,body:JSON.stringify({license_key:'ANRI-ABCDE-FGHJK-LMNPQ-RSTUV'})});
+ assert.equal(r.status,503);assert.equal(calls,0);
+});
+
 test('proxy strips ambient credentials and preserves private POST body',async t=>{
  let call;const secret='c'.repeat(43);
  const base=await site(t,{upstream:'https://issuer.example.invalid',fetcher:async(url,opts)=>{call={url,opts};return new Response(JSON.stringify({status:'pending',license_key:null}));}});
