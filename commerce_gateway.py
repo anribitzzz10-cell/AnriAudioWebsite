@@ -142,17 +142,23 @@ async def health():
     }
 
 
-async def forward(action: str, body: bytes):
+async def forward_path(upstream_path: str, body: bytes):
     origin = backend_config()
     if not origin:
         return JSONResponse({"detail": "Commerce proxy disabled"}, status_code=503)
+    if upstream_path not in (
+        "/v1/checkout/proeducation/create",
+        "/v1/checkout/proeducation/claim",
+        "/v1/license/check",
+    ):
+        return JSONResponse({"detail": "Invalid route"}, status_code=404)
     headers = {"Content-Type": "application/json"}
     if mode() == "preview":
         headers["X-Staging-Token"] = os.getenv("ANRI_SYNTHETIC_PROXY_TOKEN", "")
     try:
         async with httpx.AsyncClient(follow_redirects=False, timeout=15) as client:
             upstream = await client.post(
-                origin + "/v1/checkout/proeducation/" + action,
+                origin + upstream_path,
                 content=body, headers=headers,
             )
         if (not 200 <= upstream.status_code <= 599
@@ -165,6 +171,16 @@ async def forward(action: str, body: bytes):
     # Do not log or transform a signed quote, claim code or licensed key.
     return Response(upstream.content, status_code=upstream.status_code,
                     media_type="application/json")
+
+
+async def forward(action: str, body: bytes):
+    if action not in ("create", "claim"):
+        return JSONResponse({"detail": "Invalid route"}, status_code=404)
+    return await forward_path("/v1/checkout/proeducation/" + action, body)
+
+
+async def forward_license_check(body: bytes):
+    return await forward_path("/v1/license/check", body)
 
 
 @app.post("/v1/checkout/proeducation/{action}")
@@ -188,6 +204,26 @@ async def proxy(action: str, request: Request):
     if len(body) > 4096:
         return JSONResponse({"detail": "Request too large"}, status_code=413)
     return await forward(action, body)
+
+
+@app.post("/v1/license/check")
+async def proxy_license_check(request: Request):
+    if request.url.query:
+        return JSONResponse({"detail": "Invalid route"}, status_code=404)
+    supplied_origin = request.headers.get("origin")
+    expected_origins = (
+        {"https://anriaudio.com", "https://www.anriaudio.com"}
+        if mode() == "production"
+        else {"https://anri-audio-checkout-gateway-preview.onrender.com"}
+    )
+    if supplied_origin and supplied_origin not in expected_origins:
+        return JSONResponse({"detail": "Origin forbidden"}, status_code=403)
+    if not request.headers.get("content-type", "").lower().startswith("application/json"):
+        return JSONResponse({"detail": "JSON required"}, status_code=415)
+    body = await request.body()
+    if len(body) > 4096:
+        return JSONResponse({"detail": "Request too large"}, status_code=413)
+    return await forward_license_check(body)
 
 
 @app.get("/{raw_path:path}")
