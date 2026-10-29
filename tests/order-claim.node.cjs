@@ -11,7 +11,7 @@ function fixture({saved=true,enabled=true,fetcher}={}){
  function element(id){const named=[...elements.values()].find(e=>e.id===id);if(named)return named;if(!elements.has(id))elements.set(id,{value:'',textContent:'',hidden:true,checked:false,disabled:false,
   handlers:{},addEventListener(n,f){this.handlers[n]=f;},after(){},append(){},reset(){},focus(){},select(){}});return elements.get(id);}
  const storage=new Map(saved?[['anri-private-order',JSON.stringify({order_num:order,claim_credential:credential})]]:[]);
- const document={documentElement:{lang:'ru'},hidden:false,getElementById:element,
+ const document={documentElement:{lang:'ru'},hidden:false,getElementById:element,querySelectorAll(){return [];},
   createElement(type){const e=element('created-'+elements.size);e.submit=()=>{submitted=true;};return e;},
   addEventListener(n,f){events[n]=f;},body:{append(){}}};
  const context={API_ORIGIN:enabled?'https://anriaudio.com':'',CHECKOUT_ENABLED:false,
