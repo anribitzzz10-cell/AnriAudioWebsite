@@ -5,7 +5,11 @@ const path = require('node:path');
 const root = __dirname;
 const official = 'https://anriaudio.com';
 const apiPaths = new Set(['/v1/checkout/proeducation/create', '/v1/checkout/proeducation/claim']);
-const licenseCheckPath = '/v1/license/check';
+const licenseApiPaths = new Set([
+  '/v1/license/check',
+  '/v1/license/recovery/request',
+  '/v1/license/recovery/verify'
+]);
 const privateHeaders = {'Cache-Control':'no-store', 'Pragma':'no-cache', 'Referrer-Policy':'no-referrer', 'X-Content-Type-Options':'nosniff', 'X-Frame-Options':'DENY'};
 const csp = "default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'self'; img-src 'self'; form-action https://anriprod.proeducation.kz; base-uri 'none'; object-src 'none'; frame-ancestors 'none'";
 const mime = {'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.png':'image/png','.webp':'image/webp','.ico':'image/x-icon','.webmanifest':'application/manifest+json'};
@@ -28,15 +32,15 @@ function createServer({upstream=process.env.ANRI_COMMERCE_UPSTREAM, licenseUpstr
     try {
       const url=new URL(req.url,'http://site.invalid');
       if(url.pathname.startsWith('/v1/')) {
-        const isLicenseCheck=url.pathname===licenseCheckPath;
-        if(!apiPaths.has(url.pathname)&&!isLicenseCheck)return fail(res,404,'Unavailable');
+        const isLicenseApi=licenseApiPaths.has(url.pathname);
+        if(!apiPaths.has(url.pathname)&&!isLicenseApi)return fail(res,404,'Unavailable');
         if(req.method!=='POST')return fail(res,405,'POST required');
         if(url.search)return fail(res,400,'Query parameters forbidden');
         // No cookies or ambient credentials are accepted or forwarded.
         if(req.headers.origin!==official || (req.headers['sec-fetch-site'] && req.headers['sec-fetch-site']!=='same-origin'))return fail(res,403,'Official site required');
         if(!/^application\/json(?:\s*;|$)/i.test(req.headers['content-type']||''))return fail(res,415,'JSON required');
-        const requestTarget=isLicenseCheck?licenseTarget:target;
-        if(!requestTarget || (url.pathname.endsWith('/create')&&!salesEnabled))return fail(res,503,isLicenseCheck?'License service unavailable':'Checkout is closed');
+        const requestTarget=isLicenseApi?licenseTarget:target;
+        if(!requestTarget || (url.pathname.endsWith('/create')&&!salesEnabled))return fail(res,503,isLicenseApi?'License service unavailable':'Checkout is closed');
         let raw;
         try{raw=await body(req);JSON.parse(raw);}catch{return fail(res,400,'Invalid order request');}
         const controller=new AbortController();const timer=setTimeout(()=>controller.abort(),10000);
