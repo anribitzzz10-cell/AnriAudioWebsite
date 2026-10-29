@@ -91,3 +91,27 @@ for(const path of ['/checkout/','/ru/checkout/','/kk/checkout/']){
  });
 }
 
+
+
+test('public license status checker posts the key only to same-origin API and clears the field', async ({page}) => {
+ const licenseKey='ANRI-ABCDE-FGHJK-LMNPQ-RSTUV';
+ let posted;
+ await page.route('**/v1/license/check', async route => {
+  const request=route.request();
+  expect(request.method()).toBe('POST');
+  expect(request.url()).toBe(base+'/v1/license/check');
+  expect(request.url()).not.toContain(licenseKey);
+  posted=request.postDataJSON();
+  await route.fulfill({json:{ok:true,license:{product:'anri_audio_midi',edition:'full',status:'active',active_activations:1,max_activations:2,expires_at:null}}});
+ });
+ await page.goto(base+'/ru/license/');
+ await expect(page.locator('#license-check-form')).toBeVisible();
+ await page.locator('#license-key').fill(licenseKey);
+ await page.locator('#check-button').click();
+ await expect(page.locator('#license-key')).toHaveValue('');
+ await expect(page.locator('#license-result')).toContainText('Действует');
+ await expect(page.locator('#license-result')).toContainText('1 / 2');
+ await expect(page).toHaveURL(base+'/ru/license/');
+ expect(posted).toEqual({license_key:licenseKey});
+ expect(await page.evaluate(()=>({local:localStorage.length,session:sessionStorage.length}))).toEqual({local:0,session:0});
+});
