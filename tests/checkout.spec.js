@@ -38,7 +38,7 @@ test('secret stays in POST body and recovery returns existing key', async ({page
   expect(req.headers()['referer']).toBeUndefined();
   if(req.url().endsWith('/create')){
    expect(req.postDataJSON()).toEqual({customer_email:'buyer@example.invalid',locale:'en'});
-   await route.fulfill({json:{order_num:order,claim_credential:credential,amount_minor:650000,currency:'KZT',merchant_form_action:'https://anriprod.proeducation.kz/',method:'POST',fields:fieldsFor(path)}});
+   await route.fulfill({json:{order_num:order,claim_credential:credential,amount_minor:650000,currency:'KZT',merchant_form_action:'https://anriprod.proeducation.kz/',method:'POST',fields:fieldsFor('/checkout/')}});
   }else{
    expect(req.postDataJSON()).toEqual({order_num:order,claim_credential:credential});
    await route.fulfill({json:{status:'fulfilled',license_key:key}});
