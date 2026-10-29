@@ -156,6 +156,14 @@ class GatewayTests(unittest.TestCase):
         config = self.client.get("/checkout/config.js")
         self.assertIn("API_ORIGIN=location.origin", config.text)
         self.assertIn("CHECKOUT_ENABLED=false", config.text)
+        for path, warning in [
+            ("/license/", "Do not enter a real license key."),
+            ("/ru/license/", "Не вводите настоящий лицензионный ключ."),
+            ("/kk/license/", "Нақты лицензия кілтін енгізбеңіз."),
+        ]:
+            page = self.client.get(path)
+            self.assertEqual(page.status_code, 200)
+            self.assertIn(warning, page.text)
 
         blocked = self.client.post("/v1/checkout/proeducation/claim", json={})
         self.assertEqual(blocked.status_code, 404)
