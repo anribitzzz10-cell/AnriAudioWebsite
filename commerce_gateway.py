@@ -166,7 +166,7 @@ async def proxy(action: str, request: Request):
     expected_origins = (
         {"https://anriaudio.com", "https://www.anriaudio.com"}
         if mode() == "production"
-        else {"https://anri-synthetic-checkout-20261029.onrender.com"}
+        else {"https://anri-audio-checkout-gateway-preview.onrender.com"}
     )
     if supplied_origin and supplied_origin not in expected_origins:
         return JSONResponse({"detail": "Origin forbidden"}, status_code=403)
