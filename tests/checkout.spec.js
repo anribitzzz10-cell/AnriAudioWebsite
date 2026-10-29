@@ -53,7 +53,7 @@ test('secret stays in POST body and recovery returns existing key', async ({page
  const recoverySlip = await page.evaluate(()=>navigator.clipboard.readText());
  expect(recoverySlip).toBe('ANRI AUDIO MIDI\nOrder: '+order+'\nPrivate credential: '+credential);
  await expect(page.locator('#pay')).toBeDisabled();
- await expect(page.locator('#amount')).toContainText('6,500');
+ await expect(page.locator('#amount')).toContainText('18,000');
  await expect(page).toHaveURL(base+'/checkout/');
  await page.reload();
  await expect(page.locator('#credential')).toHaveValue(credential);
@@ -119,6 +119,24 @@ test('server quote with unapproved sys or substituted price stays non-payable', 
    order_num:order,claim_credential:credential,amount_minor:1800000,currency:'KZT',
    merchant_form_action:'https://anriprod.proeducation.kz/',method:'POST',
    fields:fieldsFor('/checkout/').map(f=>f.name===field?{...f,value}:f)
+  }}));
+  await page.goto(base+'/checkout/');
+  await page.locator('#email').fill('buyer@example.invalid');
+  await page.locator('#buy').click();
+  await expect(page.locator('#prepared')).toBeHidden();
+  await expect(page.locator('#pay')).toBeDisabled();
+  await page.unroute('**/v1/checkout/proeducation/create');
+ }
+});
+
+
+test('unapproved KZT amount from server is not payable', async ({page})=>{
+ await page.route('**/checkout/config.js', r=>r.fulfill({contentType:'text/javascript',body:`export const API_ORIGIN='${base}'; export const CHECKOUT_ENABLED=true;`}));
+ for(const amount of [650000,1799999,1800001]){
+  await page.route('**/v1/checkout/proeducation/create',r=>r.fulfill({json:{
+   order_num:order,claim_credential:credential,amount_minor:amount,currency:'KZT',
+   merchant_form_action:'https://anriprod.proeducation.kz/',method:'POST',
+   fields:fieldsFor('/checkout/')
   }}));
   await page.goto(base+'/checkout/');
   await page.locator('#email').fill('buyer@example.invalid');
