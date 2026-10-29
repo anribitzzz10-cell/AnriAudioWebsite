@@ -14,7 +14,7 @@ const fields = [
  {name:'signature',value:'a'.repeat(64)}
 ];
 
-for (const [path, heading] of [['/checkout/','Your order'],['/ru/checkout/','Ваш заказ'],['/kk/checkout/','Сіздің тапсырысыңыз']]) {
+for (const [path, heading] of [['/checkout/','Your order'],['/ru/checkout/','Ваш заказ'],['/kk/checkout/','Тапсырысыңыз']]) {
  test('closed checkout '+path, async ({page})=>{
   await page.goto(base+path+'?order=untrusted&success=true');
   await expect(page.locator('#heading')).toHaveText(heading);
@@ -56,7 +56,7 @@ test('purchase email is sufficient; buyer never saves order number or private co
  await page.reload();
  await expect(page.locator('#key')).toHaveText(key);
  expect(calls.length).toBe(2);
- expect(await page.evaluate(()=>Boolean(sessionStorage.getItem('anri-private-order')))).toBe(true);
+ expect(await page.evaluate(()=>sessionStorage.getItem('anri-private-order'))).toBeNull();
 });
 
 for (const [path, locale] of [['/ru/checkout/','ru'],['/kk/checkout/','kk']]) {
@@ -93,9 +93,7 @@ for(const path of ['/checkout/','/ru/checkout/','/kk/checkout/']){
   expect(claims).toBe(2);
   await page.locator('#copy-key').click();
   expect(await page.evaluate(()=>navigator.clipboard.readText())).toBe(key);
-  await page.evaluate(()=>sessionStorage.removeItem('anri-private-order'));
-  await page.reload();
-  await expect(page.locator('#key')).toBeHidden();
+  expect(await page.evaluate(()=>sessionStorage.getItem('anri-private-order'))).toBeNull();
  });
 }
 
