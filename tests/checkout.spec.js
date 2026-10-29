@@ -12,7 +12,7 @@ const fieldsFor = (path,origin=base) => [
  {name:'payments_limit',value:'1'},
  {name:'products[0][name]',value:'ANRI AUDIO MIDI — Perpetual FULL License'},
  {name:'products[0][sku]',value:'ANRI_AUDIO_MIDI_MAC_AUV2'},
- {name:'products[0][price]',value:'6500.00'},
+ {name:'products[0][price]',value:'18000.00'},
  {name:'products[0][quantity]',value:'1'},
  {name:'signature',value:'a'.repeat(64)}
 ];
@@ -39,7 +39,7 @@ test('secret stays in POST body and recovery returns existing key', async ({page
   expect(req.headers()['referer']).toBeUndefined();
   if(req.url().endsWith('/create')){
    expect(req.postDataJSON()).toEqual({customer_email:'buyer@example.invalid',locale:'en'});
-   await route.fulfill({json:{order_num:order,claim_credential:credential,amount_minor:650000,currency:'KZT',merchant_form_action:'https://anriprod.proeducation.kz/',method:'POST',fields:fieldsFor('/checkout/')}});
+   await route.fulfill({json:{order_num:order,claim_credential:credential,amount_minor:1800000,currency:'KZT',merchant_form_action:'https://anriprod.proeducation.kz/',method:'POST',fields:fieldsFor('/checkout/')}});
   }else{
    expect(req.postDataJSON()).toEqual({order_num:order,claim_credential:credential});
    await route.fulfill({json:{status:'fulfilled',license_key:key}});
@@ -75,7 +75,7 @@ for (const [path, locale] of [['/ru/checkout/','ru'],['/kk/checkout/','kk']]) {
    const req=route.request();
    expect(req.method()).toBe('POST');
    expect(req.postDataJSON()).toEqual({customer_email:'buyer@example.invalid',locale});
-   await route.fulfill({json:{order_num:order,claim_credential:credential,amount_minor:650000,currency:'KZT',merchant_form_action:'https://anriprod.proeducation.kz/',method:'POST',fields:fieldsFor(path)}});
+   await route.fulfill({json:{order_num:order,claim_credential:credential,amount_minor:1800000,currency:'KZT',merchant_form_action:'https://anriprod.proeducation.kz/',method:'POST',fields:fieldsFor(path)}});
   });
   await page.goto(base+path);
   await page.locator('#email').fill('buyer@example.invalid');
@@ -116,7 +116,7 @@ test('server quote with unapproved sys or substituted price stays non-payable', 
  await page.route('**/checkout/config.js', r=>r.fulfill({contentType:'text/javascript',body:`export const API_ORIGIN='${base}'; export const CHECKOUT_ENABLED=true;`}));
  for(const [field,value] of [['sys','unapproved'],['products[0][price]','10.00'],['customer_email','other@example.invalid'],['urlReturn','https://attacker.invalid/checkout/']]){
   await page.route('**/v1/checkout/proeducation/create',r=>r.fulfill({json:{
-   order_num:order,claim_credential:credential,amount_minor:650000,currency:'KZT',
+   order_num:order,claim_credential:credential,amount_minor:1800000,currency:'KZT',
    merchant_form_action:'https://anriprod.proeducation.kz/',method:'POST',
    fields:fieldsFor('/checkout/').map(f=>f.name===field?{...f,value}:f)
   }}));
