@@ -93,6 +93,48 @@ for(const path of ['/checkout/','/ru/checkout/','/kk/checkout/']){
 
 
 
+test('email recovery restores a paid ProEducation license without order credentials', async ({page}) => {
+ const licenseKey='ANRI-ABCDE-FGHJK-LMNPQ-RSTUV';
+ const calls=[];
+ await page.route('**/v1/license/recovery/request', async route=>{
+  const request=route.request();
+  expect(request.method()).toBe('POST');
+  expect(request.url()).toBe(base+'/v1/license/recovery/request');
+  expect(request.url()).not.toContain('buyer@example.invalid');
+  calls.push({path:'/request',body:request.postDataJSON()});
+  await route.fulfill({json:{ok:true,message:'If a matching purchase exists, a 6-digit verification code has been sent.',expires_in_seconds:600}});
+ });
+ await page.route('**/v1/license/recovery/verify', async route=>{
+  const request=route.request();
+  expect(request.method()).toBe('POST');
+  expect(request.url()).toBe(base+'/v1/license/recovery/verify');
+  expect(request.url()).not.toContain('123456');
+  calls.push({path:'/verify',body:request.postDataJSON()});
+  await route.fulfill({json:{ok:true,email:'buyer@example.invalid',licenses:[{
+   key:licenseKey,product:'anri_audio_midi',edition:'full',status:'active',
+   active_activations:1,max_activations:2,expires_at:null,order_num:'anri-full-'+'a'.repeat(32)
+  }]}});
+ });
+ await page.goto(base+'/ru/license/');
+ await page.locator('#recovery-email').fill('buyer@example.invalid');
+ await page.locator('#recovery-send-button').click();
+ await expect(page.locator('#recovery-verify-form')).toBeVisible();
+ await expect(page.locator('#recovery-result')).toContainText('6-значный код');
+ await page.locator('#recovery-code').fill('123456');
+ await page.locator('#recovery-verify-button').click();
+ await expect(page.locator('#recovery-result')).toContainText(licenseKey);
+ await expect(page.locator('#recovery-result')).toContainText('Действует');
+ await expect(page.locator('#recovery-result')).toContainText('Номер заказа');
+ expect(calls).toEqual([
+  {path:'/request',body:{email:'buyer@example.invalid'}},
+  {path:'/verify',body:{email:'buyer@example.invalid',code:'123456'}}
+ ]);
+ expect(await page.evaluate(()=>({local:localStorage.length,session:sessionStorage.length}))).toEqual({local:0,session:0});
+ await page.reload();
+ await expect(page.locator('#recovery-email')).toHaveValue('');
+ await expect(page.locator('#recovery-result')).toBeHidden();
+});
+
 test('public license status checker posts the key only to same-origin API and clears the field', async ({page}) => {
  const licenseKey='ANRI-ABCDE-FGHJK-LMNPQ-RSTUV';
  let posted;
