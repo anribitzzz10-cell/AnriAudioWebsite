@@ -148,6 +148,43 @@ class GatewayTests(unittest.TestCase):
         self.assertEqual(r.status_code, 503)
         self.assertNotIn("evil.invalid", r.text)
 
+    def test_license_preview_is_read_only_and_points_only_to_isolated_cloud(self):
+        os.environ["ANRI_GATEWAY_MODE"] = "license_preview"
+        os.environ["ANRI_COMMERCE_API_ORIGIN"] = gateway.LICENSE_CHECK_PREVIEW
+        self.assertEqual(gateway.backend_config(), gateway.LICENSE_CHECK_PREVIEW)
+        self.assertFalse(gateway.public_checkout_enabled())
+        config = self.client.get("/checkout/config.js")
+        self.assertIn("API_ORIGIN=location.origin", config.text)
+        self.assertIn("CHECKOUT_ENABLED=false", config.text)
+
+        blocked = self.client.post("/v1/checkout/proeducation/claim", json={})
+        self.assertEqual(blocked.status_code, 404)
+        self.assertIn("Checkout disabled", blocked.text)
+        self.assertEqual(self.client.post(
+            "/v1/license/check", json={"license_key": "ANRI-ABCDE-FGHJK-LMNPQ-RSTUV"},
+            headers={"Origin": "https://attacker.invalid"}).status_code, 403)
+
+        calls = []
+        class FakeClient:
+            def __init__(self, **kwargs): pass
+            async def __aenter__(self): return self
+            async def __aexit__(self, *_): pass
+            async def post(self, url, content, headers):
+                calls.append((url, content, dict(headers)))
+                return httpx.Response(200, json={"ok": False, "license": None},
+                                      headers={"Content-Type": "application/json"})
+        with patch.object(gateway.httpx, "AsyncClient", FakeClient):
+            check = self.client.post(
+                "/v1/license/check", json={"license_key": "ANRI-ABCDE-FGHJK-LMNPQ-RSTUV"},
+                headers={"Origin": gateway.LICENSE_CHECK_GATEWAY_ORIGIN})
+        self.assertEqual(check.status_code, 200)
+        self.assertEqual(check.json(), {"ok": False, "license": None})
+        self.assertEqual(calls[0][0], gateway.LICENSE_CHECK_PREVIEW + "/v1/license/check")
+        self.assertNotIn("X-Staging-Token", calls[0][2])
+
+        os.environ["ANRI_COMMERCE_API_ORIGIN"] = gateway.SYNTHETIC
+        self.assertIsNone(gateway.backend_config())
+
     def test_production_checkout_requires_explicit_release_switch(self):
         os.environ["ANRI_GATEWAY_MODE"] = "production"
         os.environ["ANRI_COMMERCE_API_ORIGIN"] = gateway.LIVE
