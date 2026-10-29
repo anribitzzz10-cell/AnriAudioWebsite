@@ -87,7 +87,7 @@ class GatewayTests(unittest.TestCase):
                     "/v1/checkout/proeducation/" + action,
                     content=b"{}", headers={
                         "Content-Type": "application/json",
-                        "Origin": "https://anri-synthetic-checkout-20261029.onrender.com",
+                        "Origin": "https://anri-audio-checkout-gateway-preview.onrender.com",
                     })
                 self.assertEqual(response.status_code, 422)
                 self.assertEqual(response.json(), {"detail": "Invalid order request"})
