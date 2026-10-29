@@ -17,9 +17,11 @@ from fastapi.responses import FileResponse, JSONResponse, Response
 app = FastAPI(docs_url=None, redoc_url=None, openapi_url=None)
 ROOT = Path(__file__).resolve().parent
 SYNTHETIC = "https://anri-synthetic-api-20261029.onrender.com"
+LICENSE_CHECK_PREVIEW = "https://anri-cloud-current-code-preview-20261029.onrender.com"
+LICENSE_CHECK_GATEWAY_ORIGIN = "https://anri-license-check-gateway-preview-20261029.onrender.com"
 MERCHANT_PREVIEW = "https://anri-proeducation-full-18000-staging.up.railway.app"
 LIVE = "https://api.anriaudio.com"
-MODES = {"preview", "merchant_preview", "production"}
+MODES = {"preview", "license_preview", "merchant_preview", "production"}
 PAGE_PATHS = {
     "": "index.html",
     "index.html": "index.html",
@@ -84,7 +86,12 @@ def backend_config():
     target = os.getenv("ANRI_COMMERCE_API_ORIGIN", "").strip()
     if selected not in MODES:
         return None
-    trusted = {"preview": SYNTHETIC, "merchant_preview": MERCHANT_PREVIEW, "production": LIVE}
+    trusted = {
+        "preview": SYNTHETIC,
+        "license_preview": LICENSE_CHECK_PREVIEW,
+        "merchant_preview": MERCHANT_PREVIEW,
+        "production": LIVE,
+    }
     if target != trusted[selected]:
         return None
     parts = urlsplit(target)
@@ -191,6 +198,8 @@ async def proxy(action: str, request: Request):
     # Render terminates TLS upstream of uvicorn. request.url.scheme can be
     # internal http, so compare browser Origin to explicitly trusted external
     # sites rather than the internal scheme or an attacker-controlled Host.
+    if mode() == "license_preview":
+        return JSONResponse({"detail": "Checkout disabled in license preview"}, status_code=404)
     expected_origins = (
         {"https://anriaudio.com", "https://www.anriaudio.com"}
         if mode() == "production"
@@ -214,6 +223,8 @@ async def proxy_license_check(request: Request):
     expected_origins = (
         {"https://anriaudio.com", "https://www.anriaudio.com"}
         if mode() == "production"
+        else {LICENSE_CHECK_GATEWAY_ORIGIN}
+        if mode() == "license_preview"
         else {"https://anri-audio-checkout-gateway-preview.onrender.com"}
     )
     if supplied_origin and supplied_origin not in expected_origins:
