@@ -52,6 +52,35 @@ test('license check does not fall back to the commerce upstream',async t=>{
  assert.equal(r.status,503);assert.equal(calls,0);
 });
 
+test('email recovery endpoints use the dedicated license upstream, not commerce',async t=>{
+ const calls=[];
+ const base=await site(t,{
+  upstream:'https://commerce.example.invalid',
+  licenseUpstream:'https://license.example.invalid',
+  salesEnabled:false,
+  fetcher:async(url,opts)=>{
+   calls.push({url,opts});
+   return new Response(JSON.stringify({ok:true,message:'If a matching purchase exists, a 6-digit verification code has been sent.',expires_in_seconds:600}),{headers:{'Content-Type':'application/json'}});
+  }
+ });
+ for(const [route,data] of [
+  ['/v1/license/recovery/request',{email:'buyer@example.invalid'}],
+  ['/v1/license/recovery/verify',{email:'buyer@example.invalid',code:'123456'}]
+ ]){
+  const r=await fetch(base+route,{method:'POST',headers,body:JSON.stringify(data)});
+  assert.equal(r.status,200,route);
+  assert.equal(r.headers.get('cache-control'),'no-store');
+  assert.equal(r.headers.get('referrer-policy'),'no-referrer');
+ }
+ assert.equal(calls.length,2);
+ assert.deepEqual(calls.map(c=>c.url),[
+  'https://license.example.invalid/v1/license/recovery/request',
+  'https://license.example.invalid/v1/license/recovery/verify'
+ ]);
+ assert.deepEqual(JSON.parse(calls[0].opts.body),{email:'buyer@example.invalid'});
+ assert.deepEqual(JSON.parse(calls[1].opts.body),{email:'buyer@example.invalid',code:'123456'});
+ assert.ok(calls.every(c=>JSON.stringify(c.opts.headers)==='{"Content-Type":"application/json"}'));
+});
 test('proxy strips ambient credentials and preserves private POST body',async t=>{
  let call;const secret='c'.repeat(43);
  const base=await site(t,{upstream:'https://issuer.example.invalid',fetcher:async(url,opts)=>{call={url,opts};return new Response(JSON.stringify({status:'pending',license_key:null}));}});
