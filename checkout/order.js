@@ -41,9 +41,22 @@ function validQuote(q){
    /^(?:do|currency|order_id|customer_email|sys|urlSuccess|urlReturn|urlNotification|payments_limit|signature|products\[0\]\[(?:name|sku|price|quantity)\])$/.test(f.name) &&
    !f.value.includes(q.claim_credential)) &&
   new Set(q.fields.map(f=>f.name)).size===q.fields.length &&
-  q.fields.some(f=>f.name==='order_id'&&f.value===q.order_num) &&
-  q.fields.some(f=>f.name==='currency'&&f.value==='kzt') &&
-  q.fields.some(f=>f.name==='signature'&&/^[a-f0-9]{64}$/.test(f.value));
+  (() => {
+   const f=new Map(q.fields.map(entry=>[entry.name,entry.value]));
+   const price=String(Math.floor(q.amount_minor/100))+'.'+String(q.amount_minor%100).padStart(2,'0');
+   const returnUrl=location.origin+location.pathname;
+   return f.size===13 &&
+    f.get('do')==='pay' && f.get('sys')==='anriaudio' &&
+    f.get('order_id')===q.order_num && f.get('currency')==='kzt' &&
+    f.get('customer_email') && f.get('payments_limit')==='1' &&
+    f.get('urlSuccess')===returnUrl && f.get('urlReturn')===returnUrl &&
+    /^https:\/\/[A-Za-z0-9.-]+\/v1\/payments\/proeducation\/webhook$/.test(f.get('urlNotification')||'') &&
+    f.get('products[0][name]')==='ANRI AUDIO MIDI — Perpetual FULL License' &&
+    f.get('products[0][sku]')==='ANRI_AUDIO_MIDI_MAC_AUV2' &&
+    f.get('products[0][price]')===price &&
+    f.get('products[0][quantity]')==='1' &&
+    /^[a-f0-9]{64}$/.test(f.get('signature')||'');
+  })();
 }
 async function post(path, data){
  const r=await fetch(API_ORIGIN+'/v1/checkout/proeducation/'+path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data),cache:'no-store',credentials:'omit',referrerPolicy:'no-referrer',redirect:'error'});
