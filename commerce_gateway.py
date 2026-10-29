@@ -117,7 +117,8 @@ async def privacy(request: Request, call_next):
     response.headers["Referrer-Policy"] = "no-referrer"
     response.headers["X-Content-Type-Options"] = "nosniff"
     response.headers["X-Frame-Options"] = "DENY"
-    if request.url.path in ("/checkout/", "/ru/checkout/", "/kk/checkout/"):
+    if request.url.path in ("/checkout/", "/ru/checkout/", "/kk/checkout/",
+                             "/license/", "/ru/license/", "/kk/license/"):
         response.headers["Content-Security-Policy"] = (
             CHECKOUT_CSP if public_checkout_enabled()
             else CHECKOUT_CSP.replace(
