@@ -4,9 +4,9 @@ history.replaceState(null, '', location.pathname);
 const $ = id => document.getElementById(id);
 const lang = document.documentElement.lang;
 const translations = {
- en: ['Your order','Checkout is closed. Secure order access will be enabled after verification.','Email','Create order','Save your order number and private credential before payment.','Copy credential','I saved my order number and private credential.','Continue to payment','Check order / recover key','Order number','Private order credential','Check order','Clear this browser session','Keep your credential private. It restores the same key. A return from the payment page does not confirm payment.','Payment has not been confirmed yet.','Your license key:','Order unavailable. Check your private credential or contact support.','Credential copied.','Credential ready. Save it before payment.'],
- ru: ['Ваш заказ','Покупка закрыта. Защищённый доступ к заказу будет включён после проверки.','Email','Создать заказ','До оплаты сохраните номер заказа и его секретный код.','Копировать код','Я сохранил номер заказа и секретный код.','Перейти к оплате','Проверить заказ / восстановить ключ','Номер заказа','Секретный код заказа','Проверить заказ','Очистить эту сессию браузера','Храните код в тайне. Он восстанавливает тот же ключ. Возврат со страницы оплаты не подтверждает платёж.','Оплата пока не подтверждена.','Ваш лицензионный ключ:','Заказ недоступен. Проверьте секретный код или обратитесь в поддержку.','Код скопирован.','Код готов. Сохраните его до оплаты.'],
- kk: ['Сіздің тапсырысыңыз','Сатып алу жабық. Тапсырысқа қауіпсіз қол жеткізу тексеруден кейін қосылады.','Email','Тапсырыс жасау','Төлемге дейін тапсырыс нөмірі мен құпия кодын сақтаңыз.','Кодты көшіру','Тапсырыс нөмірі мен құпия кодын сақтадым.','Төлемге өту','Тапсырысты тексеру / кілтті қалпына келтіру','Тапсырыс нөмірі','Тапсырыстың құпия коды','Тексеру','Браузердің осы сессиясын тазалау','Кодты құпия сақтаңыз. Ол сол кілтті қалпына келтіреді. Төлем бетінен оралу төлемді растамайды.','Төлем әлі расталған жоқ.','Лицензиялық кілтіңіз:','Тапсырыс қолжетімсіз. Құпия кодты тексеріңіз немесе қолдау қызметіне хабарласыңыз.','Код көшірілді.','Код дайын. Төлемге дейін сақтаңыз.']
+ en: ['Your order','Checkout is closed. Secure order access will be enabled after verification.','Email','Create order','Save your order number and private credential before payment.','Copy order details','I saved my order number and private credential.','Continue to payment','Check order / recover key','Order number','Private order credential','Check order','Clear this browser session','Keep your credential private. It restores the same key. A return from the payment page does not confirm payment.','Payment has not been confirmed yet.','Your license key:','Order unavailable. Check your private credential or contact support.','Order number and private code copied.','Credential ready. Save it before payment.'],
+ ru: ['Ваш заказ','Покупка закрыта. Защищённый доступ к заказу будет включён после проверки.','Email','Создать заказ','До оплаты сохраните номер заказа и его секретный код.','Копировать номер заказа и код','Я сохранил номер заказа и секретный код.','Перейти к оплате','Проверить заказ / восстановить ключ','Номер заказа','Секретный код заказа','Проверить заказ','Очистить эту сессию браузера','Храните код в тайне. Он восстанавливает тот же ключ. Возврат со страницы оплаты не подтверждает платёж.','Оплата пока не подтверждена.','Ваш лицензионный ключ:','Заказ недоступен. Проверьте секретный код или обратитесь в поддержку.','Номер заказа и секретный код скопированы.','Код готов. Сохраните его до оплаты.'],
+ kk: ['Сіздің тапсырысыңыз','Сатып алу жабық. Тапсырысқа қауіпсіз қол жеткізу тексеруден кейін қосылады.','Email','Тапсырыс жасау','Төлемге дейін тапсырыс нөмірі мен құпия кодын сақтаңыз.','Тапсырыс нөмірі мен кодын көшіру','Тапсырыс нөмірі мен құпия кодын сақтадым.','Төлемге өту','Тапсырысты тексеру / кілтті қалпына келтіру','Тапсырыс нөмірі','Тапсырыстың құпия коды','Тексеру','Браузердің осы сессиясын тазалау','Кодты құпия сақтаңыз. Ол сол кілтті қалпына келтіреді. Төлем бетінен оралу төлемді растамайды.','Төлем әлі расталған жоқ.','Лицензиялық кілтіңіз:','Тапсырыс қолжетімсіз. Құпия кодты тексеріңіз немесе қолдау қызметіне хабарласыңыз.','Тапсырыс нөмірі мен құпия коды көшірілді.','Код дайын. Төлемге дейін сақтаңыз.']
 };
 const t = translations[lang] || translations.en;
 ['heading','notice','email-label','buy','save-label','copy','saved-label','pay','recover-heading','order-label','credential-label','check','forget','privacy'].forEach((id,i)=>$(id).textContent=t[i]);
@@ -78,7 +78,16 @@ $('create').addEventListener('submit', async e=>{
   $('prepared').hidden=false;$('result').textContent=t[18];
  } catch {prepared=null;$('prepared').hidden=true;$('pay').disabled=true;$('result').textContent=t[16];$('buy').disabled=!(enabled&&CHECKOUT_ENABLED);}
 });
-$('copy').addEventListener('click',async()=>{try{await navigator.clipboard.writeText($('new-credential').value);$('result').textContent=t[17];}catch{$('new-credential').focus();$('new-credential').select();}});
+$('copy').addEventListener('click',async()=>{
+ const number=$('order-reference').textContent.trim();
+ const credential=$('new-credential').value;
+ if(!validOrder(number)||!validCredential(credential))return;
+ // The buyer must retain BOTH factors. Never put this bearer credential in a
+ // URL, email, analytics event or server log. Clipboard write is user initiated.
+ const details='ANRI AUDIO MIDI\nOrder: '+number+'\nPrivate credential: '+credential;
+ try{await navigator.clipboard.writeText(details);$('result').textContent=t[17];}
+ catch{$('new-credential').focus();$('new-credential').select();}
+});
 $('saved').addEventListener('change',()=>{$('pay').disabled=!(prepared && validQuote(prepared) && $('saved').checked);});
 $('pay').addEventListener('click',()=>{
  if(!enabled||!validQuote(prepared)||!$('saved').checked||!CHECKOUT_ENABLED) return;
