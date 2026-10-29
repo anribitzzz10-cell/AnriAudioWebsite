@@ -44,6 +44,8 @@ class GatewayTests(unittest.TestCase):
         self.assertIn("API_ORIGIN=''", config.text)
         self.assertFalse(self.client.get("/health").json()["external_payment_verified"])
         self.assertFalse(self.client.get("/health").json()["proxy_configured"])
+        for page in ["/license/", "/ru/license/", "/kk/license/"]:
+            self.assertIn("form-action 'none'", self.client.get(page).headers["content-security-policy"])
         for blocked in ["/docs", "/openapi.json", "/.github/workflows/checkout.yml",
                         "/docs/PROEDUCATION_COMMERCIAL_GO_NO_GO_20261029_RU.md",
                         "/staging/server.py", "/pilot/", "/tests/checkout.spec.js",
