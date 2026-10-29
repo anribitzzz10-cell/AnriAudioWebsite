@@ -33,7 +33,7 @@ def request(opener, path, *, invalid_post=False):
         r = exc
     with r:
         content = r.read(262145)
-        return r.status, dict(r.headers), content[:262145]
+        return r.status, {k.lower(): v for k, v in r.headers.items()}, content[:262145]
 
 
 def main():
@@ -43,7 +43,7 @@ def main():
         try:
             status, headers, body = request(opener, path)
             ok = (status == 200 and b'id="heading"' in body) if path != "/" else (status == 200 and b"ANRI" in body)
-            ok &= "no-store" in headers.get("Cache-Control", "")
+            ok &= "no-store" in headers.get("cache-control", "")
         except Exception:
             ok = False
         print(("PASS " if ok else "FAIL ") + "GET " + path, flush=True)
@@ -72,7 +72,7 @@ def main():
             body = json.loads(data.decode())
             ok = status == 503 and body == {"detail": "Commerce proxy disabled"}
             ok &= "no-store" in headers.get("Cache-Control", "")
-            ok &= headers.get("Referrer-Policy") == "no-referrer"
+            ok &= headers.get("referrer-policy") == "no-referrer"
         except Exception:
             ok = False
         print(("PASS " if ok else "FAIL ") + "POST " + path + " (disabled)", flush=True)
