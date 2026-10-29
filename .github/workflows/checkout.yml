@@ -18,8 +18,8 @@ jobs:
         run: python3 -m pip install -r requirements-commerce.txt
       - name: Offline production gateway contract (no network)
         run: python3 -m unittest discover -s tests -p test_commerce_gateway.py -v
-      - name: Verify isolated live preview (no payment or credentials)
-        run: python3 tests/live_preview_smoke.py
+      - name: Verify connected Railway issuer and website proxy (no payment)
+        run: python3 tests/real_full_integration_smoke.py
       - name: Offline checkout proxy smoke checker contract (no network)
         run: python3 -m unittest discover -s tests -p test_checkout_proxy_smoke.py -v
       - name: Order recovery security checks
