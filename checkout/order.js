@@ -17,9 +17,19 @@ const licenseCopy = {
  ru:{heading:'Проверить лицензию / Посмотреть ключ',notice:'Введите номер заказа и секретный код, сохранённый до оплаты. ANRI Cloud вернёт тот же ключ только после подтверждения платежа.',section:'Проверить лицензию / Посмотреть ключ',check:'Проверить лицензию',link:'Вернуться к оформлению',viewLink:'Проверить лицензию / Посмотреть ключ'},
  kk:{heading:'Лицензияны тексеру / Кілтті көру',notice:'Төлемге дейін сақталған тапсырыс нөмірі мен құпия кодты енгізіңіз. ANRI Cloud төлем расталғаннан кейін сол кілтті қайтарады.',section:'Лицензияны тексеру / Кілтті көру',check:'Лицензияны тексеру',link:'Тапсырысқа оралу',viewLink:'Лицензияны тексеру / Кілтті көру'}
 };
+const statusCopy = {
+ en:{heading:'Check an existing license',notice:'Enter your ANRI license key to check its current status. This is read-only: it does not activate, renew, or change anything.',label:'License key',button:'Check license status',checking:'Checking current status…',invalid:'Enter a valid ANRI license key.',notFound:'No matching license was found.',unavailable:'License status is temporarily unavailable.',active:'License is active',inactive:'License is not active',status:'Status',product:'Product',edition:'Edition',activations:'Active activations',expires:'Expires',perpetual:'Perpetual',states:{active:'Active',revoked:'Revoked',expired:'Expired',inactive:'Inactive'}},
+ ru:{heading:'Проверить действующую лицензию',notice:'Введите ключ ANRI, чтобы проверить его текущее состояние. Проверка только читает данные: она ничего не активирует и не изменяет.',label:'Лицензионный ключ',button:'Проверить статус',checking:'Проверяем текущее состояние…',invalid:'Введите корректный ключ ANRI.',notFound:'Лицензия с таким ключом не найдена.',unavailable:'Проверка лицензии временно недоступна.',active:'Лицензия действующая',inactive:'Лицензия не действует',status:'Статус',product:'Продукт',edition:'Редакция',activations:'Активных устройств',expires:'Истекает',perpetual:'Бессрочная',states:{active:'Действует',revoked:'Отозвана',expired:'Истекла',inactive:'Неактивна'}},
+ kk:{heading:'Қолданыстағы лицензияны тексеру',notice:'Ағымдағы күйін тексеру үшін ANRI кілтін енгізіңіз. Бұл тек оқуға арналған тексеріс: лицензияны белсендірмейді және өзгертпейді.',label:'Лицензия кілті',button:'Күйін тексеру',checking:'Ағымдағы күй тексерілуде…',invalid:'Дұрыс ANRI кілтін енгізіңіз.',notFound:'Мұндай лицензия табылмады.',unavailable:'Лицензияны тексеру уақытша қолжетімсіз.',active:'Лицензия белсенді',inactive:'Лицензия белсенді емес',status:'Күйі',product:'Өнім',edition:'Нұсқа',activations:'Белсенді құрылғылар',expires:'Жарамдылық мерзімі',perpetual:'Мерзімсіз',states:{active:'Белсенді',revoked:'Кері қайтарылған',expired:'Мерзімі өткен',inactive:'Белсенді емес'}}
+};
 ['heading','notice','email-label','buy','save-label','copy','saved-label','pay','recover-heading','order-label','credential-label','check','forget','privacy'].forEach((id,i)=>$(id).textContent=t[i]);
 $('license-link').href = isLicensePage ? (checkoutPaths[lang] || checkoutPaths.en) : (licensePaths[lang] || licensePaths.en);
 $('license-link').textContent = isLicensePage ? (licenseCopy[lang] || licenseCopy.en).link : (licenseCopy[lang] || licenseCopy.en).viewLink;
+const statusText = statusCopy[lang] || statusCopy.en;
+$('license-check-heading').textContent = statusText.heading;
+$('license-check-notice').textContent = statusText.notice;
+$('license-key-label').textContent = statusText.label;
+$('check-license').textContent = statusText.button;
 for (const anchor of document.querySelectorAll('nav a[lang]')) {
   anchor.href = isLicensePage ? (licensePaths[anchor.lang] || licensePaths.en) : (checkoutPaths[anchor.lang] || checkoutPaths.en);
 }
@@ -43,12 +53,52 @@ if (enabled && CHECKOUT_ENABLED) {
   $('notice').textContent = liveText[lang] || liveText.en;
 }
 $('check').disabled = !enabled;
+$('check-license').disabled = !enabled;
 $('buy').disabled = !(enabled && CHECKOUT_ENABLED);
 const storageKey = 'anri-private-order';
 let prepared;
 const validOrder = value => /^anri-full-[0-9a-f]{32}$/.test(value);
 const validCredential = value => /^[A-Za-z0-9_-]{43}$/.test(value);
 const validKey = value => typeof value === 'string' && /^ANRI-[A-Z2-9]{5}(?:-[A-Z2-9]{5}){3}$/.test(value);
+$('license-check').addEventListener('submit', async e => {
+ e.preventDefault();
+ if (!enabled) return;
+ const key = $('license-key-check').value.trim().toUpperCase();
+ const copy = statusCopy[lang] || statusCopy.en;
+ if (!validKey(key)) { $('license-status').textContent = copy.invalid; return; }
+ const button = $('check-license');
+ button.disabled = true;
+ $('license-status').textContent = copy.checking;
+ try {
+  const response = await fetch(API_ORIGIN + '/v1/license/check', {
+   method:'POST', headers:{'Content-Type':'application/json'},
+   body:JSON.stringify({license_key:key}), cache:'no-store',
+   credentials:'omit', referrerPolicy:'no-referrer', redirect:'error'
+  });
+  if (!response.ok) throw new Error('Unavailable');
+  const result = await response.json();
+  if (!result.ok || !result.license) {
+   $('license-status').textContent = copy.notFound;
+   return;
+  }
+  const lic = result.license;
+  const state = copy.states[lic.status] || copy.states.inactive;
+  const product = lic.product === 'anri_audio_midi' ? 'ANRI AUDIO MIDI' : String(lic.product || '—');
+  const edition = lic.edition === 'full' ? 'FULL' : String(lic.edition || '—');
+  const expiry = lic.expires_at ? String(lic.expires_at) : copy.perpetual;
+  $('license-status').textContent = [
+   lic.active ? copy.active : copy.inactive,
+   copy.status + ': ' + state,
+   copy.product + ': ' + product + ' (' + edition + ')',
+   copy.activations + ': ' + String(lic.active_activations) + ' / ' + String(lic.max_activations),
+   copy.expires + ': ' + expiry
+  ].join(String.fromCharCode(10));
+ } catch {
+  $('license-status').textContent = copy.unavailable;
+ } finally {
+  button.disabled = !enabled;
+ }
+});
 try { const saved = JSON.parse(sessionStorage.getItem(storageKey)); if(saved && validOrder(saved.order_num) && validCredential(saved.claim_credential)){$('order').value=saved.order_num;$('credential').value=saved.claim_credential;} } catch {}
 const extra = ({
  en:['Copy license key','License key copied.','Payment verification paused. Use Check order to retry.'],
@@ -160,8 +210,8 @@ copyKey.addEventListener('click',async()=>{if(!$('key').hidden && validKey($('ke
  try{await navigator.clipboard.writeText($('key').textContent);$('result').textContent=extra[1];}
  catch{$('result').textContent=t[15];}
 }});
-$('forget').addEventListener('click',()=>{stopClaim();try{sessionStorage.removeItem(storageKey);}catch{}prepared=null;for(const id of ['credential','new-credential','order'])$(id).value='';clearKey();$('prepared').hidden=true;$('result').textContent='';$('create').reset();$('saved').checked=false;$('pay').disabled=true;$('buy').disabled=!(enabled&&CHECKOUT_ENABLED);});
-addEventListener('pagehide',()=>{stopClaim();clearKey();$('credential').value='';$('new-credential').value='';});
+$('forget').addEventListener('click',()=>{stopClaim();try{sessionStorage.removeItem(storageKey);}catch{}prepared=null;for(const id of ['credential','new-credential','order','license-key-check'])$(id).value='';clearKey();$('license-status').textContent='';$('prepared').hidden=true;$('result').textContent='';$('create').reset();$('saved').checked=false;$('pay').disabled=true;$('buy').disabled=!(enabled&&CHECKOUT_ENABLED);});
+addEventListener('pagehide',()=>{stopClaim();clearKey();$('credential').value='';$('new-credential').value='';$('license-key-check').value='';});
 addEventListener('pageshow',()=>{
  if(!$('credential').value){try{const s=JSON.parse(sessionStorage.getItem(storageKey));if(s && validOrder(s.order_num)&&validCredential(s.claim_credential)){$('order').value=s.order_num;$('credential').value=s.claim_credential;}}catch{}}
  startClaim();
