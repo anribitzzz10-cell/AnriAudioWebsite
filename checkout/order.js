@@ -223,6 +223,9 @@ async function claimOrder(attempt, run, owner) {
     if (run !== generation || !sameIdentity(owner, identity())) return;
 
     if (result.status === 'fulfilled' && validKey(result.license_key)) {
+      try { sessionStorage.removeItem(storageKey); } catch {}
+      currentOrder = '';
+      currentCredential = '';
       $('key').textContent = result.license_key;
       $('key').hidden = false;
       if (!$('copy-key')) {
