@@ -160,9 +160,15 @@ async def proxy(action: str, request: Request):
     if action not in ("create", "claim") or request.url.query:
         return JSONResponse({"detail": "Invalid route"}, status_code=404)
     supplied_origin = request.headers.get("origin")
-    if supplied_origin and supplied_origin != (
-        request.url.scheme + "://" + request.url.netloc
-    ):
+    # Render terminates TLS upstream of uvicorn. request.url.scheme can be
+    # internal http, so compare browser Origin to explicitly trusted external
+    # sites rather than the internal scheme or an attacker-controlled Host.
+    expected_origins = (
+        {"https://anriaudio.com", "https://www.anriaudio.com"}
+        if mode() == "production"
+        else {"https://anri-synthetic-checkout-20261029.onrender.com"}
+    )
+    if supplied_origin and supplied_origin not in expected_origins:
         return JSONResponse({"detail": "Origin forbidden"}, status_code=403)
     if not request.headers.get("content-type", "").lower().startswith("application/json"):
         return JSONResponse({"detail": "JSON required"}, status_code=415)
