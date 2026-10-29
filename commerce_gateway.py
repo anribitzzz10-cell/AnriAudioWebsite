@@ -17,7 +17,7 @@ from fastapi.responses import FileResponse, JSONResponse, Response
 app = FastAPI(docs_url=None, redoc_url=None, openapi_url=None)
 ROOT = Path(__file__).resolve().parent
 SYNTHETIC = "https://anri-synthetic-api-20261029.onrender.com"
-MERCHANT_PREVIEW = "https://anri-cloud-pg17-preflight-20261028.onrender.com"
+MERCHANT_PREVIEW = "https://anri-proeducation-full-18000-staging.up.railway.app"
 LIVE = "https://api.anriaudio.com"
 MODES = {"preview", "merchant_preview", "production"}
 PAGE_PATHS = {
