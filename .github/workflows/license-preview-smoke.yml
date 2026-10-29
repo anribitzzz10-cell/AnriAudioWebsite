@@ -59,8 +59,19 @@ jobs:
                       status, headers, body = request("/v1/license/check", "POST", {"license_key": fake_key}, base)
                       last = (status, body)
                       if status == 200 and json.loads(body) == {"ok": False, "license": None}:
-                          ready = True
-                          break
+                          pages_ready = True
+                          for page_path, warning in [
+                              ("/license/", "Do not enter a real license key."),
+                              ("/ru/license/", "Не вводите настоящий лицензионный ключ."),
+                              ("/kk/license/", "Нақты лицензия кілтін енгізбеңіз."),
+                          ]:
+                              page_status, _, page_body = request(page_path)
+                              if page_status != 200 or warning not in page_body:
+                                  pages_ready = False
+                                  break
+                          if pages_ready:
+                              ready = True
+                              break
               except Exception as exc:
                   last = repr(exc)
               time.sleep(5)
