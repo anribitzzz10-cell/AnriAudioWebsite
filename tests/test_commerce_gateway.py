@@ -35,7 +35,7 @@ class GatewayTests(unittest.TestCase):
         os.environ["ANRI_SYNTHETIC_PROXY_TOKEN"] = "synthetic-test-only-not-live-" + "x" * 65
 
     def test_closed_checkout_and_real_public_static_files(self):
-        for page in ["/", "/ru/", "/kk/", "/checkout/", "/ru/checkout/", "/kk/checkout/"]:
+        for page in ["/", "/ru/", "/kk/", "/checkout/", "/ru/checkout/", "/kk/checkout/", "/license/", "/ru/license/", "/kk/license/"]:
             r = self.client.get(page)
             self.assertEqual(r.status_code, 200, page)
             self.assertIn("no-store", r.headers["cache-control"])
