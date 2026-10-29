@@ -93,11 +93,14 @@ def backend_config():
 
 
 def public_checkout_enabled():
-    return (
-        mode() == "production"
-        and backend_config() == LIVE
-        and os.getenv("ANRI_PUBLIC_CHECKOUT_ENABLED", "0") == "1"
+    official = (mode() == "production" and backend_config() == LIVE
+                and os.getenv("ANRI_PUBLIC_CHECKOUT_ENABLED", "0") == "1")
+    # Explicit one-merchant preview, never an arbitrary preview/backend URL.
+    private_live_preview = (
+        mode() == "merchant_preview" and backend_config() == MERCHANT_PREVIEW
+        and os.getenv("ANRI_PRIVATE_REAL_PAYMENT_PREVIEW_ENABLED", "0") == "1"
     )
+    return official or private_live_preview
 
 
 @app.middleware("http")
@@ -110,7 +113,7 @@ async def privacy(request: Request, call_next):
     response.headers["X-Frame-Options"] = "DENY"
     if request.url.path in ("/checkout/", "/ru/checkout/", "/kk/checkout/"):
         response.headers["Content-Security-Policy"] = (
-            CHECKOUT_CSP if mode() == "production"
+            CHECKOUT_CSP if public_checkout_enabled()
             else CHECKOUT_CSP.replace(
                 "form-action https://anriprod.proeducation.kz",
                 "form-action 'none'",
