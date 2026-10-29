@@ -1,6 +1,8 @@
 name: Private order page (offline browser)
 on:
   pull_request:
+  push:
+    branches: [feature/automatic-order-claim-20261029]
   workflow_dispatch:
 permissions:
   contents: read
