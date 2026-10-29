@@ -34,7 +34,9 @@ function identity(){ return {order_num:$('order').value.trim(),claim_credential:
 function sameIdentity(a,b){return a.order_num===b.order_num && a.claim_credential===b.claim_credential;}
 function validQuote(q){
  return q && validOrder(q.order_num) && validCredential(q.claim_credential) && q.currency==='KZT' &&
-  Number.isSafeInteger(q.amount_minor) && q.amount_minor>0 && q.amount_minor<=100000000 &&
+  // Fixed commercial KZT price approved 2026-10-29. Never submit an
+  // incorrect quote, even if a proxy or deployment is misconfigured.
+  Number.isSafeInteger(q.amount_minor) && q.amount_minor===1800000 &&
   q.merchant_form_action==='https://anriprod.proeducation.kz/' && q.method==='POST' && Array.isArray(q.fields) &&
   q.fields.length>0 && q.fields.length<=100 &&
   q.fields.every(f=>typeof f.name==='string' && typeof f.value==='string' &&
