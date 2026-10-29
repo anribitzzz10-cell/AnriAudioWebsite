@@ -11,6 +11,7 @@ on:
       - 'kk/license/**'
       - 'tests/test_license_status_pages.py'
       - 'tests/smoke_live_license_status_api.py'
+      - 'tests/smoke_live_license_status_pages.py'
       - '.github/workflows/license-status-pages.yml'
   push:
     branches:
@@ -24,6 +25,7 @@ on:
       - 'kk/license/**'
       - 'tests/test_license_status_pages.py'
       - 'tests/smoke_live_license_status_api.py'
+      - 'tests/smoke_live_license_status_pages.py'
       - '.github/workflows/license-status-pages.yml'
   workflow_dispatch:
 
@@ -43,3 +45,5 @@ jobs:
         run: python tests/test_license_status_pages.py
       - name: Smoke-test deployed API using a synthetic unknown key (read-only)
         run: python tests/smoke_live_license_status_api.py
+      - name: Verify deployed EN/RU/KK pages and homepage links (GET only)
+        run: python tests/smoke_live_license_status_pages.py
