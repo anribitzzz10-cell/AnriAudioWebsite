@@ -29,6 +29,7 @@ for (const [path, heading] of [['/checkout/','Your order'],['/ru/checkout/','Ð’Ð
 }
 
 test('secret stays in POST body and recovery returns existing key', async ({page})=>{
+ await page.context().grantPermissions(['clipboard-read','clipboard-write']);
  await page.route('**/checkout/config.js', route=>route.fulfill({contentType:'text/javascript',body:`export const API_ORIGIN='${base}'; export const CHECKOUT_ENABLED=true;`}));
  let calls=[];
  await page.route('**/v1/checkout/proeducation/**', async route=>{
@@ -48,6 +49,9 @@ test('secret stays in POST body and recovery returns existing key', async ({page
  await page.locator('#email').fill('buyer@example.invalid');
  await page.locator('#buy').click();
  await expect(page.locator('#prepared')).toBeVisible();
+ await page.locator('#copy').click();
+ const recoverySlip = await page.evaluate(()=>navigator.clipboard.readText());
+ expect(recoverySlip).toBe('ANRI AUDIO MIDI\nOrder: '+order+'\nPrivate credential: '+credential);
  await expect(page.locator('#pay')).toBeDisabled();
  await expect(page.locator('#amount')).toContainText('6,500');
  await expect(page).toHaveURL(base+'/checkout/');
@@ -77,6 +81,10 @@ for (const [path, locale] of [['/ru/checkout/','ru'],['/kk/checkout/','kk']]) {
   await page.locator('#email').fill('buyer@example.invalid');
   await page.locator('#buy').click();
   await expect(page.locator('#prepared')).toBeVisible();
+  await page.context().grantPermissions(['clipboard-read','clipboard-write']);
+  await page.locator('#copy').click();
+  expect(await page.evaluate(()=>navigator.clipboard.readText()))
+   .toBe('ANRI AUDIO MIDI\nOrder: '+order+'\nPrivate credential: '+credential);
   await expect(page).toHaveURL(base+path);
  });
 }
