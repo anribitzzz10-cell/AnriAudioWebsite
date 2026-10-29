@@ -67,14 +67,15 @@ jobs:
           if not ready:
               raise SystemExit(f"Preview did not become ready with read-only status route: {last!r}")
 
-          for path, expected in [
-              ("/license/", "Check an existing license"),
-              ("/ru/license/", "Проверить действующую лицензию"),
-              ("/kk/license/", "Қолданыстағы лицензияны тексеру"),
+          for path, expected, warning in [
+              ("/license/", "Check an existing license", "Do not enter a real license key."),
+              ("/ru/license/", "Проверить действующую лицензию", "Не вводите настоящий лицензионный ключ."),
+              ("/kk/license/", "Қолданыстағы лицензияны тексеру", "Нақты лицензия кілтін енгізбеңіз."),
           ]:
               status, headers, body = request(path)
               assert status == 200, (path, status)
               assert expected in body, (path, expected)
+              assert warning in body, (path, warning)
               assert headers.get("Cache-Control") == "no-store"
 
           for path, expected_link in [
