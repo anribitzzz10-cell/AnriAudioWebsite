@@ -75,6 +75,7 @@ function createServer({upstream=process.env.ANRI_COMMERCE_UPSTREAM, licenseUpstr
       const segments=pathname.split('/').filter(Boolean);
       if(segments.some(s=>s.startsWith('.')||s.includes('\\')) || pathname.includes('\0'))return fail(res,404,'Not found');
       const isCheckout=/^\/(?:ru\/|kk\/)?checkout(?:\/|$)/.test(pathname);
+      const isKaspi=/^\/(?:ru\/|kk\/)?kaspi(?:\/|$)/.test(pathname);
       const isLicensePage=/^\/(?:ru\/|kk\/)?license(?:\/|$)/.test(pathname);
       let file=path.resolve(root,'.'+pathname);
       if(!file.startsWith(root+path.sep)) {if(pathname==='/')file=path.join(root,'index.html');else return fail(res,404,'Not found');}
