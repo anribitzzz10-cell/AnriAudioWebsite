@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<meta name="robots" content="noindex,nofollow">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'self'; img-src 'self'; form-action 'none'; base-uri 'none'; object-src 'none'; frame-ancestors 'none'">
+<title>ANRI AUDIO — Kaspi Pay</title>
+<link rel="stylesheet" href="/checkout/style.css">
+<script defer src="/kaspi/checkout.js"></script>
+</head>
+<body>
+<main>
+<a href="/">ANRI AUDIO</a>
+<nav aria-label="Language">
+<a href="?lang=en" lang="en">EN</a> ·
+<a href="?lang=ru" lang="ru" aria-current="page">RU</a> ·
+<a href="?lang=kk" lang="kk">KK</a>
+</nav>
+<p class="license-status-link"><a href="/ru/license/">Проверить статус лицензии</a></p>
+<h1 id="heading">Оплата через Kaspi Pay</h1>
+<p id="lead">ANRI AUDIO MIDI для Logic Pro. Бессрочная FULL-лицензия — 5 000 ₸, до двух активаций.</p>
+<p id="price">Цена: 5 000 ₸</p>
+<p id="warning">Платёжная ссылка не фиксирует сумму автоматически. В Kaspi.kz нужно вручную ввести ровно 5 000 ₸ и указать номер заказа в сообщении к платежу.</p>
+<form id="order-form">
+<label id="email-label" for="email">Email для получения и восстановления лицензии</label>
+<input id="email" type="email" required maxlength="254" autocomplete="email">
+<button id="create" type="submit">Создать заказ на 5 000 ₸</button>
+</form>
+<section id="prepared" hidden>
+<p id="order-amount"></p>
+<p><strong id="order-label">Номер заказа</strong></p>
+<pre id="order-id"></pre>
+<button id="copy-order" type="button">Скопировать номер заказа</button>
+<p><a id="pay-link" class="button" href="#" target="_blank" rel="noopener noreferrer">Открыть Kaspi Pay</a></p>
+<p id="pay-instructions"></p>
+</section>
+<p id="result" role="status" aria-live="polite"></p>
+<p id="manual-note">После оплаты ANRI AUDIO вручную сверяет поступление в собственном Kaspi POS → История. Скриншот, сообщение покупателя или возврат на сайт не подтверждают оплату. FULL-ключ создаётся в ANRI Cloud только после проверки реальной операции.</p>
+<p><a id="support" href="mailto:anribitzzz10@gmail.com?subject=ANRI%20AUDIO%20Kaspi%20Pay">Поддержка ANRI AUDIO</a></p>
+</main>
+</body>
+</html>
