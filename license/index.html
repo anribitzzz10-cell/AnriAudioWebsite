@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#0a0a0d">
 <meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; connect-src https://anri-cloud.onrender.com; img-src 'self'; form-action 'self'; base-uri 'none'; object-src 'none'">
 <meta name="robots" content="noindex,nofollow">
 <meta name="description" content="Check the current status of an existing ANRI AUDIO MIDI license.">
 <title>Check License Status | ANRI AUDIO</title>
@@ -28,7 +29,7 @@
       <input id="license-key" name="license_key" type="password" required maxlength="128" minlength="10" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="ANRI-XXXXX-XXXXX-XXXXX-XXXXX">
       <button id="check-button" type="submit">Check license</button>
     </form>
-    <p class="privacy">Privacy: the key is sent to ANRI Cloud through the site's secure gateway for this request only. It is not saved in browser storage or placed in the URL. Never share your key in chats or screenshots.</p>
+    <p class="privacy">Privacy: the key is sent to ANRI Cloud directly over HTTPS for this request only. It is not saved in browser storage or placed in the URL. Never share your key in chats or screenshots.</p>
     <div id="license-result" class="result" role="status" aria-live="polite" hidden></div>
     <section class="recovery-section" aria-labelledby="recovery-title">
       <h2 id="recovery-title">Already paid but lost your order number or private code?</h2>
