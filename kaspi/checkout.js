@@ -55,9 +55,18 @@ const copy = {
 for (const [id,key] of [['heading','heading'],['lead','lead'],['warning','warning'],['email-label','email'],['create','create'],['order-label','order'],['copy-order','copy'],['pay-link','pay'],['manual-note','note'],['support','support']]) $(id).textContent=copy[key];
 const storedKey='anri-kaspi-idempotency-'+locale;
 let idempotency='';
-try { idempotency=sessionStorage.getItem(storedKey)||''; } catch {}
-function newIdempotency(){idempotency=crypto.randomUUID().replaceAll('-','');try{sessionStorage.setItem(storedKey,idempotency);}catch{}}
-if(!/^[A-Za-z0-9._:-]{16,128}$/.test(idempotency))newIdempotency();
+let idempotencyEmail='';
+try {
+ const saved=JSON.parse(sessionStorage.getItem(storedKey)||'null');
+ if(saved&&typeof saved.key==='string'&&typeof saved.email==='string'&&/^[A-Za-z0-9._:-]{16,128}$/.test(saved.key)){
+  idempotency=saved.key;idempotencyEmail=saved.email;
+ }
+} catch {}
+function newIdempotency(email){
+ idempotency=crypto.randomUUID().replaceAll('-','');
+ idempotencyEmail=email;
+ try{sessionStorage.setItem(storedKey,JSON.stringify({key:idempotency,email}));}catch{}
+}
 let order=null;
 function showOrder(q){
  if(!q||!/^KSP-[A-F0-9]{32}$/.test(q.order_id)||q.amount_kzt!==5000||q.currency!=='KZT'||q.payment_url!=='https://pay.kaspi.kz/pay/zxqekc5w')throw Error('Invalid order response');
@@ -76,11 +85,12 @@ $('order-form').addEventListener('submit',async e=>{
  $('create').disabled=true;
  $('result').textContent='';
  try{
-  if(!idempotency)newIdempotency();
+  const email=$('email').value.trim().toLowerCase();
+  if(!idempotency||idempotencyEmail!==email)newIdempotency(email);
   const response=await fetch('/v1/kaspi/orders',{
    method:'POST',
    headers:{'Content-Type':'application/json'},
-   body:JSON.stringify({customer_email:$('email').value.trim(),idempotency_key:idempotency}),
+   body:JSON.stringify({customer_email:email,idempotency_key:idempotency}),
    cache:'no-store',credentials:'omit',redirect:'error',referrerPolicy:'no-referrer'
   });
   if(!response.ok)throw Error('order');
