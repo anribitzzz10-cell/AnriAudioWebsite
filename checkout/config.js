@@ -1,4 +1,4 @@
-// Public checkout stays CLOSED until the production payment and database checks pass.
-// Render Static Sites do not run server.cjs, so use the existing ANRI Cloud origin.
-export const API_ORIGIN = 'https://anri-cloud.onrender.com';
+// Official dynamic Railway site proxies commerce to production ANRI Cloud.
+// Do not enable payment without verified database, merchant callback and issuer.
+export const API_ORIGIN = 'https://anriaudio.com';
 export const CHECKOUT_ENABLED = false;
