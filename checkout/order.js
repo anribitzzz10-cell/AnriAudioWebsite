@@ -90,7 +90,7 @@ function sameIdentity(a, b) {
 function validQuote(q, expectedEmail) {
   if (!q || !validOrder(q.order_num) || !validCredential(q.claim_credential) ||
       q.currency !== 'KZT' || !Number.isSafeInteger(q.amount_minor) ||
-      q.amount_minor <= 0 || q.amount_minor > 100000000 ||
+      q.amount_minor !== 500000 ||
       q.merchant_form_action !== 'https://anriprod.proeducation.kz/' ||
       q.method !== 'POST' || !Array.isArray(q.fields) ||
       q.fields.length < 1 || q.fields.length > 100) return false;
@@ -103,6 +103,9 @@ function validQuote(q, expectedEmail) {
   const field = name => q.fields.find(f => f.name === name)?.value;
   if (field('order_id') !== q.order_num || field('currency') !== 'kzt' ||
       field('sys') !== 'anriaudio' ||
+      field('products[0][sku]') !== 'ANRI_AUDIO_MIDI_MAC_AUV2' ||
+      field('products[0][price]') !== '5000.00' ||
+      field('products[0][quantity]') !== '1' ||
       field('customer_email')?.trim().toLowerCase() !== expectedEmail.trim().toLowerCase() ||
       !/^[a-f0-9]{64}$/.test(field('signature') || '')) return false;
 

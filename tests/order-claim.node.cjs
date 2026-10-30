@@ -22,7 +22,7 @@ const fields = [
   ['payments_limit', '1'],
   ['products[0][name]', 'ANRI AUDIO MIDI — Perpetual FULL License'],
   ['products[0][sku]', 'ANRI_AUDIO_MIDI_MAC_AUV2'],
-  ['products[0][price]', '18000.00'],
+  ['products[0][price]', '5000.00'],
   ['products[0][quantity]', '1'],
   ['signature', 'a'.repeat(64)]
 ].map(([name, value]) => ({name, value}));
@@ -31,7 +31,7 @@ function quote() {
   return {
     order_num: order,
     claim_credential: credential,
-    amount_minor: 1800000,
+    amount_minor: 500000,
     currency: 'KZT',
     merchant_form_action: 'https://anriprod.proeducation.kz/',
     method: 'POST',
@@ -229,6 +229,14 @@ async function run() {
     assert.equal(f.ensure('key').hidden, true);
     assert.equal(f.timers.size, 0);
     assert.equal(f.storage.size, 1);
+  });
+
+  await check('new orders reject stale price and mismatched provider amount', async () => {
+    const f = fixture({saved: false});
+    assert.equal(f.context.validQuote(quote(), 'buyer@example.invalid'), true);
+    assert.equal(f.context.validQuote({...quote(), amount_minor: 1800000}, 'buyer@example.invalid'), false);
+    const mismatched = {...quote(), fields: fields.map(f => f.name === 'products[0][price]' ? {...f, value: '18000.00'} : f)};
+    assert.equal(f.context.validQuote(mismatched, 'buyer@example.invalid'), false);
   });
 
   return passed;
