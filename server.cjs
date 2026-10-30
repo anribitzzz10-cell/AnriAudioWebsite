@@ -4,7 +4,7 @@ const fs = require('node:fs/promises');
 const path = require('node:path');
 const root = __dirname;
 const official = 'https://anriaudio.com';
-const apiPaths = new Set(['/v1/checkout/proeducation/create', '/v1/checkout/proeducation/claim']);
+const apiPaths = new Set(['/v1/checkout/proeducation/create', '/v1/checkout/proeducation/claim', '/v1/checkout/proeducation/private-five-rub/create']);
 const licenseApiPaths = new Set([
   '/v1/license/check',
   '/v1/license/recovery/request',
