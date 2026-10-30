@@ -54,7 +54,7 @@ function createServer({upstream=process.env.ANRI_COMMERCE_UPSTREAM, licenseUpstr
             const nonce=crypto.randomBytes(16).toString('hex');
             const bodyHash=crypto.createHash('sha256').update(raw).digest('hex');
             const canonical=Buffer.concat([
-              Buffer.from('POST\\n'),Buffer.from(url.pathname),Buffer.from('\\n\\n'+timestamp+'\\n'+nonce+'\\n'),Buffer.from(bodyHash)
+              Buffer.from('POST\n'),Buffer.from(url.pathname),Buffer.from('\n\n'+timestamp+'\n'+nonce+'\n'),Buffer.from(bodyHash)
             ]);
             forwardHeaders['X-Anri-Gateway-Signature']=crypto.createHmac('sha256',kaspiGatewaySecret).update(canonical).digest('hex');
             forwardHeaders['X-Anri-Gateway-Timestamp']=timestamp;
