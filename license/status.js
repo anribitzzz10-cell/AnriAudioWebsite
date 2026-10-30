@@ -1,8 +1,10 @@
 (() => {
   "use strict";
-  const API = "/v1/license/check";
-  const RECOVERY_REQUEST_API = "/v1/license/recovery/request";
-  const RECOVERY_VERIFY_API = "/v1/license/recovery/verify";
+  // The official site is static: POST directly to the existing ANRI Cloud.
+  const cloud = "https://anri-cloud.onrender.com";
+  const API = cloud + "/v1/license/check";
+  const RECOVERY_REQUEST_API = cloud + "/v1/license/recovery/request";
+  const RECOVERY_VERIFY_API = cloud + "/v1/license/recovery/verify";
   const messages = {
     en: {
       checking: "Checking license status…",
