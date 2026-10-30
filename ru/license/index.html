@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#0a0a0d">
 <meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; connect-src https://anri-cloud.onrender.com; img-src 'self'; form-action 'self'; base-uri 'none'; object-src 'none'">
 <meta name="robots" content="noindex,nofollow">
 <meta name="description" content="Проверка текущего статуса действующей лицензии ANRI AUDIO MIDI.">
 <title>Проверить статус лицензии | ANRI AUDIO</title>
@@ -28,7 +29,7 @@
       <input id="license-key" name="license_key" type="password" required maxlength="128" minlength="10" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="ANRI-XXXXX-XXXXX-XXXXX-XXXXX">
       <button id="check-button" type="submit">Проверить лицензию</button>
     </form>
-    <p class="privacy">Конфиденциальность: ключ передаётся в ANRI Cloud через защищённый шлюз сайта только для этой проверки. Он не сохраняется в хранилище браузера и не передаётся в URL. Не отправляйте ключ в чатах и на скриншотах.</p>
+    <p class="privacy">Конфиденциальность: ключ передаётся в ANRI Cloud напрямую по HTTPS только для этой проверки. Он не сохраняется в хранилище браузера и не передаётся в URL. Не отправляйте ключ в чатах и на скриншотах.</p>
     <div id="license-result" class="result" role="status" aria-live="polite" hidden></div>
     <section class="recovery-section" aria-labelledby="recovery-title">
       <h2 id="recovery-title">Оплатили, но потеряли номер заказа или секретный код?</h2>
