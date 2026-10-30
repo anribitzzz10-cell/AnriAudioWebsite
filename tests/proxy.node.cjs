@@ -6,11 +6,11 @@ const {createServer,upstreamOrigin}=require('../server.cjs');
 const route='/v1/checkout/proeducation/claim';
 const headers={'Content-Type':'application/json',Origin:'https://anriaudio.com','Sec-Fetch-Site':'same-origin'};
 async function site(t,options={}){const s=createServer(options);await new Promise(r=>s.listen(0,'127.0.0.1',r));t.after(()=>new Promise(r=>s.close(r)));return 'http://127.0.0.1:'+s.address().port;}
-test('official checkout is served closed in all languages with private headers',async t=>{
+test('official checkout pages are private and the ProEducation client gate is configured',async t=>{
  const base=await site(t);
- for(const p of ['/checkout/','/ru/checkout/','/kk/checkout/','/checkout/config.js']){
+ for(const p of ['/checkout/','/ru/checkout/','/kk/checkout/','/kaspi/','/checkout/config.js']){
   const r=await fetch(base+p);assert.equal(r.status,200);assert.equal(r.headers.get('cache-control'),'no-store');assert.equal(r.headers.get('referrer-policy'),'no-referrer');assert.ok(r.headers.get('content-security-policy').includes("frame-ancestors 'none'"));
-  if(p.endsWith('.js'))assert.match(await r.text(),/CHECKOUT_ENABLED = false/);
+  if(p.endsWith('.js'))assert.match(await r.text(),/CHECKOUT_ENABLED = true/);
  }
  for(const p of [route,'/v1/checkout/proeducation/create']){const r=await fetch(base+p,{method:'POST',headers,body:'{}'});assert.equal(r.status,503);}
 });
@@ -105,11 +105,52 @@ test('proxy denies alternate paths, origin, query, method and malformed body',as
   [route,{method:'POST',headers:{...headers,'Content-Type':'text/plain'},body:'{}'},415],
   [route,{method:'POST',headers,body:'not-json'},400],
   [route,{method:'POST',headers,body:'x'.repeat(4097)},400],
-  ['/v1/checkout/proeducation/create',{method:'POST',headers,body:'{}'},503]
+  ['/v1/checkout/proeducation/create',{method:'POST',headers,body:'{}'},503],\n  ['/v1/kaspi/orders',{method:'POST',headers,body:'{}'},503]
  ]){const r=await fetch(base+p,opts);assert.equal(r.status,status,p);assert.equal(r.headers.get('cache-control'),'no-store');}
  assert.equal(calls,0);
 });
-test('upstream failures never expose error bodies, cookies or location',async t=>{
+
+test('Kaspi checkout proxy signs the exact order body server-side',async t=>{
+ let call;
+ const secret='a'.repeat(64);
+ const base=await site(t,{
+  upstream:'https://anri-cloud.example.invalid',
+  kaspiSalesEnabled:true,
+  kaspiGatewaySecret:secret,
+  fetcher:async(url,opts)=>{call={url,opts};return new Response(JSON.stringify({order_id:'KSP-'+'A'.repeat(32),amount_kzt:5000,currency:'KZT',payment_url:'https://pay.kaspi.kz/pay/zxqekc5w'}));}
+ });
+ const data={customer_email:'buyer@example.invalid',idempotency_key:'kaspi-order-idem-00000001'};
+ const body=JSON.stringify(data);
+ const r=await fetch(base+'/v1/kaspi/orders',{method:'POST',headers,body});
+ assert.equal(r.status,200);
+ assert.equal(call.url,'https://anri-cloud.example.invalid/v1/kaspi/orders');
+ assert.equal(call.opts.method,'POST');
+ assert.equal(call.opts.body.toString(),body);
+ assert.equal(call.opts.redirect,'error');
+ assert.equal(call.opts.headers['Content-Type'],'application/json');
+ const ts=call.opts.headers['X-Anri-Gateway-Timestamp'];
+ const nonce=call.opts.headers['X-Anri-Gateway-Nonce'];
+ const signature=call.opts.headers['X-Anri-Gateway-Signature'];
+ assert.match(ts,/^[0-9]{10,11}$/);
+ assert.match(nonce,/^[a-f0-9]{32}$/);
+ const canonical=Buffer.concat([
+  Buffer.from('POST\\n'),Buffer.from('/v1/kaspi/orders'),Buffer.from('\\n\\n'+ts+'\\n'+nonce+'\\n'),
+  Buffer.from(require('node:crypto').createHash('sha256').update(Buffer.from(body)).digest('hex'))
+ ]);
+ const expected=require('node:crypto').createHmac('sha256',secret).update(canonical).digest('hex');
+ assert.equal(signature,expected);
+ assert.equal(Object.keys(call.opts.headers).length,4);
+ assert.equal(r.headers.get('cache-control'),'no-store');
+});
+
+test('Kaspi checkout proxy refuses missing gateway secret even when the site gate is open',async t=>{
+ let calls=0;
+ const base=await site(t,{upstream:'https://anri-cloud.example.invalid',kaspiSalesEnabled:true,kaspiGatewaySecret:'',fetcher:async()=>{calls++;throw Error('must not call');}});
+ const r=await fetch(base+'/v1/kaspi/orders',{method:'POST',headers,body:'{}'});
+ assert.equal(r.status,503);
+ assert.equal(calls,0);
+});
+\ntest('upstream failures never expose error bodies, cookies or location',async t=>{
  for(const reply of [()=>new Response('private upstream data',{status:500,headers:{'Set-Cookie':'secret','Location':'https://other.invalid'}}),()=>new Response('x'.repeat(32769)),()=>{throw Error('secret');}]){
   const base=await site(t,{upstream:'https://issuer.example.invalid',fetcher:async()=>reply()});
   const r=await fetch(base+route,{method:'POST',headers,body:'{}'});assert.equal(r.status,502);assert.equal(r.headers.get('set-cookie'),null);assert.equal(r.headers.get('location'),null);assert.equal(await r.text(),'{"detail":"Order unavailable"}');
