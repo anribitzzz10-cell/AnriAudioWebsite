@@ -37,7 +37,11 @@ const messages = {
   }
 };
 const t = messages[lang] || messages.en;
-const enabled = API_ORIGIN === location.origin;
+// Static website calls the existing Cloud directly. No purchases are enabled
+// by this browser-side origin check: CHECKOUT_ENABLED must also be true.
+const enabled = API_ORIGIN === 'https://anri-cloud.onrender.com' &&
+  location.protocol === 'https:' &&
+  ['anriaudio.com', 'www.anriaudio.com', 'anriaudiowebsite.onrender.com'].includes(location.hostname);
 const storageKey = 'anri-private-order';
 let prepared = null;
 let generation = 0;
