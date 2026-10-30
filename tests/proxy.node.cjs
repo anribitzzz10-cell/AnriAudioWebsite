@@ -134,7 +134,7 @@ test('Kaspi checkout proxy signs the exact order body server-side',async t=>{
  assert.match(ts,/^[0-9]{10,11}$/);
  assert.match(nonce,/^[a-f0-9]{32}$/);
  const canonical=Buffer.concat([
-  Buffer.from('POST\\n'),Buffer.from('/v1/kaspi/orders'),Buffer.from('\\n\\n'+ts+'\\n'+nonce+'\\n'),
+  Buffer.from('POST\n'),Buffer.from('/v1/kaspi/orders'),Buffer.from('\n\n'+ts+'\n'+nonce+'\n'),
   Buffer.from(require('node:crypto').createHash('sha256').update(Buffer.from(body)).digest('hex'))
  ]);
  const expected=require('node:crypto').createHmac('sha256',secret).update(canonical).digest('hex');
