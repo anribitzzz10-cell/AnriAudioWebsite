@@ -32,6 +32,22 @@ function createServer({upstream=process.env.ANRI_COMMERCE_UPSTREAM, licenseUpstr
   return http.createServer(async(req,res)=>{
     try {
       const url=new URL(req.url,'http://site.invalid');
+      if(url.pathname==='/v1/kaspi/config'){
+        if(req.method!=='GET')return fail(res,405,'GET required');
+        if(url.search)return fail(res,400,'Query parameters forbidden');
+        if((req.headers.origin&&req.headers.origin!==official)||(req.headers['sec-fetch-site']&&req.headers['sec-fetch-site']!=='same-origin'))return fail(res,403,'Official site required');
+        if(!target)return fail(res,503,'Kaspi checkout is being prepared');
+        const controller=new AbortController();const timer=setTimeout(()=>controller.abort(),8000);
+        try{
+          const reply=await fetcher(target+url.pathname,{method:'GET',headers:{'Accept':'application/json'},redirect:'error',signal:controller.signal});
+          if(!reply.ok)return fail(res,503,'Kaspi checkout is being prepared');
+          const reader=reply.body.getReader();let bytes=0;const chunks=[];
+          for(;;){const {done,value}=await reader.read();if(done)break;bytes+=value.length;if(bytes>8192){await reader.cancel();throw Error('response');}chunks.push(Buffer.from(value));}
+          const value=JSON.parse(Buffer.concat(chunks).toString('utf8'));
+          res.writeHead(200,{...privateHeaders,'Content-Type':'application/json'});res.end(JSON.stringify(value));
+        }catch{fail(res,503,'Kaspi checkout is being prepared');}finally{clearTimeout(timer);}
+        return;
+      }
       if(url.pathname.startsWith('/v1/')) {
         const isLicenseApi=licenseApiPaths.has(url.pathname);
         if(!apiPaths.has(url.pathname)&&!isLicenseApi)return fail(res,404,'Unavailable');
