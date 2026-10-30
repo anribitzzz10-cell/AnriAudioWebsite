@@ -110,6 +110,29 @@ test('proxy denies alternate paths, origin, query, method and malformed body',as
  assert.equal(calls,0);
 });
 
+
+test('Kaspi readiness GET is same-origin, read-only and private',async t=>{
+ let call;
+ const base=await site(t,{upstream:'https://anri-cloud.example.invalid',fetcher:async(url,opts)=>{
+  call={url,opts};return new Response(JSON.stringify({currency:'KZT',amount_kzt:5000,payment_url:'https://pay.kaspi.kz/pay/zxqekc5w',manual_pos_verification:true}),{headers:{'Content-Type':'application/json'}});
+ }});
+ const r=await fetch(base+'/v1/kaspi/config',{method:'GET',headers});
+ assert.equal(r.status,200);
+ assert.equal(call.url,'https://anri-cloud.example.invalid/v1/kaspi/config');
+ assert.equal(call.opts.method,'GET');
+ assert.equal(r.headers.get('cache-control'),'no-store');
+ assert.equal(r.headers.get('referrer-policy'),'no-referrer');
+ assert.deepEqual(call.opts.headers,{'Accept':'application/json'});
+ for(const [url,opts,status] of [
+  ['/v1/kaspi/config?x=1',{method:'GET',headers},400],
+  ['/v1/kaspi/config',{method:'POST',headers,body:'{}'},405],
+  ['/v1/kaspi/config',{method:'GET',headers:{...headers,Origin:'https://attacker.invalid'}},403],
+  ['/v1/kaspi/config',{method:'GET',headers:{...headers,'Sec-Fetch-Site':'cross-site'}},403]
+ ]){
+  const denied=await fetch(base+url,opts);assert.equal(denied.status,status,url);
+ }
+});
+
 test('Kaspi checkout proxy signs the exact order body server-side',async t=>{
  let call;
  const secret='a'.repeat(64);
