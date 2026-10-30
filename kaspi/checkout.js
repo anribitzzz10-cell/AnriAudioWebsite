@@ -17,7 +17,7 @@ const copy = {
   support:'Поддержка ANRI AUDIO',
   amount:'К оплате: 5 000 ₸',
   instructions:'В Kaspi.kz проверь получателя ИП «Анрипрод», введи ровно 5 000 ₸ и вставь номер заказа в сообщение к платежу. Не оплачивай, если получатель или сумма отличаются.',
-  error:'Не удалось создать заказ. Проверь подключение и попробуй ещё раз. Оплата не инициирована.'
+  error:'Не удалось создать заказ. Проверь подключение и попробуй ещё раз. Оплата не инициирована.',\n  closed:'Kaspi Pay пока настраивается. Не оплачивай по ссылке напрямую — сначала нужно создать заказ ANRI.'
  },
  kk: {
   heading:'Kaspi Pay арқылы төлеу',
@@ -33,7 +33,7 @@ const copy = {
   support:'ANRI AUDIO қолдау қызметі',
   amount:'Төлем сомасы: 5 000 ₸',
   instructions:'Kaspi.kz ішінде алушы «Анрипрод» ЖК екенін тексеріп, дәл 5 000 ₸ енгізіп, тапсырыс нөмірін төлем хабарламасына қой. Алушы немесе сома сәйкес келмесе, төлем жасама.',
-  error:'Тапсырыс жасау мүмкін болмады. Байланысты тексеріп, қайта көр. Төлем басталған жоқ.'
+  error:'Тапсырыс жасау мүмкін болмады. Байланысты тексеріп, қайта көр. Төлем басталған жоқ.',\n  closed:'Kaspi Pay төлемі әлі бапталып жатыр. ANRI тапсырысын жасамай тұрып тікелей төлем жасамаңыз.'
  },
  en: {
   heading:'Pay with Kaspi Pay',
@@ -49,7 +49,7 @@ const copy = {
   support:'ANRI AUDIO support',
   amount:'Amount due: 5,000 KZT',
   instructions:'In Kaspi.kz, verify the recipient is IP Anriprod, enter exactly 5,000 KZT and paste the order ID into the payment message. Do not pay if the recipient or amount differs.',
-  error:'Could not create the order. Check your connection and try again. No payment was initiated.'
+  error:'Could not create the order. Check your connection and try again. No payment was initiated.',\n  closed:'Kaspi Pay checkout is still being configured. Do not pay directly from the link; create an ANRI order first.'
  }
 }[locale];
 for (const [id,key] of [['heading','heading'],['lead','lead'],['warning','warning'],['email-label','email'],['create','create'],['order-label','order'],['copy-order','copy'],['pay-link','pay'],['manual-note','note'],['support','support']]) $(id).textContent=copy[key];
@@ -68,6 +68,27 @@ function newIdempotency(email){
  try{sessionStorage.setItem(storedKey,JSON.stringify({key:idempotency,email}));}catch{}
 }
 let order=null;
+$('create').disabled=true;
+$('result').textContent=copy.closed;
+async function checkConfig(){
+ try{
+  const response=await fetch('/v1/kaspi/config',{
+   method:'GET',headers:{'Accept':'application/json'},
+   cache:'no-store',credentials:'omit',redirect:'error',referrerPolicy:'no-referrer'
+  });
+  if(!response.ok)throw Error('Kaspi checkout disabled');
+  const config=await response.json();
+  if(config.currency!=='KZT'||config.amount_kzt!==5000||
+     config.payment_url!=='https://pay.kaspi.kz/pay/zxqekc5w'||
+     config.manual_pos_verification!==true)throw Error('Unexpected Kaspi configuration');
+  $('create').disabled=false;
+  $('result').textContent='';
+ }catch{
+  $('create').disabled=true;
+  $('result').textContent=copy.closed;
+ }
+}
+void checkConfig();
 function showOrder(q){
  if(!q||!/^KSP-[A-F0-9]{32}$/.test(q.order_id)||q.amount_kzt!==5000||q.currency!=='KZT'||q.payment_url!=='https://pay.kaspi.kz/pay/zxqekc5w')throw Error('Invalid order response');
  order=q;
@@ -81,7 +102,7 @@ function showOrder(q){
 }
 $('order-form').addEventListener('submit',async e=>{
  e.preventDefault();
- if(!$('email').reportValidity())return;
+ if($('create').disabled||!$('email').reportValidity())return;
  $('create').disabled=true;
  $('result').textContent='';
  try{
