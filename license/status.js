@@ -1,10 +1,10 @@
 (() => {
   "use strict";
-  // The official site is static: POST directly to the existing ANRI Cloud.
-  const cloud = "https://anri-cloud.onrender.com";
-  const API = cloud + "/v1/license/check";
-  const RECOVERY_REQUEST_API = cloud + "/v1/license/recovery/request";
-  const RECOVERY_VERIFY_API = cloud + "/v1/license/recovery/verify";
+  // The official Railway site is a dynamic Node server; it proxies private
+  // license requests to ANRI Cloud over fixed same-origin POST routes.
+  const API = "/v1/license/check";
+  const RECOVERY_REQUEST_API = "/v1/license/recovery/request";
+  const RECOVERY_VERIFY_API = "/v1/license/recovery/verify";
   const messages = {
     en: {
       checking: "Checking license status…",
