@@ -2,9 +2,10 @@
 const http = require('node:http');
 const fs = require('node:fs/promises');
 const path = require('node:path');
+const crypto = require('node:crypto');
 const root = __dirname;
 const official = 'https://anriaudio.com';
-const apiPaths = new Set(['/v1/checkout/proeducation/create', '/v1/checkout/proeducation/claim', '/v1/checkout/proeducation/private-five-rub/create']);
+const apiPaths = new Set(['/v1/checkout/proeducation/create', '/v1/checkout/proeducation/claim', '/v1/checkout/proeducation/private-five-rub/create', '/v1/kaspi/orders']);
 const licenseApiPaths = new Set([
   '/v1/license/check',
   '/v1/license/recovery/request',
@@ -25,7 +26,7 @@ async function body(req) {
   for await (const chunk of req) {size+=chunk.length;if(size>4096)throw Error('size');chunks.push(chunk);}
   return Buffer.concat(chunks);
 }
-function createServer({upstream=process.env.ANRI_COMMERCE_UPSTREAM, licenseUpstream=process.env.ANRI_LICENSE_CHECK_UPSTREAM, salesEnabled=process.env.ANRI_SALES_ENABLED==='1', fetcher=fetch}={}) {
+function createServer({upstream=process.env.ANRI_COMMERCE_UPSTREAM, licenseUpstream=process.env.ANRI_LICENSE_CHECK_UPSTREAM, salesEnabled=process.env.ANRI_SALES_ENABLED==='1', kaspiSalesEnabled=process.env.ANRI_KASPI_SALES_ENABLED==='1', kaspiGatewaySecret=process.env.ANRI_KASPI_GATEWAY_HMAC_SECRET||'', fetcher=fetch}={}) {
   const target=upstreamOrigin(upstream);
   const licenseTarget=upstreamOrigin(licenseUpstream);
   return http.createServer(async(req,res)=>{
@@ -40,13 +41,26 @@ function createServer({upstream=process.env.ANRI_COMMERCE_UPSTREAM, licenseUpstr
         if(req.headers.origin!==official || (req.headers['sec-fetch-site'] && req.headers['sec-fetch-site']!=='same-origin'))return fail(res,403,'Official site required');
         if(!/^application\/json(?:\s*;|$)/i.test(req.headers['content-type']||''))return fail(res,415,'JSON required');
         const requestTarget=isLicenseApi?licenseTarget:target;
-        if(!requestTarget || (url.pathname.endsWith('/create')&&!salesEnabled))return fail(res,503,isLicenseApi?'License service unavailable':'Checkout is closed');
+        if(!requestTarget || (url.pathname.endsWith('/create')&&!salesEnabled) || (url.pathname==='/v1/kaspi/orders'&&!kaspiSalesEnabled))return fail(res,503,isLicenseApi?'License service unavailable':'Checkout is closed');
         let raw;
         try{raw=await body(req);JSON.parse(raw);}catch{return fail(res,400,'Invalid order request');}
         const controller=new AbortController();const timer=setTimeout(()=>controller.abort(),10000);
         try {
           // Fixed paths only. Never proxy merchant webhooks, admin, activation or arbitrary URLs.
-          const reply=await fetcher(requestTarget+url.pathname,{method:'POST',headers:{'Content-Type':'application/json'},body:raw,redirect:'error',signal:controller.signal});
+          const forwardHeaders={'Content-Type':'application/json'};
+          if(url.pathname==='/v1/kaspi/orders'){
+            if(typeof kaspiGatewaySecret!=='string'||kaspiGatewaySecret.length<32)return fail(res,503,'Checkout is closed');
+            const timestamp=Math.floor(Date.now()/1000).toString();
+            const nonce=crypto.randomBytes(16).toString('hex');
+            const bodyHash=crypto.createHash('sha256').update(raw).digest('hex');
+            const canonical=Buffer.concat([
+              Buffer.from('POST\\n'),Buffer.from(url.pathname),Buffer.from('\\n\\n'+timestamp+'\\n'+nonce+'\\n'),Buffer.from(bodyHash)
+            ]);
+            forwardHeaders['X-Anri-Gateway-Signature']=crypto.createHmac('sha256',kaspiGatewaySecret).update(canonical).digest('hex');
+            forwardHeaders['X-Anri-Gateway-Timestamp']=timestamp;
+            forwardHeaders['X-Anri-Gateway-Nonce']=nonce;
+          }
+          const reply=await fetcher(requestTarget+url.pathname,{method:'POST',headers:forwardHeaders,body:raw,redirect:'error',signal:controller.signal});
           if(!reply.ok)return fail(res,[400,403,404,409,422,429,503].includes(reply.status)?reply.status:502,'Order unavailable');
           const reader=reply.body.getReader();let bytes=0;const chunks=[];
           for(;;){const {done,value}=await reader.read();if(done)break;bytes+=value.length;if(bytes>32768){await reader.cancel();throw Error('response');}chunks.push(Buffer.from(value));}
@@ -71,7 +85,7 @@ function createServer({upstream=process.env.ANRI_COMMERCE_UPSTREAM, licenseUpstr
       let contents;
       try{contents=await fs.readFile(file);}catch{return fail(res,404,'Not found');}
       const headers={'Content-Type':mime[path.extname(file)],'X-Content-Type-Options':'nosniff'};
-      if(isCheckout||isLicensePage)Object.assign(headers,privateHeaders,{'Content-Security-Policy':csp});
+      if(isCheckout||isKaspi||isLicensePage)Object.assign(headers,privateHeaders,{'Content-Security-Policy':csp});
       res.writeHead(200,headers);res.end(req.method==='HEAD'?undefined:contents);
     } catch {if(!res.headersSent)fail(res,500,'Unavailable');else res.end();}
   });
