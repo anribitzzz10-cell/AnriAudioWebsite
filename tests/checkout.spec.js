@@ -28,13 +28,13 @@ test('Kaspi route is voluntary support only, never a license checkout', async ({
   await expect(page.locator('body')).toContainText('не выдаёт лицензию');
 });
 
-test('support page exposes Kaspi, Boosty and PayPal; ProEducation is clearly pending', async ({page}) => {
+test('support page exposes Kaspi, Boosty, PayPal and ProEducation', async ({page}) => {
   await page.goto(base+'/support-development/');
   await expect(page.locator('#kaspi')).toContainText('Voluntary support through Kaspi Pay');
   await expect(page.locator('#kaspi a[href="https://pay.kaspi.kz/pay/zxqekc5w"]')).toBeVisible();
   await expect(page.locator('a[href="https://boosty.to/anriproduct"]')).toBeVisible();
   await expect(page.locator('a[href="https://paypal.me/anribeats"]')).toBeVisible();
-  await expect(page.locator('#proeducation')).toContainText('A separate voluntary-support payment link is being prepared');
+  await expect(page.locator('#proeducation a.pay-link')).toHaveAttribute('href', 'https://proeducation.kz/akaILk/');
 });
 
 for (const path of ['/', '/ru/', '/kk/']) {
