@@ -6,18 +6,20 @@ const {createServer,upstreamOrigin}=require('../server.cjs');
 const route='/v1/checkout/proeducation/claim';
 const headers={'Content-Type':'application/json',Origin:'https://anriaudio.com','Sec-Fetch-Site':'same-origin'};
 async function site(t,options={}){const s=createServer(options);await new Promise(r=>s.listen(0,'127.0.0.1',r));t.after(()=>new Promise(r=>s.close(r)));return 'http://127.0.0.1:'+s.address().port;}
-test('official checkout pages are private and the ProEducation client gate is configured',async t=>{
+test('legacy checkout pages are private and do not expose order forms',async t=>{
  const base=await site(t);
  for(const p of ['/checkout/','/ru/checkout/','/kk/checkout/','/kaspi/','/checkout/config.js']){
   const r=await fetch(base+p);assert.equal(r.status,200);assert.equal(r.headers.get('cache-control'),'no-store');assert.equal(r.headers.get('referrer-policy'),'no-referrer');assert.ok(r.headers.get('content-security-policy').includes("frame-ancestors 'none'"));
-  if(p.endsWith('.js'))assert.match(await r.text(),/CHECKOUT_ENABLED = true/);
+  const html=await r.text();
+  if(p.endsWith('.js')){assert.match(html,/CHECKOUT_ENABLED = false/);assert.match(html,/API_ORIGIN = ''/);}
+  else{assert.doesNotMatch(html,/<form\b|order\.js|checkout\.js/i);assert.match(html,/FREE|бесплат|тегін/i);}
  }
  for(const p of [route,'/v1/checkout/proeducation/create']){const r=await fetch(base+p,{method:'POST',headers,body:'{}'});assert.equal(r.status,503);}
 });
 
-test('localized license status pages are public, no-store and linked from checkout',async t=>{
+test('legacy license status pages remain available but are not linked from the free site',async t=>{
  const base=await site(t);
- for(const p of ['/license/','/ru/license/','/kk/license/','/license/status.js','/license/status.css','/ru/checkout/']){
+ for(const p of ['/license/','/ru/license/','/kk/license/','/license/status.js','/license/status.css']){
   const r=await fetch(base+p);assert.equal(r.status,200,p);
   assert.equal(r.headers.get('cache-control'),'no-store',p);
   assert.equal(r.headers.get('referrer-policy'),'no-referrer',p);
@@ -29,11 +31,13 @@ test('localized license status pages are public, no-store and linked from checko
    assert.ok(html.includes('type="email" required'),p);
   }
  }
- for(const [p,link] of [['/','href="/license/">Check license'],['/ru/','href="/ru/license/">Проверить лицензию'],['/kk/','href="/kk/license/">Лицензияны тексеру']]){
-  const html=await (await fetch(base+p)).text();assert.ok(html.includes(link),p);
+ for(const [path,forbidden] of [['/','href="/license/"'],['/ru/','href="/ru/license/"'],['/kk/','href="/kk/license/"']]){
+  const html=await (await fetch(base+path)).text();assert.ok(!html.includes(forbidden),path);
+  assert.match(html,/FREE 1\.0\.0|бесплатный выпуск|тегін шығарылым/i,path);
  }
- const ru=await (await fetch(base+'/ru/checkout/')).text();
- assert.ok(ru.includes('href="/ru/license/">Проверить статус лицензии'));
+ const ruCheckout=await (await fetch(base+'/ru/checkout/')).text();
+ assert.ok(!ruCheckout.includes('href="/ru/license/"'));
+ assert.ok(ruCheckout.includes('ANRI AUDIO MIDI FREE 1.0.0'));
 });
 
 test('license check uses only its dedicated upstream; commerce remains closed',async t=>{
@@ -105,7 +109,8 @@ test('proxy denies alternate paths, origin, query, method and malformed body',as
   [route,{method:'POST',headers:{...headers,'Content-Type':'text/plain'},body:'{}'},415],
   [route,{method:'POST',headers,body:'not-json'},400],
   [route,{method:'POST',headers,body:'x'.repeat(4097)},400],
-  ['/v1/checkout/proeducation/create',{method:'POST',headers,body:'{}'},503],\n  ['/v1/kaspi/orders',{method:'POST',headers,body:'{}'},503]
+  ['/v1/checkout/proeducation/create',{method:'POST',headers,body:'{}'},503],
+  ['/v1/kaspi/orders',{method:'POST',headers,body:'{}'},503]
  ]){const r=await fetch(base+p,opts);assert.equal(r.status,status,p);assert.equal(r.headers.get('cache-control'),'no-store');}
  assert.equal(calls,0);
 });
@@ -173,12 +178,28 @@ test('Kaspi checkout proxy refuses missing gateway secret even when the site gat
  assert.equal(r.status,503);
  assert.equal(calls,0);
 });
-\ntest('upstream failures never expose error bodies, cookies or location',async t=>{
+test('upstream failures never expose error bodies, cookies or location',async t=>{
  for(const reply of [()=>new Response('private upstream data',{status:500,headers:{'Set-Cookie':'secret','Location':'https://other.invalid'}}),()=>new Response('x'.repeat(32769)),()=>{throw Error('secret');}]){
   const base=await site(t,{upstream:'https://issuer.example.invalid',fetcher:async()=>reply()});
   const r=await fetch(base+route,{method:'POST',headers,body:'{}'});assert.equal(r.status,502);assert.equal(r.headers.get('set-cookie'),null);assert.equal(r.headers.get('location'),null);assert.equal(await r.text(),'{"detail":"Order unavailable"}');
  }
 });
+test('free release support page lists active methods and keeps ProEducation pending',async t=>{
+ const base=await site(t);
+ for(const p of ['/support-development/','/ru/support-development/','/kk/support-development/']){
+  const r=await fetch(base+p);assert.equal(r.status,200,p);
+  const html=await r.text();
+  assert.ok(!html.includes('https://pay.kaspi.kz/pay/zxqekc5w'),p);
+  assert.match(html,/Kaspi Pay/i,p);
+  assert.match(html,/coming soon|появится позже|кейін қосылады/i,p);
+  assert.ok(html.includes('https://boosty.to/anriproduct'),p);
+  assert.ok(html.includes('https://paypal.me/anribeats'),p);
+  assert.match(html,/ProEducation/i,p);
+  assert.match(html,/coming soon|появится позже|дайындалып жатыр/i,p);
+  assert.match(html,/ANRI AUDIO MIDI FREE/i,p);
+ }
+});
+
 test('source files and traversal stay private; existing homepage bytes are preserved',async t=>{
  const base=await site(t);
  for(const p of ['/server.cjs','/Dockerfile','/package.json','/.git/config','/tests/checkout.spec.js','/%2e%2e%5cserver.cjs'])assert.equal((await fetch(base+p)).status,404,p);
