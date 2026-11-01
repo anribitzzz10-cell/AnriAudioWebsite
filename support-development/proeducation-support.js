@@ -8,6 +8,10 @@ const PROEDUCATION_VOLUNTARY_SUPPORT = Object.freeze({
   qrUrl: "https://proeducation.kz/alaILl/"
 });
 
+// Prodamus documents customer_extra as the field for additional payment information.
+// Support on already-generated short links is not guaranteed; keep the original link and QR available.
+const PROEDUCATION_PAYMENT_NOTE = "Добровольная поддержка разработки Anri Audio MIDI. Чтобы выбрать свою сумму, нажмите «Очистить», затем введите желаемую сумму в поле «Сумма к оплате». Поддержка необязательна и не является покупкой лицензии.";
+
 (() => {
   "use strict";
   const config = PROEDUCATION_VOLUNTARY_SUPPORT;
@@ -78,7 +82,9 @@ const PROEDUCATION_VOLUNTARY_SUPPORT = Object.freeze({
   row.className = "payment-row";
   const anchor = document.createElement("a");
   anchor.className = "pay-link";
-  anchor.href = target.href;
+  const paymentLink = new URL(target.href);
+  paymentLink.searchParams.set("customer_extra", PROEDUCATION_PAYMENT_NOTE);
+  anchor.href = paymentLink.href;
   anchor.target = "_blank";
   anchor.rel = "noopener noreferrer";
   anchor.textContent = t.action;
@@ -91,7 +97,11 @@ const PROEDUCATION_VOLUNTARY_SUPPORT = Object.freeze({
   qrLabel.className = "proeducation-qr-label";
   qrLabel.textContent = t.qrLabel;
   const qrLink = document.createElement("a");
-  qrLink.href = qrTarget.href;
+  // Clicking the QR image from this page uses the same optional note.
+  // Scanning the QR code itself still follows the provider-issued original URL.
+  const qrPaymentLink = new URL(qrTarget.href);
+  qrPaymentLink.searchParams.set("customer_extra", PROEDUCATION_PAYMENT_NOTE);
+  qrLink.href = qrPaymentLink.href;
   qrLink.target = "_blank";
   qrLink.rel = "noopener noreferrer";
   qrLink.setAttribute("aria-label", t.qrAlt);
