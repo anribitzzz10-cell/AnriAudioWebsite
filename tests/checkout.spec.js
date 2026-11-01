@@ -43,7 +43,7 @@ for (const path of ['/', '/ru/', '/kk/']) {
     await expect(page).toHaveTitle(/ANRI AUDIO MIDI/);
     await expect(page.locator('body')).not.toContainText('ANRI AUDIO MIDI FREE');
     await expect(page.locator('body')).not.toContainText('1.0.0');
-    await expect(page.locator('a[href="https://pay.kaspi.kz/pay/zxqekc5w"]')).toBeVisible();
+    await expect(page.locator('a[href="https://pay.kaspi.kz/pay/zxqekc5w"]').first()).toBeVisible();
   });
 }
 for (const path of ['/support-development/','/ru/support-development/','/kk/support-development/']) {
@@ -181,5 +181,25 @@ for (const route of ['/ru/contacts/','/kk/contacts/']) {
     await expect(page.locator('main')).not.toContainText(/5\s?000\s?KZT|коммерческий выпуск|Коммерциялық нұсқа/i);
     await expect(page.locator('main a[href="../support-development/"]').first()).toBeVisible();
     await expect(page.locator('main')).toContainText(route.startsWith('/ru/') ? 'Бесплатно' : 'Тегін');
+  });
+}
+
+for (const [path, label, support] of [
+  ['/', 'Donate', '/support-development/'],
+  ['/ru/', 'Донат', '/ru/support-development/'],
+  ['/kk/', 'Қолдау', '/kk/support-development/']
+]) {
+  test('amber Donate CTA and compact platform icons '+path, async ({page}) => {
+    await page.goto(base+path);
+    const donate = page.locator('.cta-row a.btn-donate');
+    await expect(donate).toContainText(label);
+    await expect(donate).toHaveAttribute('href', support);
+    await expect(donate).toHaveCSS('border-left-color', 'rgb(216, 164, 92)');
+    await expect(donate).toHaveCSS('color', 'rgb(255, 224, 164)');
+    await expect(page.locator('nav.anri-social-links a')).toHaveCount(5);
+    await expect(page.locator('nav.anri-social-links a[aria-label="Telegram @anriproduct"]'))
+      .toHaveAttribute('href', 'https://t.me/anriproduct');
+    await expect(page.locator('a[href^="mailto:anribitzzz10@gmail.com"]')).toHaveCount(0);
+    await expect(page.locator('link[href="/assets/anri-header-socials.css"]')).toHaveCount(1);
   });
 }

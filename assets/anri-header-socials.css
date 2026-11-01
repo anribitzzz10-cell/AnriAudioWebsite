@@ -1,0 +1,13 @@
+/* Icon-only header links and amber Donate CTA, derived from #download .notice. */
+.anri-social-links{display:flex;gap:5px;align-items:center;justify-content:center;flex:0 0 auto;margin-left:auto}
+.anri-social-links a{display:inline-flex;justify-content:center;align-items:center;flex:0 0 auto;width:32px;height:32px;border-radius:10px;background:#15151b;border:1px solid rgba(215,218,232,.15);color:#d4d3dc;transition:background-color .15s,border-color .15s,color .15s}
+.anri-social-links a:hover{color:#ffe0a4;background:#24232b;border-color:rgba(220,175,102,.48)}
+.anri-social-links a:focus-visible{outline:2px solid #ffe0a4;outline-offset:3px}
+.anri-social-links svg{width:18px;height:18px;display:block}
+.anri-lang-switch{margin-left:0}
+.cta-row .btn.btn-donate{background:linear-gradient(125deg,#161513,#101116);border:1px solid rgba(220,175,102,.52);border-left:3px solid #d8a45c;color:#ffe0a4;gap:8px;transition:background .15s,border-color .15s,box-shadow .15s}
+.cta-row .btn.btn-donate:hover{background:linear-gradient(125deg,#292117,#17171b);border-color:#d8a45c;box-shadow:0 0 0 1px rgba(216,164,92,.12)}
+.cta-row .btn.btn-donate:focus-visible{outline:2px solid #ffe0a4;outline-offset:3px}
+@media(max-width:1120px){.nav{flex-wrap:wrap;row-gap:9px;padding-top:9px;padding-bottom:9px}.navlinks{order:3;width:100%;justify-content:center}.anri-social-links{order:1;margin-left:auto}.anri-lang-switch{order:2;margin-left:0}}
+@media(max-width:700px){.navlinks{display:none}.brand{order:0}.anri-lang-switch{order:1;margin-left:auto}.anri-social-links{order:2;margin-left:0}.nav{gap:8px}.anri-social-links a{width:31px;height:31px}}
+@media(max-width:510px){.anri-social-links{order:3;width:100%;justify-content:center}}
