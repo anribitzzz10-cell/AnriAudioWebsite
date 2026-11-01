@@ -178,7 +178,7 @@ test('Kaspi checkout proxy refuses missing gateway secret even when the site gat
  assert.equal(r.status,503);
  assert.equal(calls,0);
 });
-\ntest('upstream failures never expose error bodies, cookies or location',async t=>{
+test('upstream failures never expose error bodies, cookies or location',async t=>{
  for(const reply of [()=>new Response('private upstream data',{status:500,headers:{'Set-Cookie':'secret','Location':'https://other.invalid'}}),()=>new Response('x'.repeat(32769)),()=>{throw Error('secret');}]){
   const base=await site(t,{upstream:'https://issuer.example.invalid',fetcher:async()=>reply()});
   const r=await fetch(base+route,{method:'POST',headers,body:'{}'});assert.equal(r.status,502);assert.equal(r.headers.get('set-cookie'),null);assert.equal(r.headers.get('location'),null);assert.equal(await r.text(),'{"detail":"Order unavailable"}');
