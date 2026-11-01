@@ -34,7 +34,7 @@ test('support page exposes Kaspi, Boosty, PayPal and ProEducation', async ({page
   await expect(page.locator('#kaspi a[href="https://pay.kaspi.kz/pay/zxqekc5w"]')).toBeVisible();
   await expect(page.locator('a[href="https://boosty.to/anriproduct"]')).toBeVisible();
   await expect(page.locator('a[href="https://paypal.me/anribeats"]')).toBeVisible();
-  await expect(page.locator('#proeducation a.pay-link')).toHaveAttribute('href', 'https://proeducation.kz/akaILk/');
+  await expect(page.locator('#proeducation a.pay-link')).toHaveAttribute('href', /https:\/\/proeducation\.kz\/akaILk\/\?customer_extra=/);
 });
 
 for (const path of ['/', '/ru/', '/kk/']) {
@@ -78,7 +78,7 @@ test('ProEducation support activates only with an approved provider link', async
     await route.fulfill({response, body});
   });
   await page.goto(base+'/ru/support-development/');
-  await expect(page.locator('#proeducation a.pay-link')).toHaveAttribute('href', 'https://mp.e.proeducation.kz/u/CI_TEST_ONLY');
+  await expect(page.locator('#proeducation a.pay-link')).toHaveAttribute('href', /https:\/\/mp\.e\.proeducation\.kz\/u\/CI_TEST_ONLY\?customer_extra=/);
   await expect(page.locator('#proeducation .status')).toHaveCount(0);
   await expect(page.locator('#proeducation')).toContainText('не выдаёт лицензию ANRI AUDIO MIDI');
 });
@@ -99,7 +99,7 @@ test('ProEducation support refuses an untrusted destination', async ({page}) => 
 for (const path of ['/support-development/', '/ru/support-development/', '/kk/support-development/']) {
   test('current ProEducation payment link is visible in '+path, async ({page}) => {
     await page.goto(base+path);
-    await expect(page.locator('#proeducation a.pay-link')).toHaveAttribute('href', 'https://proeducation.kz/akaILk/');
+    await expect(page.locator('#proeducation a.pay-link')).toHaveAttribute('href', /https:\/\/proeducation\.kz\/akaILk\/\?customer_extra=/);
     await expect(page.locator('#proeducation .status')).toHaveCount(0);
     await expect(page.locator('#proeducation h2')).toContainText(path.startsWith('/ru') ? 'Россия (РФ)' : path.startsWith('/kk') ? 'Ресей (РФ)' : 'Russia (RF)');
     await expect(page.locator('#proeducation .proeducation-qr img')).toHaveAttribute('src', '/support-development/proeducation-support-qr.svg');
@@ -107,6 +107,20 @@ for (const path of ['/support-development/', '/ru/support-development/', '/kk/su
     // Visibility alone does not guarantee the SVG actually loaded in the browser.
     await expect(page.locator('#proeducation .proeducation-qr img')).toHaveJSProperty('complete', true);
     await expect.poll(async () => page.locator('#proeducation .proeducation-qr img').evaluate(img => img.naturalWidth)).toBeGreaterThan(0);
-    await expect(page.locator('#proeducation .proeducation-qr a')).toHaveAttribute('href', 'https://proeducation.kz/alaILl/');
+    await expect(page.locator('#proeducation .proeducation-qr a')).toHaveAttribute('href', /https:\/\/proeducation\.kz\/alaILl\/\?customer_extra=/);
   });
 }
+
+test('ProEducation link carries voluntary-support guidance in customer_extra', async ({page}) => {
+  await page.goto(base+'/ru/support-development/');
+  for (const selector of ['#proeducation a.pay-link','#proeducation .proeducation-qr a']) {
+    const href = await page.locator(selector).getAttribute('href');
+    const u = new URL(href);
+    expect(u.hostname).toBe('proeducation.kz');
+    const value = u.searchParams.get('customer_extra');
+    expect(value).toContain('Добровольная поддержка разработки Anri Audio MIDI');
+    expect(value).toContain('Очистить');
+    expect(value).toContain('Сумма к оплате');
+    expect(value).toContain('не является покупкой лицензии');
+  }
+});
