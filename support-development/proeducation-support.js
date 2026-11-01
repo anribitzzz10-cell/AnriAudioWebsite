@@ -3,8 +3,8 @@
 // Only use a provider-approved, separately generated GENERAL link for optional support.
 // URL must be independently inspected before publishing. No secrets belong here.
 const PROEDUCATION_VOLUNTARY_SUPPORT = Object.freeze({
-  approved: false,
-  url: ""
+  approved: true,
+  url: "https://proeducation.kz/akaILk/"
 });
 
 (() => {
@@ -19,7 +19,7 @@ const PROEDUCATION_VOLUNTARY_SUPPORT = Object.freeze({
     return;
   }
 
-  const knownHosts = new Set(["anriprod.proeducation.kz", "mp.e.proeducation.kz"]);
+  const knownHosts = new Set(["anriprod.proeducation.kz", "mp.e.proeducation.kz", "proeducation.kz"]);
   if (target.protocol !== "https:" || !knownHosts.has(target.hostname)
       || target.username || target.password || target.hash
       || (target.pathname === "/" && !target.search)) return;
