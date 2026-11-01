@@ -80,7 +80,7 @@ test('ProEducation support activates only with an approved provider link', async
   await page.goto(base+'/ru/support-development/');
   await expect(page.locator('#proeducation a.pay-link')).toHaveAttribute('href', 'https://mp.e.proeducation.kz/u/CI_TEST_ONLY');
   await expect(page.locator('#proeducation .status')).toHaveCount(0);
-  await expect(page.locator('#proeducation')).toContainText('лицензии не предусмотрены');
+  await expect(page.locator('#proeducation')).toContainText('не выдаёт лицензию ANRI AUDIO MIDI');
 });
 
 test('ProEducation support refuses an untrusted destination', async ({page}) => {
