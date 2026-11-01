@@ -15,7 +15,7 @@ for (const [path, heading, downloadHref] of checkoutPages) {
     await expect(page.locator('script[src*="order.js"]')).toHaveCount(0);
     await expect(page.locator('a[href="'+downloadHref+'"]')).toBeVisible();
     await expect(page.locator('body')).toContainText(/FREE 1\.0\.0|бесплатен|тегін/i);
-    await expect(page).toHaveURL(base+path);
+    await expect(page).toHaveURL(base+path+'?order=untrusted&success=true');
   });
 }
 
