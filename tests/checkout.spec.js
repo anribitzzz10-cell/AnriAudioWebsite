@@ -124,3 +124,33 @@ test('ProEducation link carries voluntary-support guidance in customer_extra', a
     expect(value).toContain('не является покупкой лицензии');
   }
 });
+
+for (const route of ['/', '/ru/', '/kk/']) {
+  test('product and info panels preserve scoped contrast in '+route, async ({page}) => {
+    await page.goto(base+route);
+    await expect(page.locator('link[rel="stylesheet"][href="/assets/anri-product-info-panels.css"]')).toHaveCount(1);
+    await expect(page.locator('#price .anri-english-support-box')).toHaveCSS('border-top-color', 'rgba(239, 74, 101, 0.32)');
+    await expect(page.locator('#download .anri-english-support-box')).toHaveCSS('border-top-color', 'rgba(239, 74, 101, 0.3)');
+    await expect(page.locator('#compatibility .anri-english-support-box')).toHaveCSS('border-top-color', 'rgba(210, 219, 235, 0.18)');
+    await expect(page.locator('#support .anri-english-support-box')).toHaveCSS('border-top-color', 'rgba(210, 219, 235, 0.18)');
+    await expect(page.locator('#seller .anri-english-support-box')).toHaveCSS('border-top-color', 'rgba(210, 219, 235, 0.18)');
+    await expect(page.locator('#support-development .anri-english-support-box')).toHaveCSS('border-top-color', 'rgba(210, 219, 235, 0.2)');
+    await expect(page.locator('#download .notice')).toHaveCSS('border-left-color', 'rgb(216, 164, 92)');
+    await expect(page.locator('#download .notice')).toHaveCSS('border-left-width', '3px');
+    await expect(page.locator('#price .grid .box').first()).toHaveCSS('border-top-color', 'rgba(219, 224, 237, 0.15)');
+    // Product showcase and FAQ retain their original styling.
+    await expect(page.locator('.anri-artbox')).toHaveCSS('border-top-color', 'rgba(237, 31, 61, 0.25)');
+    await expect(page.locator('#faq .box').first()).toHaveCSS('border-top-color', 'rgba(255, 255, 255, 0.075)');
+  });
+}
+
+test('new scoped stylesheet is delivered publicly as CSS', async ({page, request}) => {
+  const response = await request.get(base+'/assets/anri-product-info-panels.css');
+  expect(response.status()).toBe(200);
+  expect(response.headers()['content-type']).toMatch(/text\/css/);
+  const css = await response.text();
+  expect(css).toContain('#price .anri-english-support-box');
+  expect(css).toContain('#download .notice');
+  expect(css).not.toContain('.anri-artbox{');
+  expect(css).not.toContain('#faq .box{');
+});
