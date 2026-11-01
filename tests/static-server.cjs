@@ -1,7 +1,7 @@
 // Local CI server: no external traffic and no Python runtime.
 const http=require('node:http'), fs=require('node:fs'), path=require('node:path');
 const root=path.resolve(__dirname,'..');
-const mime={'.html':'text/html','.js':'text/javascript','.css':'text/css'};
+const mime={'.html':'text/html','.js':'text/javascript','.css':'text/css','.svg':'image/svg+xml'};
 http.createServer((req,res)=>{
  let file;
  try{file=path.resolve(root,'.'+decodeURIComponent(new URL(req.url,'http://localhost').pathname));}
