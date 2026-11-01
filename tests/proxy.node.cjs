@@ -189,7 +189,9 @@ test('free release support page lists active methods and keeps ProEducation pend
  for(const p of ['/support-development/','/ru/support-development/','/kk/support-development/']){
   const r=await fetch(base+p);assert.equal(r.status,200,p);
   const html=await r.text();
-  assert.ok(!html.includes('https://pay.kaspi.kz/pay/zxqekc5w'),p);\n  assert.match(html,/Kaspi Pay/i,p);\n  assert.match(html,/coming soon|появится позже|кейін қосылады/i,p);
+  assert.ok(!html.includes('https://pay.kaspi.kz/pay/zxqekc5w'),p);
+  assert.match(html,/Kaspi Pay/i,p);
+  assert.match(html,/coming soon|появится позже|кейін қосылады/i,p);
   assert.ok(html.includes('https://boosty.to/anriproduct'),p);
   assert.ok(html.includes('https://paypal.me/anribeats'),p);
   assert.match(html,/ProEducation/i,p);
