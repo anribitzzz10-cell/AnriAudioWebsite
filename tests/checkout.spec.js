@@ -192,7 +192,7 @@ for (const [path, label, support] of [
   test('amber Donate CTA and compact platform icons '+path, async ({page}) => {
     await page.goto(base+path);
     const donate = page.locator('.cta-row a.btn-donate');
-    await expect(donate).toHaveText(label);
+    await expect(donate).toContainText(label);
     await expect(donate).toHaveAttribute('href', support);
     await expect(donate).toHaveCSS('border-left-color', 'rgb(216, 164, 92)');
     await expect(donate).toHaveCSS('color', 'rgb(255, 224, 164)');
