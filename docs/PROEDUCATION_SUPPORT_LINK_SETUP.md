@@ -3,7 +3,7 @@
 **Product name:** Anri Audio MIDI
 **Purpose:** Optional support of independent development. This is not a purchase of the plugin, a perpetual FULL license, or an upgrade.
 **Merchant cabinet:** https://anriprod.proeducation.kz/
-**Current link supplied by the merchant:** `https://proeducation.kz/akaILk/` (user confirmed the text link and QR link are both valid; they may change when a new payment QR/link is generated). The website currently publishes the text link. The QR image is not embedded as a static asset because it may be regenerated and become stale.
+**Current link supplied by the merchant:** `https://proeducation.kz/akaILk/` (user confirmed the text link and QR link are both valid; they may change when a new payment QR/link is generated). The website publishes the text link and embeds the supplied QR code as `support-development/proeducation-support-qr.svg`. The QR code destination is `https://proeducation.kz/alaILl/`. Both URLs are kept separately because the provider may regenerate them independently.
 
 ## Merchant link and future refreshes
 
@@ -21,11 +21,12 @@ The three localized support pages load `/support-development/proeducation-suppor
 ```js
 const PROEDUCATION_VOLUNTARY_SUPPORT = Object.freeze({
   approved: true,
-  url: "https://proeducation.kz/akaILk/"
+  url: "https://proeducation.kz/akaILk/",
+  qrUrl: "https://proeducation.kz/alaILl/"
 });
 ```
 
-The current user-supplied HTTPS link is stored in one place in `support-development/proeducation-support.js`, with `approved: true`. The script allows the provider's `proeducation.kz` host as well as the existing merchant hosts. When the merchant generates a new link/QR, replace only the `url` value with the newly supplied text URL, re-run the locale tests, and publish through a reviewed PR. Never put API or signing secrets in frontend files.
+The current text URL and QR destination are stored separately in `support-development/proeducation-support.js`, with `approved: true`. The QR itself is a vector asset at `support-development/proeducation-support-qr.svg`. The support card identifies ProEducation as a Russia (RF) option in English, Russian and Kazakh. When the merchant generates new links/QR, replace both URL values and the QR asset together, re-run the locale tests, and publish through a reviewed PR. Never put API or signing secrets in frontend files.
 
 If the activation gate is switched off, the ProEducation card returns to **coming soon** and no payment button is inserted. The current activation adds only a link to the provider page; it does not enable website checkout, a payments API, or license issuance.
 
