@@ -12,7 +12,7 @@ test('legacy checkout pages are private and do not expose order forms',async t=>
   const r=await fetch(base+p);assert.equal(r.status,200);assert.equal(r.headers.get('cache-control'),'no-store');assert.equal(r.headers.get('referrer-policy'),'no-referrer');assert.ok(r.headers.get('content-security-policy').includes("frame-ancestors 'none'"));
   const html=await r.text();
   if(p.endsWith('.js')){assert.match(html,/CHECKOUT_ENABLED = false/);assert.match(html,/API_ORIGIN = ''/);}
-  else{assert.doesNotMatch(html,/<form\\b|order\\.js|checkout\\.js/i);assert.match(html,/FREE|бесплат|тегін/i);}
+  else{assert.doesNotMatch(html,/<form\b|order\.js|checkout\.js/i);assert.match(html,/FREE|бесплат|тегін/i);}
  }
  for(const p of [route,'/v1/checkout/proeducation/create']){const r=await fetch(base+p,{method:'POST',headers,body:'{}'});assert.equal(r.status,503);}
 });
@@ -33,7 +33,7 @@ test('legacy license status pages remain available but are not linked from the f
  }
  for(const [path,forbidden] of [['/','href="/license/"'],['/ru/','href="/ru/license/"'],['/kk/','href="/kk/license/"']]){
   const html=await (await fetch(base+path)).text();assert.ok(!html.includes(forbidden),path);
-  assert.match(html,/FREE 1\\.0\\.0|бесплатный выпуск|тегін шығарылым/i,path);
+  assert.match(html,/FREE 1\.0\.0|бесплатный выпуск|тегін шығарылым/i,path);
  }
  const ruCheckout=await (await fetch(base+'/ru/checkout/')).text();
  assert.ok(!ruCheckout.includes('href="/ru/license/"'));
@@ -109,7 +109,8 @@ test('proxy denies alternate paths, origin, query, method and malformed body',as
   [route,{method:'POST',headers:{...headers,'Content-Type':'text/plain'},body:'{}'},415],
   [route,{method:'POST',headers,body:'not-json'},400],
   [route,{method:'POST',headers,body:'x'.repeat(4097)},400],
-  ['/v1/checkout/proeducation/create',{method:'POST',headers,body:'{}'},503],\n  ['/v1/kaspi/orders',{method:'POST',headers,body:'{}'},503]
+  ['/v1/checkout/proeducation/create',{method:'POST',headers,body:'{}'},503],
+  ['/v1/kaspi/orders',{method:'POST',headers,body:'{}'},503]
  ]){const r=await fetch(base+p,opts);assert.equal(r.status,status,p);assert.equal(r.headers.get('cache-control'),'no-store');}
  assert.equal(calls,0);
 });
