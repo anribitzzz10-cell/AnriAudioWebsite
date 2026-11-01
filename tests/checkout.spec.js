@@ -101,5 +101,9 @@ for (const path of ['/support-development/', '/ru/support-development/', '/kk/su
     await page.goto(base+path);
     await expect(page.locator('#proeducation a.pay-link')).toHaveAttribute('href', 'https://proeducation.kz/akaILk/');
     await expect(page.locator('#proeducation .status')).toHaveCount(0);
+    await expect(page.locator('#proeducation h2')).toContainText(path.startsWith('/ru') ? 'Россия (РФ)' : path.startsWith('/kk') ? 'Ресей (РФ)' : 'Russia (RF)');
+    await expect(page.locator('#proeducation .proeducation-qr img')).toHaveAttribute('src', '/support-development/proeducation-support-qr.svg');
+    await expect(page.locator('#proeducation .proeducation-qr img')).toBeVisible();
+    await expect(page.locator('#proeducation .proeducation-qr a')).toHaveAttribute('href', 'https://proeducation.kz/alaILl/');
   });
 }
