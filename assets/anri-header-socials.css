@@ -23,6 +23,29 @@
   .anri-header-icons .anri-social-icon{width:32px;height:32px;min-width:32px}
 }
 
+/* Features CTA: soft blue halo, matching the Donation glow's intensity. */
+.cta-row .btn-features-glow{
+  position:relative;
+  color:#eef3ff;
+  border:1px solid rgba(104,151,239,.67);
+  background:linear-gradient(180deg,rgba(23,29,46,.98),rgba(19,20,31,.99));
+  box-shadow:inset 0 0 0 1px rgba(160,193,255,.07),0 0 12px rgba(83,132,237,.14),0 0 24px rgba(83,132,237,.07);
+  transition:border-color .18s ease,background .18s ease,box-shadow .18s ease,color .18s ease;
+}
+.cta-row .btn-features-glow:hover{
+  color:#fff;
+  border-color:rgba(135,184,255,.98);
+  background:linear-gradient(180deg,rgba(28,38,61,.99),rgba(20,25,43,.99));
+  box-shadow:inset 0 0 0 1px rgba(160,193,255,.12),0 0 16px rgba(93,150,255,.24),0 0 32px rgba(93,150,255,.12);
+}
+.cta-row .btn-features-glow:focus-visible{
+  color:#fff;
+  border-color:#a1c5ff;
+  outline:2px solid #bbd5ff;
+  outline-offset:3px;
+  box-shadow:0 0 18px rgba(93,150,255,.24);
+}
+
 /* Donation CTA: warm restrained border glow, matching the amber notice.
    Download and Features keep their existing styles. */
 .cta-row .btn-donate-glow{
@@ -47,5 +70,5 @@
   box-shadow:0 0 18px rgba(232,176,88,.21);
 }
 @media(prefers-reduced-motion:reduce){
-  .cta-row .btn-donate-glow{transition:none}
+  .cta-row .btn-donate-glow,.cta-row .btn-features-glow{transition:none}
 }

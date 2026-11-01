@@ -209,6 +209,13 @@ for (const [route, donationHref, donationName] of pagesWithIconHeaders) {
     expect(shadow).toContain('rgba(216, 164, 92, 0.13)');
     await expect(page.locator('.cta-row a[href="#download"]')).not.toHaveClass(/btn-donate-glow/);
     await expect(page.locator('.cta-row a[href="#functions"]')).not.toHaveClass(/btn-donate-glow/);
+    const features = page.locator('.cta-row a[href="#functions"]');
+    await expect(features).toHaveClass(/btn-features-glow/);
+    await expect(features).toHaveCSS('border-top-color', 'rgba(104, 151, 239, 0.67)');
+    const featuresShadow = await features.evaluate(element => getComputedStyle(element).boxShadow);
+    expect(featuresShadow).toContain('rgba(83, 132, 237, 0.14)');
+    await expect(page.locator('.cta-row a[href="#download"]')).not.toHaveClass(/btn-features-glow/);
+    await expect(donation).not.toHaveClass(/btn-features-glow/);
     await expect(page.locator('#support a[href="https://t.me/anriproduct"]')).toBeVisible();
     await expect(page.locator('link[href="/assets/anri-header-socials.css"]')).toHaveCount(1);
   });
