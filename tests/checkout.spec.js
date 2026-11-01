@@ -30,7 +30,7 @@ test('Kaspi route is voluntary support only, never a license checkout', async ({
 
 test('support page exposes Kaspi, Boosty and PayPal; ProEducation is clearly pending', async ({page}) => {
   await page.goto(base+'/support-development/');
-  await expect(page.locator('#kaspi')).toContainText('Ссылка поддержки появится позже');
+  await expect(page.locator('#kaspi')).toContainText('Support link coming soon');
   await expect(page.locator('#kaspi a')).toHaveCount(0);
   await expect(page.locator('a[href="https://boosty.to/anriproduct"]')).toBeVisible();
   await expect(page.locator('a[href="https://paypal.me/anribeats"]')).toBeVisible();
