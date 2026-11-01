@@ -13,7 +13,7 @@ const licenseApiPaths = new Set([
 ]);
 const privateHeaders = {'Cache-Control':'no-store', 'Pragma':'no-cache', 'Referrer-Policy':'no-referrer', 'X-Content-Type-Options':'nosniff', 'X-Frame-Options':'DENY'};
 const csp = "default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'self'; img-src 'self'; form-action https://anriprod.proeducation.kz; base-uri 'none'; object-src 'none'; frame-ancestors 'none'";
-const mime = {'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.png':'image/png','.webp':'image/webp','.ico':'image/x-icon','.webmanifest':'application/manifest+json'};
+const mime = {'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.png':'image/png','.svg':'image/svg+xml','.webp':'image/webp','.ico':'image/x-icon','.webmanifest':'application/manifest+json'};
 function fail(res, code, message) { res.writeHead(code, {...privateHeaders,'Content-Type':'application/json'});res.end(JSON.stringify({detail:message})); }
 function upstreamOrigin(value) {
   if (!value) return null;
