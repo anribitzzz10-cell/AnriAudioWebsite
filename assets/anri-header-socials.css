@@ -1,0 +1,24 @@
+/* ANRI: icon-only contact/support links — shared across EN, RU and KZ. */
+.anri-header-icons{display:flex;align-items:center;justify-content:center;gap:6px;flex:0 0 auto;margin-left:auto}
+.anri-header-icons .anri-social-icon{box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;width:33px;height:33px;min-width:33px;border-radius:10px;border:1px solid rgba(255,255,255,.11);background:#17171e;color:#e9e9f1;text-decoration:none;transition:background .15s ease,border-color .15s ease,transform .15s ease}
+.anri-header-icons .anri-social-icon:hover,.anri-header-icons .anri-social-icon:focus-visible{background:rgba(237,31,61,.15);border-color:rgba(255,110,135,.55);color:#fff;transform:translateY(-1px)}
+.anri-header-icons .anri-social-icon:focus-visible{outline:2px solid #fff;outline-offset:3px}
+.anri-header-icons .anri-social-icon svg{width:18px;height:18px;display:block;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.anri-header-icons .anri-icon-proeducation{border-style:dashed;opacity:.8}
+.nav:has(.anri-header-icons)>.anri-lang-switch{margin-left:0}
+@media(max-width:1100px){
+  .nav:has(.anri-header-icons){height:auto;min-height:70px;flex-wrap:wrap;row-gap:10px;padding-top:10px;padding-bottom:10px}
+  .nav:has(.anri-header-icons)>.navlinks{order:4;flex-basis:100%;justify-content:center;gap:16px;overflow-x:auto}
+}
+@media(max-width:700px){
+  .nav:has(.anri-header-icons)>.navlinks{display:none}
+  .nav:has(.anri-header-icons)>.anri-header-icons{order:1}
+  .nav:has(.anri-header-icons)>.anri-lang-switch{order:2}
+}
+@media(max-width:520px){
+  .nav:has(.anri-header-icons)>.brand{flex-basis:100%}
+  .nav:has(.anri-header-icons)>.anri-header-icons{margin-left:0}
+  .nav:has(.anri-header-icons)>.anri-lang-switch{margin-left:auto}
+  .anri-header-icons{gap:5px}
+  .anri-header-icons .anri-social-icon{width:32px;height:32px;min-width:32px}
+}

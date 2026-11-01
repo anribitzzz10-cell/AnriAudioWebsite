@@ -32,8 +32,8 @@ test('support page exposes Kaspi, Boosty, PayPal and ProEducation', async ({page
   await page.goto(base+'/support-development/');
   await expect(page.locator('#kaspi')).toContainText('Voluntary support through Kaspi Pay');
   await expect(page.locator('#kaspi a[href="https://pay.kaspi.kz/pay/zxqekc5w"]')).toBeVisible();
-  await expect(page.locator('a[href="https://boosty.to/anriproduct"]')).toBeVisible();
-  await expect(page.locator('a[href="https://paypal.me/anribeats"]')).toBeVisible();
+  await expect(page.locator('#boosty a.pay-link[href="https://boosty.to/anriproduct"]')).toBeVisible();
+  await expect(page.locator('#paypal a.pay-link[href="https://paypal.me/anribeats"]')).toBeVisible();
   await expect(page.locator('#proeducation a.pay-link')).toHaveAttribute('href', /https:\/\/proeducation\.kz\/fqaIO5\/\?customer_extra=/);
 });
 
@@ -43,7 +43,7 @@ for (const path of ['/', '/ru/', '/kk/']) {
     await expect(page).toHaveTitle(/ANRI AUDIO MIDI/);
     await expect(page.locator('body')).not.toContainText('ANRI AUDIO MIDI FREE');
     await expect(page.locator('body')).not.toContainText('1.0.0');
-    await expect(page.locator('a[href="https://pay.kaspi.kz/pay/zxqekc5w"]')).toBeVisible();
+    await expect(page.locator('#support-development a[href="https://pay.kaspi.kz/pay/zxqekc5w"]')).toBeVisible();
   });
 }
 for (const path of ['/support-development/','/ru/support-development/','/kk/support-development/']) {
@@ -181,5 +181,37 @@ for (const route of ['/ru/contacts/','/kk/contacts/']) {
     await expect(page.locator('main')).not.toContainText(/5\s?000\s?KZT|коммерческий выпуск|Коммерциялық нұсқа/i);
     await expect(page.locator('main a[href="../support-development/"]').first()).toBeVisible();
     await expect(page.locator('main')).toContainText(route.startsWith('/ru/') ? 'Бесплатно' : 'Тегін');
+  });
+}
+
+const pagesWithIconHeaders = [
+  ['/', '/support-development/', 'Donation'],
+  ['/ru/', '/ru/support-development/', 'Поддержать'],
+  ['/kk/', '/kk/support-development/', 'Қолдау']
+];
+
+for (const [route, donationHref, donationName] of pagesWithIconHeaders) {
+  test('header icons and donation CTA are accessible in '+route, async ({page}) => {
+    await page.goto(base+route);
+    const nav = page.locator('.anri-header-icons');
+    await expect(nav.locator('a.anri-social-icon')).toHaveCount(5);
+    await expect(nav.getByRole('link', {name: 'Telegram'})).toHaveAttribute('href', 'https://t.me/anriproduct');
+    await expect(nav.getByRole('link', {name: 'Boosty'})).toHaveAttribute('href', 'https://boosty.to/anriproduct');
+    await expect(nav.getByRole('link', {name: 'Kaspi Pay'})).toHaveAttribute('href', 'https://pay.kaspi.kz/pay/zxqekc5w');
+    await expect(nav.getByRole('link', {name: 'PayPal'})).toHaveAttribute('href', 'https://paypal.me/anribeats');
+    await expect(nav.getByRole('link', {name: 'ProEducation'})).toHaveAttribute('href', donationHref+'#proeducation');
+    await expect(page.locator('.cta-row').getByRole('link', {name: donationName})).toHaveAttribute('href', donationHref);
+    await expect(page.locator('#support a[href="https://t.me/anriproduct"]')).toBeVisible();
+    await expect(page.locator('link[href="/assets/anri-header-socials.css"]')).toHaveCount(1);
+  });
+}
+
+for (const route of ['/legal/', '/ru/contacts/', '/kk/contacts/']) {
+  test('legal contact pages use one Telegram account: '+route, async ({page}) => {
+    await page.goto(base+route);
+    await expect(page.locator('main a[href="https://t.me/anriproduct"]')).toBeVisible();
+    await expect(page.locator('main')).not.toContainText('anribitzzz10@gmail.com');
+    await expect(page.locator('main a[href="https://t.me/anriprod"]')).toHaveCount(0);
+    await expect(page.locator('.anri-header-icons a.anri-social-icon')).toHaveCount(5);
   });
 }
