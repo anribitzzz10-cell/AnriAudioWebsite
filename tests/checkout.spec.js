@@ -201,6 +201,14 @@ for (const [route, donationHref, donationName] of pagesWithIconHeaders) {
     await expect(nav.getByRole('link', {name: 'PayPal'})).toHaveAttribute('href', 'https://paypal.me/anribeats');
     await expect(nav.getByRole('link', {name: 'ProEducation'})).toHaveAttribute('href', donationHref+'#proeducation');
     await expect(page.locator('.cta-row').getByRole('link', {name: donationName})).toHaveAttribute('href', donationHref);
+    const donation = page.locator('.cta-row').getByRole('link', {name: donationName});
+    await expect(donation).toHaveClass(/btn-donate-glow/);
+    await expect(donation).toHaveCSS('border-top-color', 'rgba(216, 164, 92, 0.82)');
+    await expect(donation).toHaveCSS('color', 'rgb(245, 223, 181)');
+    const shadow = await donation.evaluate(element => getComputedStyle(element).boxShadow);
+    expect(shadow).toContain('rgba(216, 164, 92, 0.13)');
+    await expect(page.locator('.cta-row a[href="#download"]')).not.toHaveClass(/btn-donate-glow/);
+    await expect(page.locator('.cta-row a[href="#functions"]')).not.toHaveClass(/btn-donate-glow/);
     await expect(page.locator('#support a[href="https://t.me/anriproduct"]')).toBeVisible();
     await expect(page.locator('link[href="/assets/anri-header-socials.css"]')).toHaveCount(1);
   });

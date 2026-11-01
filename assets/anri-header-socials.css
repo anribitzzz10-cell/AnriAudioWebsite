@@ -22,3 +22,30 @@
   .anri-header-icons{gap:5px}
   .anri-header-icons .anri-social-icon{width:32px;height:32px;min-width:32px}
 }
+
+/* Donation CTA: warm restrained border glow, matching the amber notice.
+   Download and Features keep their existing styles. */
+.cta-row .btn-donate-glow{
+  position:relative;
+  color:#f5dfb5;
+  border:1px solid rgba(216,164,92,.82);
+  background:linear-gradient(180deg,rgba(31,25,20,.97),rgba(19,17,18,.98));
+  box-shadow:inset 0 0 0 1px rgba(255,213,146,.08),0 0 12px rgba(216,164,92,.13),0 0 24px rgba(216,164,92,.07);
+  transition:border-color .18s ease,background .18s ease,box-shadow .18s ease,color .18s ease;
+}
+.cta-row .btn-donate-glow:hover{
+  color:#fff2d8;
+  border-color:rgba(247,198,115,.96);
+  background:linear-gradient(180deg,rgba(39,31,23,.99),rgba(24,19,18,.99));
+  box-shadow:inset 0 0 0 1px rgba(255,213,146,.13),0 0 16px rgba(232,176,88,.21),0 0 32px rgba(232,176,88,.11);
+}
+.cta-row .btn-donate-glow:focus-visible{
+  color:#fff2d8;
+  border-color:#f7c673;
+  outline:2px solid #ffe0a6;
+  outline-offset:3px;
+  box-shadow:0 0 18px rgba(232,176,88,.21);
+}
+@media(prefers-reduced-motion:reduce){
+  .cta-row .btn-donate-glow{transition:none}
+}
