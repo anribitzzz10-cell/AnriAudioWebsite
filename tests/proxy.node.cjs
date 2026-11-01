@@ -12,7 +12,7 @@ test('legacy checkout pages are private and do not expose order forms',async t=>
   const r=await fetch(base+p);assert.equal(r.status,200);assert.equal(r.headers.get('cache-control'),'no-store');assert.equal(r.headers.get('referrer-policy'),'no-referrer');assert.ok(r.headers.get('content-security-policy').includes("frame-ancestors 'none'"));
   const html=await r.text();
   if(p.endsWith('.js')){assert.match(html,/CHECKOUT_ENABLED = false/);assert.match(html,/API_ORIGIN = ''/);}
-  else{assert.doesNotMatch(html,/<form\b|order\.js|checkout\.js/i);assert.match(html,/FREE|бесплат|тегін/i);}
+  else{assert.doesNotMatch(html,/<form\b|order\.js|checkout\.js/i);assert.match(html,/ANRI AUDIO MIDI|бесплат|тегін/i);}
  }
  for(const p of [route,'/v1/checkout/proeducation/create']){const r=await fetch(base+p,{method:'POST',headers,body:'{}'});assert.equal(r.status,503);}
 });
@@ -33,11 +33,11 @@ test('legacy license status pages remain available but are not linked from the f
  }
  for(const [path,forbidden] of [['/','href="/license/"'],['/ru/','href="/ru/license/"'],['/kk/','href="/kk/license/"']]){
   const html=await (await fetch(base+path)).text();assert.ok(!html.includes(forbidden),path);
-  assert.match(html,/FREE 1\.0\.0|бесплатный выпуск|тегін шығарылым/i,path);
+  assert.match(html,/ANRI AUDIO MIDI/i,path);assert.doesNotMatch(html,/ANRI AUDIO MIDI FREE|1\.0\.0/i,path);
  }
  const ruCheckout=await (await fetch(base+'/ru/checkout/')).text();
  assert.ok(!ruCheckout.includes('href="/ru/license/"'));
- assert.ok(ruCheckout.includes('ANRI AUDIO MIDI FREE 1.0.0'));
+ assert.ok(ruCheckout.includes('ANRI AUDIO MIDI'));
 });
 
 test('license check uses only its dedicated upstream; commerce remains closed',async t=>{
@@ -190,13 +190,13 @@ test('free release support page lists active methods and keeps ProEducation pend
   const r=await fetch(base+p);assert.equal(r.status,200,p);
   const html=await r.text();
   assert.ok(!html.includes('https://pay.kaspi.kz/pay/zxqekc5w'),p);
-  assert.match(html,/Kaspi Pay/i,p);
+  assert.match(html,/Kaspi Pay/i,p);assert.ok(html.includes('https://pay.kaspi.kz/pay/zxqekc5w'),p);
   assert.match(html,/coming soon|появится позже|кейін қосылады/i,p);
   assert.ok(html.includes('https://boosty.to/anriproduct'),p);
   assert.ok(html.includes('https://paypal.me/anribeats'),p);
   assert.match(html,/ProEducation/i,p);
   assert.match(html,/coming soon|появится позже|дайындалып жатыр/i,p);
-  assert.match(html,/ANRI AUDIO MIDI FREE/i,p);
+  assert.match(html,/ANRI AUDIO MIDI/i,p);
  }
 });
 
