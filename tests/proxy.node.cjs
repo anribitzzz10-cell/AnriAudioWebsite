@@ -184,12 +184,11 @@ test('upstream failures never expose error bodies, cookies or location',async t=
   const r=await fetch(base+route,{method:'POST',headers,body:'{}'});assert.equal(r.status,502);assert.equal(r.headers.get('set-cookie'),null);assert.equal(r.headers.get('location'),null);assert.equal(await r.text(),'{"detail":"Order unavailable"}');
  }
 });
-test('free release support page lists active methods and keeps ProEducation pending',async t=>{
+test('support page lists active methods and keeps ProEducation pending',async t=>{
  const base=await site(t);
  for(const p of ['/support-development/','/ru/support-development/','/kk/support-development/']){
   const r=await fetch(base+p);assert.equal(r.status,200,p);
   const html=await r.text();
-  assert.ok(!html.includes('https://pay.kaspi.kz/pay/zxqekc5w'),p);
   assert.match(html,/Kaspi Pay/i,p);assert.ok(html.includes('https://pay.kaspi.kz/pay/zxqekc5w'),p);
   assert.match(html,/coming soon|появится позже|кейін қосылады/i,p);
   assert.ok(html.includes('https://boosty.to/anriproduct'),p);
