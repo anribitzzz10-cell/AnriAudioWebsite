@@ -7,7 +7,7 @@
 .anri-header-icons .anri-icon-proeducation{border-style:dashed;opacity:.8}
 .nav:has(.anri-header-icons)>.anri-lang-switch{margin-left:0}
 @media(max-width:1100px){
-  .nav:has(.anri-header-icons){flex-wrap:wrap;row-gap:10px;padding-top:10px;padding-bottom:10px}
+  .nav:has(.anri-header-icons){height:auto;min-height:70px;flex-wrap:wrap;row-gap:10px;padding-top:10px;padding-bottom:10px}
   .nav:has(.anri-header-icons)>.navlinks{order:4;flex-basis:100%;justify-content:center;gap:16px;overflow-x:auto}
 }
 @media(max-width:700px){
