@@ -179,7 +179,7 @@ for (const route of ['/ru/contacts/','/kk/contacts/']) {
     await page.goto(base+route);
     await expect(page.locator('main')).toContainText('ANRI AUDIO MIDI');
     await expect(page.locator('main')).not.toContainText(/5\s?000\s?KZT|коммерческий выпуск|Коммерциялық нұсқа/i);
-    await expect(page.locator('main a[href="../support-development/"]')).toBeVisible();
+    await expect(page.locator('main a[href="../support-development/"]').first()).toBeVisible();
     await expect(page.locator('main')).toContainText(route.startsWith('/ru/') ? 'Бесплатно' : 'Тегін');
   });
 }
