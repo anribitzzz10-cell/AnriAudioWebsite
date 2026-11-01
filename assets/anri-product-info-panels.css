@@ -1,0 +1,102 @@
+/* ANRI AUDIO MIDI website: scoped panels for the six product-information sections.
+   Scope intentionally stops at #seller; hero, articulation showcases, FAQ, contacts
+   and standalone support/legal pages keep their existing appearance. */
+
+:is(#price,#compatibility,#download,#support-development,#support,#seller) .anri-english-support-box {
+  border-radius:24px;
+  padding:32px;
+  box-shadow:0 15px 42px rgba(0,0,0,.22);
+  color:#f5f6f8;
+}
+:is(#price,#compatibility,#download,#support-development,#support,#seller) .anri-english-support-box p,
+:is(#price,#compatibility,#download,#support-development,#support,#seller) .anri-english-support-box .intro {
+  color:#c5cad5;
+  line-height:1.68;
+}
+:is(#price,#compatibility,#download,#support-development,#support,#seller) .anri-english-support-box strong {
+  color:#f1f3f7;
+}
+:is(#price,#compatibility,#download,#support-development,#support,#seller) .anri-english-support-box h2 {
+  color:#fafbfe;
+}
+
+/* Style 1: restrained premium red tone only for the main product and download panels. */
+#price .anri-english-support-box {
+  background:linear-gradient(135deg,#211419 0%,#17171c 54%,#101419 100%);
+  border:1px solid rgba(239,74,101,.32);
+}
+#download .anri-english-support-box {
+  background:linear-gradient(140deg,#21141a 0%,#18171d 48%,#11151c 100%);
+  border:1px solid rgba(239,74,101,.30);
+}
+
+/* Style 2: calm graphite panels for compatibility, support and developer info. */
+:is(#compatibility,#support,#seller) .anri-english-support-box {
+  background:linear-gradient(155deg,#191c23 0%,#12151b 100%);
+  border:1px solid rgba(210,219,235,.18);
+}
+#support-development .anri-english-support-box {
+  background:linear-gradient(155deg,#181b22 0%,#11141b 100%);
+  border:1px solid rgba(210,219,235,.20);
+}
+
+/* Three feature tiles remain neutral; icons communicate the visual hierarchy. */
+#price .anri-english-support-box .grid .box {
+  background:linear-gradient(155deg,#1c1d24 0%,#151820 100%);
+  border:1px solid rgba(219,224,237,.15);
+  box-shadow:0 7px 18px rgba(0,0,0,.12);
+}
+#price .anri-english-support-box .grid .box h3 {color:#f8f9fb;}
+#price .anri-english-support-box .grid .box p {color:#bdc4d1;}
+#price .grid .box:nth-child(1) .icon {background:rgba(240,80,107,.13);color:#ff8096;}
+#price .grid .box:nth-child(2) .icon {background:rgba(105,133,207,.17);color:#a5baff;}
+#price .grid .box:nth-child(3) .icon {background:rgba(142,132,177,.19);color:#d1c1f3;}
+
+/* The release notice is distinct from ordinary cards; disabled remains grey. */
+#download .notice {
+  background:linear-gradient(110deg,#252321 0%,#1b1e23 100%);
+  border:1px solid rgba(220,175,102,.48);
+  border-left:3px solid #d8a45c;
+  color:#e8e5dd;
+  padding:17px 20px;
+}
+#download .notice strong {color:#ffe0a4;}
+#download .anri-section-actions .placeholder {
+  background:#1b1f27;
+  border:1px dashed rgba(181,191,208,.40);
+  color:#c8ced9;
+  padding:10px 13px;
+  border-radius:11px;
+}
+#download .anri-english-support-box .small {color:#adb5c4;}
+
+/* Only actual support CTAs retain red as an accent. */
+:is(#download,#support-development,#seller) .anri-section-actions a {
+  background:#1b2029;
+  border:1px solid rgba(212,220,237,.24);
+  color:#f0f3fa;
+  transition:background-color .15s ease,border-color .15s ease;
+}
+:is(#download,#support-development,#seller) .anri-section-actions a:hover {
+  background:#242a35;
+  border-color:rgba(233,239,249,.48);
+}
+#support-development .anri-section-actions a:first-child {
+  background:rgba(237,31,61,.12);
+  border-color:rgba(237,68,96,.48);
+  color:#ffedf1;
+}
+#support-development .anri-section-actions a:first-child:hover {
+  background:rgba(237,31,61,.21);
+  border-color:rgba(255,104,131,.65);
+}
+#support-development .anri-english-support-box .small {color:#adb5c2;}
+
+/* Narrow screens preserve legibility and avoid overflowing buttons. */
+@media(max-width:700px) {
+  :is(#price,#compatibility,#download,#support-development,#support,#seller) .anri-english-support-box {
+    padding:21px;
+    border-radius:19px;
+  }
+  :is(#download,#support-development,#seller) .anri-section-actions a {max-width:100%;}
+}
