@@ -3,7 +3,7 @@
 **Product name:** Anri Audio MIDI
 **Purpose:** Optional support of independent development. This is not a purchase of the plugin, a perpetual FULL license, or an upgrade.
 **Merchant cabinet:** https://anriprod.proeducation.kz/
-**Current link supplied by the merchant:** `https://proeducation.kz/akaILk/` (user confirmed the text link and QR link are both valid; they may change when a new payment QR/link is generated). The website publishes the text link and embeds the supplied QR code as `support-development/proeducation-support-qr.svg`. The QR code destination is `https://proeducation.kz/alaILl/`. Both URLs are kept separately because the provider may regenerate them independently.
+**Current link supplied by the merchant:** `https://proeducation.kz/fqaIO5/` (the current text link is user-supplied and the QR destination was decoded from the newly uploaded QR image). The website publishes the text link and embeds the supplied QR code as `support-development/proeducation-support-qr.svg`. The QR code destination is `https://proeducation.kz/fraIO6/`. Both URLs are kept separately because the provider may regenerate them independently.
 
 ## Merchant link and future refreshes
 
@@ -21,8 +21,8 @@ The three localized support pages load `/support-development/proeducation-suppor
 ```js
 const PROEDUCATION_VOLUNTARY_SUPPORT = Object.freeze({
   approved: true,
-  url: "https://proeducation.kz/akaILk/",
-  qrUrl: "https://proeducation.kz/alaILl/"
+  url: "https://proeducation.kz/fqaIO5/",
+  qrUrl: "https://proeducation.kz/fraIO6/"
 });
 ```
 
