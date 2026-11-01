@@ -23,13 +23,13 @@ test('Kaspi route is voluntary support only, never a license checkout', async ({
   await page.goto(base+'/kaspi/');
   await expect(page.locator('h1')).toHaveText('Kaspi Pay — добровольная поддержка');
   await expect(page.locator('form')).toHaveCount(0);
-  await expect(page.locator('a[href="https://pay.kaspi.kz/pay/zxqekc5w"]')).toBeVisible();
+  await expect(page.locator('body')).toContainText('Отдельная публичная ссылка Kaspi Pay');\n  await expect(page.locator('a[href="https://pay.kaspi.kz/pay/zxqekc5w"]')).toHaveCount(0);
   await expect(page.locator('body')).toContainText('не выдаёт лицензию');
 });
 
 test('support page exposes Kaspi, Boosty and PayPal; ProEducation is clearly pending', async ({page}) => {
   await page.goto(base+'/support-development/');
-  await expect(page.locator('a[href="https://pay.kaspi.kz/pay/zxqekc5w"]')).toBeVisible();
+  await expect(page.locator('#kaspi')).toContainText('Ссылка поддержки появится позже');\n  await expect(page.locator('#kaspi a')).toHaveCount(0);
   await expect(page.locator('a[href="https://boosty.to/anriproduct"]')).toBeVisible();
   await expect(page.locator('a[href="https://paypal.me/anribeats"]')).toBeVisible();
   await expect(page.locator('#proeducation')).toContainText('A separate voluntary-support payment link is being prepared');
