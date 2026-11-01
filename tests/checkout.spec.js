@@ -54,3 +54,39 @@ for (const path of ['/support-development/','/ru/support-development/','/kk/supp
     await expect(page.locator('body')).not.toContainText('ANRI AUDIO MIDI FREE');
   });
 }
+
+for (const path of ['/support-development/', '/ru/support-development/', '/kk/support-development/']) {
+  test('ProEducation support remains inactive without approved separate payment URL '+path, async ({page}) => {
+    await page.goto(base+path);
+    await expect(page.locator('#proeducation .status')).toBeVisible();
+    await expect(page.locator('#proeducation a.pay-link')).toHaveCount(0);
+    await expect(page.locator('script[src="/support-development/proeducation-support.js"]')).toHaveCount(1);
+  });
+}
+
+test('ProEducation support activates only with an approved provider link', async ({page}) => {
+  await page.route('**/support-development/proeducation-support.js', async route => {
+    const response = await route.fetch();
+    const body = (await response.text())
+      .replace('approved: false', 'approved: true')
+      .replace('url: ""', 'url: "https://mp.e.proeducation.kz/u/CI_TEST_ONLY"');
+    await route.fulfill({response, body});
+  });
+  await page.goto(base+'/ru/support-development/');
+  await expect(page.locator('#proeducation a.pay-link')).toHaveAttribute('href', 'https://mp.e.proeducation.kz/u/CI_TEST_ONLY');
+  await expect(page.locator('#proeducation .status')).toHaveCount(0);
+  await expect(page.locator('#proeducation')).toContainText('лицензии не предусмотрены');
+});
+
+test('ProEducation support refuses an untrusted destination', async ({page}) => {
+  await page.route('**/support-development/proeducation-support.js', async route => {
+    const response = await route.fetch();
+    const body = (await response.text())
+      .replace('approved: false', 'approved: true')
+      .replace('url: ""', 'url: "https://example.invalid/untrusted"');
+    await route.fulfill({response, body});
+  });
+  await page.goto(base+'/support-development/');
+  await expect(page.locator('#proeducation .status')).toBeVisible();
+  await expect(page.locator('#proeducation a.pay-link')).toHaveCount(0);
+});
