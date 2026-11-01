@@ -56,7 +56,12 @@ for (const path of ['/support-development/','/ru/support-development/','/kk/supp
 }
 
 for (const path of ['/support-development/', '/ru/support-development/', '/kk/support-development/']) {
-  test('ProEducation support remains inactive without approved separate payment URL '+path, async ({page}) => {
+  test('ProEducation support stays hidden when the activation gate is disabled '+path, async ({page}) => {
+    await page.route('**/support-development/proeducation-support.js', async route => {
+      const response = await route.fetch();
+      const body = (await response.text()).replace('approved: true', 'approved: false');
+      await route.fulfill({response, body});
+    });
     await page.goto(base+path);
     await expect(page.locator('#proeducation .status')).toBeVisible();
     await expect(page.locator('#proeducation a.pay-link')).toHaveCount(0);
@@ -69,7 +74,7 @@ test('ProEducation support activates only with an approved provider link', async
     const response = await route.fetch();
     const body = (await response.text())
       .replace('approved: false', 'approved: true')
-      .replace('url: ""', 'url: "https://mp.e.proeducation.kz/u/CI_TEST_ONLY"');
+      .replace('url: "https://proeducation.kz/akaILk/"', 'url: "https://mp.e.proeducation.kz/u/CI_TEST_ONLY"');
     await route.fulfill({response, body});
   });
   await page.goto(base+'/ru/support-development/');
@@ -83,7 +88,7 @@ test('ProEducation support refuses an untrusted destination', async ({page}) => 
     const response = await route.fetch();
     const body = (await response.text())
       .replace('approved: false', 'approved: true')
-      .replace('url: ""', 'url: "https://example.invalid/untrusted"');
+      .replace('url: "https://proeducation.kz/akaILk/"', 'url: "https://example.invalid/untrusted"');
     await route.fulfill({response, body});
   });
   await page.goto(base+'/support-development/');
