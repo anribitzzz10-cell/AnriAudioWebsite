@@ -22,28 +22,28 @@
 
 /* Style 1: restrained premium red tone only for the main product and download panels. */
 #price .anri-english-support-box {
-  background:linear-gradient(135deg,#211419 0%,#17171c 54%,#101419 100%);
-  border:1px solid rgba(239,74,101,.32);
+  background:linear-gradient(155deg,#141117 0%,#101116 55%,#0c0d12 100%);
+  border:1px solid rgba(239,74,101,.23);
 }
 #download .anri-english-support-box {
-  background:linear-gradient(140deg,#21141a 0%,#18171d 48%,#11151c 100%);
-  border:1px solid rgba(239,74,101,.30);
+  background:linear-gradient(155deg,#141118 0%,#101116 50%,#0c0d12 100%);
+  border:1px solid rgba(239,74,101,.23);
 }
 
 /* Style 2: calm graphite panels for compatibility, support and developer info. */
 :is(#compatibility,#support,#seller) .anri-english-support-box {
-  background:linear-gradient(155deg,#191c23 0%,#12151b 100%);
-  border:1px solid rgba(210,219,235,.18);
+  background:linear-gradient(155deg,#111217 0%,#0c0d12 100%);
+  border:1px solid rgba(210,219,235,.12);
 }
 #support-development .anri-english-support-box {
-  background:linear-gradient(155deg,#181b22 0%,#11141b 100%);
-  border:1px solid rgba(210,219,235,.20);
+  background:linear-gradient(155deg,#111217 0%,#0c0d12 100%);
+  border:1px solid rgba(210,219,235,.12);
 }
 
 /* Three feature tiles remain neutral; icons communicate the visual hierarchy. */
 #price .anri-english-support-box .grid .box {
-  background:linear-gradient(155deg,#1c1d24 0%,#151820 100%);
-  border:1px solid rgba(219,224,237,.15);
+  background:linear-gradient(155deg,#111217 0%,#0b0c11 100%);
+  border:1px solid rgba(219,224,237,.10);
   box-shadow:0 7px 18px rgba(0,0,0,.12);
 }
 #price .anri-english-support-box .grid .box h3 {color:#f8f9fb;}
@@ -52,43 +52,43 @@
 #price .grid .box:nth-child(2) .icon {background:rgba(105,133,207,.17);color:#a5baff;}
 #price .grid .box:nth-child(3) .icon {background:rgba(142,132,177,.19);color:#d1c1f3;}
 
-/* The release notice is distinct from ordinary cards; disabled remains grey. */
+/* Dark release notice is distinct from ordinary cards; disabled remains dark. */
 #download .notice {
-  background:linear-gradient(110deg,#252321 0%,#1b1e23 100%);
-  border:1px solid rgba(220,175,102,.48);
+  background:linear-gradient(125deg,#161513 0%,#101116 100%);
+  border:1px solid rgba(220,175,102,.36);
   border-left:3px solid #d8a45c;
   color:#e8e5dd;
   padding:17px 20px;
 }
 #download .notice strong {color:#ffe0a4;}
 #download .anri-section-actions .placeholder {
-  background:#1b1f27;
-  border:1px dashed rgba(181,191,208,.40);
+  background:#101217;
+  border:1px dashed rgba(181,191,208,.28);
   color:#c8ced9;
   padding:10px 13px;
   border-radius:11px;
 }
 #download .anri-english-support-box .small {color:#adb5c4;}
 
-/* Only actual support CTAs retain red as an accent. */
+/* All inner buttons are dark. Red is reserved for a fine outline on the support CTA. */
 :is(#download,#support-development,#seller) .anri-section-actions a {
-  background:#1b2029;
-  border:1px solid rgba(212,220,237,.24);
+  background:#111217;
+  border:1px solid rgba(212,220,237,.16);
   color:#f0f3fa;
   transition:background-color .15s ease,border-color .15s ease;
 }
 :is(#download,#support-development,#seller) .anri-section-actions a:hover {
-  background:#242a35;
-  border-color:rgba(233,239,249,.48);
+  background:#181a21;
+  border-color:rgba(233,239,249,.32);
 }
 #support-development .anri-section-actions a:first-child {
-  background:rgba(237,31,61,.12);
-  border-color:rgba(237,68,96,.48);
+  background:#171116;
+  border-color:rgba(237,68,96,.37);
   color:#ffedf1;
 }
 #support-development .anri-section-actions a:first-child:hover {
-  background:rgba(237,31,61,.21);
-  border-color:rgba(255,104,131,.65);
+  background:#21141b;
+  border-color:rgba(255,104,131,.52);
 }
 #support-development .anri-english-support-box .small {color:#adb5c2;}
 

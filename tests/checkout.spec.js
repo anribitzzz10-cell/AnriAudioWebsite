@@ -129,15 +129,25 @@ for (const route of ['/', '/ru/', '/kk/']) {
   test('product and info panels preserve scoped contrast in '+route, async ({page}) => {
     await page.goto(base+route);
     await expect(page.locator('link[rel="stylesheet"][href="/assets/anri-product-info-panels.css"]')).toHaveCount(1);
-    await expect(page.locator('#price .anri-english-support-box')).toHaveCSS('border-top-color', 'rgba(239, 74, 101, 0.32)');
-    await expect(page.locator('#download .anri-english-support-box')).toHaveCSS('border-top-color', 'rgba(239, 74, 101, 0.3)');
-    await expect(page.locator('#compatibility .anri-english-support-box')).toHaveCSS('border-top-color', 'rgba(210, 219, 235, 0.18)');
-    await expect(page.locator('#support .anri-english-support-box')).toHaveCSS('border-top-color', 'rgba(210, 219, 235, 0.18)');
-    await expect(page.locator('#seller .anri-english-support-box')).toHaveCSS('border-top-color', 'rgba(210, 219, 235, 0.18)');
-    await expect(page.locator('#support-development .anri-english-support-box')).toHaveCSS('border-top-color', 'rgba(210, 219, 235, 0.2)');
+    await expect(page.locator('#price .anri-english-support-box')).toHaveCSS('border-top-color', 'rgba(239, 74, 101, 0.23)');
+    await expect(page.locator('#download .anri-english-support-box')).toHaveCSS('border-top-color', 'rgba(239, 74, 101, 0.23)');
+    await expect(page.locator('#compatibility .anri-english-support-box')).toHaveCSS('border-top-color', 'rgba(210, 219, 235, 0.12)');
+    await expect(page.locator('#support .anri-english-support-box')).toHaveCSS('border-top-color', 'rgba(210, 219, 235, 0.12)');
+    await expect(page.locator('#seller .anri-english-support-box')).toHaveCSS('border-top-color', 'rgba(210, 219, 235, 0.12)');
+    await expect(page.locator('#support-development .anri-english-support-box')).toHaveCSS('border-top-color', 'rgba(210, 219, 235, 0.12)');
     await expect(page.locator('#download .notice')).toHaveCSS('border-left-color', 'rgb(216, 164, 92)');
     await expect(page.locator('#download .notice')).toHaveCSS('border-left-width', '3px');
-    await expect(page.locator('#price .grid .box').first()).toHaveCSS('border-top-color', 'rgba(219, 224, 237, 0.15)');
+    await expect(page.locator('#price .grid .box').first()).toHaveCSS('border-top-color', 'rgba(219, 224, 237, 0.1)');
+    // All interactive buttons and the inactive download placeholder use near-black fills.
+    await expect(page.locator('#download .anri-section-actions a')).toHaveCSS('background-color', 'rgb(17, 18, 23)');
+    await expect(page.locator('#download .anri-section-actions .placeholder')).toHaveCSS('background-color', 'rgb(16, 18, 23)');
+    await expect(page.locator('#support-development .anri-section-actions a').first()).toHaveCSS('background-color', 'rgb(23, 17, 22)');
+    await expect(page.locator('#support-development .anri-section-actions a').last()).toHaveCSS('background-color', 'rgb(17, 18, 23)');
+    await expect(page.locator('#seller .anri-section-actions a')).toHaveCSS('background-color', 'rgb(17, 18, 23)');
+    // The product feature cards now share a dark neutral gradient, not the older grey fill.
+    const featureBackground = await page.locator('#price .grid .box').first().evaluate(el => getComputedStyle(el).backgroundImage);
+    expect(featureBackground).toContain('rgb(17, 18, 23)');
+    expect(featureBackground).toContain('rgb(11, 12, 17)');
     // Product showcase and FAQ retain their original styling.
     await expect(page.locator('.anri-artbox')).toHaveCSS('border-top-color', 'rgba(237, 31, 61, 0.25)');
     await expect(page.locator('#faq .box').first()).toHaveCSS('border-top-color', 'rgba(255, 255, 255, 0.075)');
