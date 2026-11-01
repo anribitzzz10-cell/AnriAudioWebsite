@@ -211,7 +211,7 @@ for (const route of ['/legal/', '/ru/contacts/', '/kk/contacts/']) {
     await page.goto(base+route);
     await expect(page.locator('main a[href="https://t.me/anriproduct"]')).toBeVisible();
     await expect(page.locator('main')).not.toContainText('anribitzzz10@gmail.com');
-    await expect(page.locator('main')).not.toContainText('@anriprod');
+    await expect(page.locator('main a[href="https://t.me/anriprod"]')).toHaveCount(0);
     await expect(page.locator('.anri-header-icons a.anri-social-icon')).toHaveCount(5);
   });
 }
