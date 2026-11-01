@@ -210,3 +210,16 @@ test('upstream cannot be a URL credential, redirect target, HTTP or official sit
  assert.equal(upstreamOrigin(),null);
  for(const p of ['http://example.invalid','https://user:secret@example.invalid','https://example.invalid/private','https://example.invalid/?x=1','https://anriaudio.com'])assert.throws(()=>upstreamOrigin(p));
 });
+
+// A QR vector is a public image asset; it must not be blocked by static-file MIME guards.
+test('ProEducation SVG QR asset is served with correct image MIME and readable XML', async t=>{
+ const base=await site(t);
+ const r=await fetch(base+'/support-development/proeducation-support-qr.svg');
+ assert.equal(r.status,200);
+ assert.match(r.headers.get('content-type')||'',/^image\/svg\+xml(?:;|$)/);
+ assert.equal(r.headers.get('x-content-type-options'),'nosniff');
+ const svg=await r.text();
+ assert.match(svg,/<svg\b/);
+ assert.match(svg,/<path\b/);
+ assert.match(svg,/<\/svg>/);
+});

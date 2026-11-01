@@ -45,7 +45,8 @@ const PROEDUCATION_VOLUNTARY_SUPPORT = Object.freeze({
       note: "This is an optional contribution. It is not a plugin purchase and does not issue an ANRI AUDIO MIDI license.",
       action: "Open ProEducation payment link",
       qrLabel: "Or scan the ProEducation payment QR code · Russia (RF)",
-      qrAlt: "ProEducation payment QR code for Russia (RF)"
+      qrAlt: "ProEducation payment QR code for Russia (RF)",
+      amountHelp: "On the payment page, tap “Clear” and enter any amount you wish to contribute."
     },
     ru: {
       title: "ProEducation · Россия (РФ)",
@@ -53,7 +54,8 @@ const PROEDUCATION_VOLUNTARY_SUPPORT = Object.freeze({
       note: "Это необязательный перевод на поддержку. Он не является покупкой плагина и не выдаёт лицензию ANRI AUDIO MIDI.",
       action: "Открыть ссылку ProEducation",
       qrLabel: "Или отсканируйте QR-код для оплаты · Россия (РФ)",
-      qrAlt: "QR-код ProEducation для оплаты из России"
+      qrAlt: "QR-код ProEducation для оплаты из России",
+      amountHelp: "На странице оплаты нажмите «Очистить» и введите любую сумму, которой хотите поддержать разработку Anri Audio MIDI."
     },
     kk: {
       title: "ProEducation · Ресей (РФ)",
@@ -61,7 +63,8 @@ const PROEDUCATION_VOLUNTARY_SUPPORT = Object.freeze({
       note: "Бұл ерікті аударым. Ол плагинді сатып алу болып саналмайды және ANRI AUDIO MIDI лицензиясын бермейді.",
       action: "ProEducation төлем сілтемесін ашу",
       qrLabel: "Немесе төлем QR-кодын сканерлеңіз · Ресей (РФ)",
-      qrAlt: "Ресейден төлеуге арналған ProEducation QR-коды"
+      qrAlt: "Ресейден төлеуге арналған ProEducation QR-коды",
+      amountHelp: "Төлем бетінде «Очистить» түймесін басып, әзірлеуді қолдау үшін өзіңіз қалаған соманы енгізіңіз."
     }
   };
   const t = locales[document.documentElement.lang] || locales.en;
@@ -105,9 +108,12 @@ const PROEDUCATION_VOLUNTARY_SUPPORT = Object.freeze({
   const style = document.createElement("style");
   style.textContent = ".proeducation-support-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(170px,210px);gap:22px;align-items:center;margin-top:14px}.proeducation-qr{display:grid;justify-items:center;gap:9px;text-align:center}.proeducation-qr-label{font-size:12px;line-height:1.5;color:var(--muted);margin:0!important}.proeducation-qr a{display:block;width:min(100%,190px);padding:10px;border-radius:14px;background:#fff;border:1px solid rgba(255,255,255,.16)}.proeducation-qr img{display:block;width:100%;height:auto;image-rendering:pixelated}@media(max-width:600px){.proeducation-support-layout{grid-template-columns:1fr;gap:14px}.proeducation-qr{justify-items:start;text-align:left}.proeducation-qr a{width:min(100%,170px)}}";
   layout.append(row, qr);
+  const amountHelp = document.createElement("p");
+  amountHelp.className = "payment-note proeducation-amount-help";
+  amountHelp.textContent = t.amountHelp;
   heading.textContent = t.title;
   intro.textContent = t.intro;
   note.textContent = t.note;
   status.remove();
-  section.append(style, layout);
+  section.append(style, layout, amountHelp);
 })();
