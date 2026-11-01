@@ -90,3 +90,11 @@ test('ProEducation support refuses an untrusted destination', async ({page}) => 
   await expect(page.locator('#proeducation .status')).toBeVisible();
   await expect(page.locator('#proeducation a.pay-link')).toHaveCount(0);
 });
+
+for (const path of ['/support-development/', '/ru/support-development/', '/kk/support-development/']) {
+  test('current ProEducation payment link is visible in '+path, async ({page}) => {
+    await page.goto(base+path);
+    await expect(page.locator('#proeducation a.pay-link')).toHaveAttribute('href', 'https://proeducation.kz/akaILk/');
+    await expect(page.locator('#proeducation .status')).toHaveCount(0);
+  });
+}
