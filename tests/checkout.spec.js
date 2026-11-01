@@ -164,3 +164,22 @@ test('new scoped stylesheet is delivered publicly as CSS', async ({page, request
   expect(css).not.toContain('.anri-artbox{');
   expect(css).not.toContain('#faq .box{');
 });
+
+test('English legal information describes the free ANRI AUDIO MIDI release', async ({page}) => {
+  await page.goto(base+'/legal/');
+  await expect(page.getByRole('heading',{name:'Free software and optional support'})).toBeVisible();
+  await expect(page.locator('main')).toContainText('No purchase, subscription, account registration, license key, or activation is required');
+  await expect(page.locator('a[href="/ru/contacts/"]')).toHaveCount(2);
+  await expect(page.locator('a[href="/kk/contacts/"]')).toHaveCount(2);
+  await expect(page.locator('main')).not.toContainText(/5\s?000\s?KZT|Pre-release purchase information|perpetual software license/i);
+});
+
+for (const route of ['/ru/contacts/','/kk/contacts/']) {
+  test('linked business contacts are consistent with free release '+route, async ({page}) => {
+    await page.goto(base+route);
+    await expect(page.locator('main')).toContainText('ANRI AUDIO MIDI');
+    await expect(page.locator('main')).not.toContainText(/5\s?000\s?KZT|коммерческий выпуск|Коммерциялық нұсқа/i);
+    await expect(page.locator('main a[href="../support-development/"]')).toBeVisible();
+    await expect(page.locator('main')).toContainText(route.startsWith('/ru/') ? 'Бесплатно' : 'Тегін');
+  });
+}
