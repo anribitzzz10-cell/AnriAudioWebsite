@@ -4,8 +4,8 @@
 // URL must be independently inspected before publishing. No secrets belong here.
 const PROEDUCATION_VOLUNTARY_SUPPORT = Object.freeze({
   approved: true,
-  url: "https://proeducation.kz/akaILk/",
-  qrUrl: "https://proeducation.kz/alaILl/"
+  url: "https://proeducation.kz/fqaIO5/",
+  qrUrl: "https://proeducation.kz/fraIO6/"
 });
 
 // Prodamus documents customer_extra as the field for additional payment information.
