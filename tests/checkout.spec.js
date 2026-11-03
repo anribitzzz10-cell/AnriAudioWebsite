@@ -138,9 +138,10 @@ for (const route of ['/', '/ru/', '/kk/']) {
     await expect(page.locator('#download .notice')).toHaveCSS('border-left-color', 'rgb(216, 164, 92)');
     await expect(page.locator('#download .notice')).toHaveCSS('border-left-width', '3px');
     await expect(page.locator('#price .grid .box').first()).toHaveCSS('border-top-color', 'rgba(219, 224, 237, 0.1)');
-    // All interactive buttons and the inactive download placeholder use near-black fills.
-    await expect(page.locator('#download .anri-section-actions a')).toHaveCSS('background-color', 'rgb(17, 18, 23)');
-    await expect(page.locator('#download .anri-section-actions .placeholder')).toHaveCSS('background-color', 'rgb(16, 18, 23)');
+    // The download is prominent; the optional support link retains a quiet fill.
+    await expect(page.locator('#download .anri-section-actions a.anri-pkg-download')).toHaveCSS('border-top-color', 'rgba(245, 100, 124, 0.68)');
+    await expect(page.locator('#download .anri-section-actions a:not(.anri-pkg-download)')).toHaveCSS('background-color', 'rgb(17, 18, 23)');
+    await expect(page.locator('#download .anri-section-actions .placeholder')).toHaveCount(0);
     await expect(page.locator('#support-development .anri-section-actions a').first()).toHaveCSS('background-color', 'rgb(23, 17, 22)');
     await expect(page.locator('#support-development .anri-section-actions a').last()).toHaveCSS('background-color', 'rgb(17, 18, 23)');
     await expect(page.locator('#seller .anri-section-actions a')).toHaveCSS('background-color', 'rgb(17, 18, 23)');
@@ -151,6 +152,27 @@ for (const route of ['/', '/ru/', '/kk/']) {
     // Product showcase and FAQ retain their original styling.
     await expect(page.locator('.anri-artbox')).toHaveCSS('border-top-color', 'rgba(237, 31, 61, 0.25)');
     await expect(page.locator('#faq .box').first()).toHaveCSS('border-top-color', 'rgba(255, 255, 255, 0.075)');
+  });
+}
+
+const macosDownloadHref = 'https://github.com/anribitzzz10-cell/AnriAudioWebsite/releases/download/macos-free-1.0.2-rc1/ANRI_AUDIO_MIDI_FREE_COMPONENT.pkg';
+const macosDownloads = [
+  ['/', 'Download macOS installer'],
+  ['/ru/', 'Скачать установщик macOS'],
+  ['/kk/', 'macOS орнатқышын жүктеу']
+];
+for (const [route, label] of macosDownloads) {
+  test('free macOS download points to public release in '+route, async ({page}) => {
+    await page.goto(base+route);
+    const download = page.locator('#download a.anri-pkg-download');
+    await expect(download).toHaveCount(1);
+    await expect(download).toHaveAttribute('href', macosDownloadHref);
+    await expect(download).toHaveAttribute('target', '_blank');
+    await expect(download).toContainText(label);
+    await expect(page.locator('.cta-row a[href="#download"]')).toBeVisible();
+    await expect(page.locator('#download')).not.toContainText(/coming shortly|ссылка на скачивание готовится|сілтемесі дайындалып жатыр/i);
+    await expect(page.locator('#download')).toContainText('arm64');
+    await expect(page.locator('#download')).not.toContainText(/license activation required|требуется активация/i);
   });
 }
 
