@@ -90,23 +90,8 @@
   background:#21141b;
   border-color:rgba(255,104,131,.52);
 }
-/* Direct voluntary-support methods mirror the dark red-outline buttons
-   on the dedicated support page, without affecting other panels. */
-#support-development .anri-section-actions a.anri-support-payment-link {
-  background:#111217;
-  border-color:rgba(237,68,96,.48);
-  color:#f6f7fb;
-  box-shadow:0 0 0 1px rgba(237,68,96,.025);
-}
-#support-development .anri-section-actions a.anri-support-payment-link:hover {
-  background:#19151b;
-  border-color:rgba(255,104,131,.65);
-  box-shadow:0 0 12px rgba(237,68,96,.08);
-}
-#support-development .anri-section-actions a.anri-support-payment-link:focus-visible {
-  outline:2px solid #fff;
-  outline-offset:2px;
-}
+/* Provider buttons inherit the original neutral Kaspi style.
+   The first "View support methods" CTA keeps its red outline. */
 #support-development .anri-english-support-box .small {color:#adb5c2;}
 
 /* Download link becomes active only when the public GitHub release asset is live.

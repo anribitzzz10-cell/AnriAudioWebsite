@@ -58,6 +58,8 @@ for (const [route, detailHref, footerText] of homepageSupportRoutes) {
     const links = panel.locator('.anri-section-actions a');
     await expect(links).toHaveCount(5);
     await expect(links.first()).toHaveAttribute('href', detailHref);
+    await expect(links.first()).toHaveCSS('background-color', 'rgb(23, 17, 22)');
+    await expect(links.first()).toHaveCSS('border-top-color', 'rgba(237, 68, 96, 0.37)');
     await expect(links.evaluateAll(nodes => nodes.slice(1).map(node => node.textContent.trim()))).resolves.toEqual([
       'Kaspi Pay ↗', 'ProEducation ↗', 'Boosty ↗', 'PayPal ↗'
     ]);
@@ -66,7 +68,7 @@ for (const [route, detailHref, footerText] of homepageSupportRoutes) {
       await expect(providers.nth(i)).toHaveAttribute('target', '_blank');
       await expect(providers.nth(i)).toHaveAttribute('rel', 'noopener noreferrer');
       await expect(providers.nth(i)).toHaveCSS('background-color', 'rgb(17, 18, 23)');
-      await expect(providers.nth(i)).toHaveCSS('border-top-color', 'rgba(237, 68, 96, 0.48)');
+      await expect(providers.nth(i)).toHaveCSS('border-top-color', 'rgba(212, 220, 237, 0.16)');
     }
     await expect(providers.nth(0)).toHaveAttribute('href', 'https://pay.kaspi.kz/pay/zxqekc5w');
     await expect(providers.nth(2)).toHaveAttribute('href', 'https://boosty.to/anriproduct');
@@ -194,17 +196,19 @@ for (const route of ['/', '/ru/', '/kk/']) {
     await page.goto(base+route);
     await expect(page.locator('link[rel="stylesheet"][href="/assets/anri-product-info-panels.css"]')).toHaveCount(1);
     await expect(page.locator('#price .anri-english-support-box')).toHaveCSS('border-top-color', 'rgba(239, 74, 101, 0.23)');
-    await expect(page.locator('#download .anri-english-support-box')).toHaveCSS('border-top-color', 'rgba(239, 74, 101, 0.23)');
+    const macPanel = page.locator('#download .anri-english-support-box').filter({hasText:'macOS · Audio Unit (AUv2)'});
+    await expect(macPanel).toHaveCount(1);
+    await expect(macPanel).toHaveCSS('border-top-color', 'rgba(239, 74, 101, 0.23)');
     await expect(page.locator('#compatibility .anri-english-support-box')).toHaveCSS('border-top-color', 'rgba(210, 219, 235, 0.12)');
     await expect(page.locator('#support .anri-english-support-box')).toHaveCSS('border-top-color', 'rgba(210, 219, 235, 0.12)');
     await expect(page.locator('#seller .anri-english-support-box')).toHaveCSS('border-top-color', 'rgba(210, 219, 235, 0.12)');
     await expect(page.locator('#support-development .anri-english-support-box')).toHaveCSS('border-top-color', 'rgba(210, 219, 235, 0.12)');
-    await expect(page.locator('#download .notice')).toHaveCSS('border-left-color', 'rgb(216, 164, 92)');
-    await expect(page.locator('#download .notice')).toHaveCSS('border-left-width', '3px');
+    await expect(macPanel.locator('.notice')).toHaveCSS('border-left-color', 'rgb(216, 164, 92)');
+    await expect(macPanel.locator('.notice')).toHaveCSS('border-left-width', '3px');
     await expect(page.locator('#price .grid .box').first()).toHaveCSS('border-top-color', 'rgba(219, 224, 237, 0.1)');
     // The download is prominent; the optional support link retains a quiet fill.
-    await expect(page.locator('#download .anri-section-actions a.anri-pkg-download')).toHaveCSS('border-top-color', 'rgba(245, 100, 124, 0.68)');
-    await expect(page.locator('#download .anri-section-actions a:not(.anri-pkg-download)')).toHaveCSS('background-color', 'rgb(17, 18, 23)');
+    await expect(macPanel.locator('.anri-section-actions a.anri-pkg-download')).toHaveCSS('border-top-color', 'rgba(245, 100, 124, 0.68)');
+    await expect(macPanel.locator('.anri-section-actions a:not(.anri-pkg-download)')).toHaveCSS('background-color', 'rgb(17, 18, 23)');
     await expect(page.locator('#download .anri-section-actions .placeholder')).toHaveCount(0);
     await expect(page.locator('#support-development .anri-section-actions a').first()).toHaveCSS('background-color', 'rgb(23, 17, 22)');
     await expect(page.locator('#support-development .anri-section-actions a').last()).toHaveCSS('background-color', 'rgb(17, 18, 23)');
@@ -228,7 +232,7 @@ const macosDownloads = [
 for (const [route, label] of macosDownloads) {
   test('free macOS download points to public release in '+route, async ({page}) => {
     await page.goto(base+route);
-    const download = page.locator('#download a.anri-pkg-download');
+    const download = page.locator('#download a.anri-pkg-download').filter({hasText:label});
     await expect(download).toHaveCount(1);
     await expect(download).toHaveAttribute('href', macosDownloadHref);
     await expect(download).toHaveAttribute('target', '_blank');
