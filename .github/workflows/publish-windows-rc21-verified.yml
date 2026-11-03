@@ -1,0 +1,84 @@
+name: Publish verified Windows RC2.1 release and website
+
+on:
+  push:
+    paths:
+      - '.github/release-triggers/windows-rc21-publish.trigger'
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      TAG: windows-vst3-rc2.1
+      EXE: ANRI_AUDIO_MIDI_WINDOWS_X64_OFFLINE_SETUP_RC2_1.exe
+      EXPECTED_SHA: 6bd2aabf39505dc753ef573d43e1d4d9fa95b95ea7c0a2a4fbd3a6548a00d39c
+      EXPECTED_BYTES: '241174944'
+      WEBSITE_PR: '44'
+    steps:
+      - name: Guard exact repository and public macOS PKG
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$GITHUB_REPOSITORY" == "anribitzzz10-cell/AnriAudioWebsite" ]] || exit 3
+          [[ "$(gh api "/repos/$GITHUB_REPOSITORY" --jq .private)" == "false" ]] || exit 4
+          gh api "/repos/$GITHUB_REPOSITORY/releases/tags/macos-free-1.0.2-rc1" \
+            --jq '.assets[] | select(.name == "ANRI_AUDIO_MIDI_FREE_COMPONENT.pkg" and .size == 594166728) | .id' |
+            grep -q .
+          echo 'MACOS PKG UNCHANGED PASS'
+
+      - name: Verify uploaded Windows EXE asset SHA-256 before publishing
+        shell: bash
+        run: |
+          set -euo pipefail
+          releases="$(gh api "/repos/$GITHUB_REPOSITORY/releases?per_page=100")"
+          release_id="$(jq -er --arg tag "$TAG" '
+            [.[] | select(.tag_name == $tag and .draft == true)] |
+            if length == 1 then .[0].id else error("Expected one draft Windows release") end
+          ' <<< "$releases")"
+          jq -e \
+            --arg tag "$TAG" --arg exe "$EXE" \
+            --arg hash "sha256:$EXPECTED_SHA" --argjson size "$EXPECTED_BYTES" '
+            [.[] | select(.tag_name == $tag and .draft == true)] |
+            length == 1 and (.[0].assets | any(.name == $exe and .state == "uploaded" and .size == $size and .digest == $hash)) and
+            (.[0].assets | any(.name == ($exe + ".sha256") and .state == "uploaded"))
+          ' <<< "$releases" || {
+            echo 'Windows EXE missing or hash/size mismatch: publication refused'; exit 7;
+          }
+          pr="$(gh pr view "$WEBSITE_PR" --repo "$GITHUB_REPOSITORY" --json state,headRefName,baseRefName,isDraft)"
+          jq -e '.state == "OPEN" and .headRefName == "release/windows-rc21-download-three-languages" and .baseRefName == "main"' <<< "$pr"
+          echo "RELEASE_ID=$release_id" >> "$GITHUB_ENV"
+          echo 'WINDOWS RC2.1 BINARY SHA256 AND PR GUARDS PASS'
+
+      - name: Publish only the verified Windows release
+        shell: bash
+        run: |
+          set -euo pipefail
+          gh api -X PATCH "/repos/$GITHUB_REPOSITORY/releases/$RELEASE_ID" -F draft=false -F prerelease=true >/dev/null
+          [[ "$(gh release view "$TAG" --repo "$GITHUB_REPOSITORY" --json isDraft --jq .isDraft)" == "false" ]]
+          url="https://github.com/$GITHUB_REPOSITORY/releases/download/$TAG/$EXE"
+          code="$(curl -sSIL --max-time 60 -o /dev/null -w '%{http_code}' "$url")"
+          [[ "$code" == "200" ]] || {
+            echo "Public Windows release HTTP $code; site merge refused"; exit 8;
+          }
+          echo 'PUBLIC WINDOWS DOWNLOAD LINK PASS'
+
+      - name: Merge pre-reviewed EN/RU/KK website update
+        shell: bash
+        run: |
+          set -euo pipefail
+          gh pr ready "$WEBSITE_PR" --repo "$GITHUB_REPOSITORY"
+          gh pr merge "$WEBSITE_PR" --repo "$GITHUB_REPOSITORY" --squash
+          [[ "$(gh pr view "$WEBSITE_PR" --repo "$GITHUB_REPOSITORY" --json state --jq .state)" == "MERGED" ]]
+          echo 'WINDOWS DOWNLOAD SITE PR MERGED PASS'
+
+      - name: Show public download destination
+        shell: bash
+        run: |
+          echo "https://github.com/$GITHUB_REPOSITORY/releases/download/$TAG/$EXE"
+          echo 'Railway website deployment may continue asynchronously after the main branch merge.'
