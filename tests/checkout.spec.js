@@ -84,6 +84,19 @@ for (const route of ['/support-development/', '/ru/support-development/', '/kk/s
   });
 }
 
+for (const route of ['/support-development/', '/ru/support-development/', '/kk/support-development/']) {
+  test('support methods show Kaspi, ProEducation, Boosty, PayPal in that order: '+route, async ({page}) => {
+    await page.goto(base+route);
+    const groups = page.locator('.payment-groups > .payment-group');
+    await expect(groups).toHaveCount(4);
+    await expect(groups.evaluateAll(elements => elements.map(el => el.id))).resolves.toEqual([
+      'kaspi','proeducation','boosty','paypal'
+    ]);
+    await expect(page.locator('#proeducation a.pay-link')).toBeVisible();
+    await expect(page.locator('#proeducation .proeducation-qr img')).toBeVisible();
+  });
+}
+
 test('ProEducation support activates only with an approved provider link', async ({page}) => {
   await page.route('**/support-development/proeducation-support.js', async route => {
     const response = await route.fetch();
