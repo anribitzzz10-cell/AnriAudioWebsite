@@ -92,6 +92,29 @@
 }
 #support-development .anri-english-support-box .small {color:#adb5c2;}
 
+/* Download link becomes active only when the public GitHub release asset is live.
+   Keep styles confined to the free macOS download panel. */
+#download .anri-section-actions a.anri-pkg-download {
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  color:#fff5f6;
+  background:linear-gradient(160deg,#61202f,#32151f);
+  border:1px solid rgba(245,100,124,.68);
+  box-shadow:0 0 14px rgba(237,31,61,.13);
+  font-weight:800;
+}
+#download .anri-section-actions a.anri-pkg-download:hover {
+  background:linear-gradient(160deg,#792a3d,#3d1826);
+  border-color:rgba(255,139,157,.86);
+  box-shadow:0 0 18px rgba(237,31,61,.2);
+}
+#download .anri-section-actions a.anri-pkg-download:focus-visible {
+  outline:2px solid #ffc4ce;
+  outline-offset:3px;
+}
+
 /* Narrow screens preserve legibility and avoid overflowing buttons. */
 @media(max-width:700px) {
   :is(#price,#compatibility,#download,#support-development,#support,#seller) .anri-english-support-box {
