@@ -46,6 +46,42 @@ for (const path of ['/', '/ru/', '/kk/']) {
     await expect(page.locator('#support-development a[href="https://pay.kaspi.kz/pay/zxqekc5w"]')).toBeVisible();
   });
 }
+const homepageSupportRoutes = [
+  ['/', '/support-development/', 'Choose a support option above'],
+  ['/ru/', '/ru/support-development/', 'Выберите способ поддержки выше'],
+  ['/kk/', '/kk/support-development/', 'Жоғарыдағы қолдау тәсілін таңдаңыз']
+];
+for (const [route, detailHref, footerText] of homepageSupportRoutes) {
+  test('homepage support panel links all four providers in the approved order: '+route, async ({page}) => {
+    await page.goto(base+route);
+    const panel = page.locator('#support-development');
+    const links = panel.locator('.anri-section-actions a');
+    await expect(links).toHaveCount(5);
+    await expect(links.first()).toHaveAttribute('href', detailHref);
+    await expect(links.evaluateAll(nodes => nodes.slice(1).map(node => node.textContent.trim()))).resolves.toEqual([
+      'Kaspi Pay ↗', 'ProEducation ↗', 'Boosty ↗', 'PayPal ↗'
+    ]);
+    const providers = panel.locator('.anri-support-payment-link');
+    for (let i = 0; i < 4; i++) {
+      await expect(providers.nth(i)).toHaveAttribute('target', '_blank');
+      await expect(providers.nth(i)).toHaveAttribute('rel', 'noopener noreferrer');
+      await expect(providers.nth(i)).toHaveCSS('background-color', 'rgb(17, 18, 23)');
+      await expect(providers.nth(i)).toHaveCSS('border-top-color', 'rgba(237, 68, 96, 0.48)');
+    }
+    await expect(providers.nth(0)).toHaveAttribute('href', 'https://pay.kaspi.kz/pay/zxqekc5w');
+    await expect(providers.nth(2)).toHaveAttribute('href', 'https://boosty.to/anriproduct');
+    await expect(providers.nth(3)).toHaveAttribute('href', 'https://paypal.me/anribeats');
+    const proeducation = new URL(await providers.nth(1).getAttribute('href'));
+    expect(proeducation.origin+proeducation.pathname).toBe('https://proeducation.kz/fqaIO5/');
+    const note = proeducation.searchParams.get('customer_extra');
+    expect(note).toContain('Добровольная поддержка разработки Anri Audio MIDI');
+    expect(note).toContain('Сумма к оплате');
+    expect(note).toContain('не является покупкой лицензии');
+    await expect(panel.locator('p.small')).toContainText(footerText);
+    await expect(panel.locator('p.small')).not.toContainText(/coming soon|готовится отдельно|дайындалып жатыр/i);
+  });
+}
+
 for (const path of ['/support-development/','/ru/support-development/','/kk/support-development/']) {
   test('Kaspi is available for optional support '+path, async ({page}) => {
     await page.goto(base+path);
