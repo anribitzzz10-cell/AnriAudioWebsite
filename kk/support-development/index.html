@@ -24,8 +24,10 @@ h1{font-size:clamp(44px,7vw,74px);line-height:1;letter-spacing:-.05em;margin:22p
 .payment-label{display:grid;gap:3px;min-width:110px}.payment-label strong{font-size:15px}.payment-label span{color:var(--muted);font-size:12px}
 .payment-action{display:flex;align-items:center;gap:11px;min-width:0}
 .payment-action code{font:600 14px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.02em;overflow-wrap:anywhere;color:#f3f3f8}
-.copy-button,.pay-link{font:700 13px/1.2 Inter,system-ui,sans-serif;border-radius:11px;border:1px solid rgba(237,31,61,.36);padding:11px 14px;color:#ffe5ea;background:rgba(237,31,61,.10);white-space:nowrap;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;min-height:42px}
-.copy-button:hover,.pay-link:hover{background:rgba(237,31,61,.20)}
+/* Consistent restrained outline for Kaspi Pay, Boosty, PayPal and the
+   dynamically-inserted ProEducation payment link. */
+.copy-button,.pay-link{font:700 13px/1.2 Inter,system-ui,sans-serif;border-radius:11px;border:1px solid rgba(237,68,96,.48);padding:11px 14px;color:#f6f7fb;background:#111217;box-shadow:0 0 0 1px rgba(237,68,96,.025);white-space:nowrap;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;min-height:42px;transition:background-color .15s ease,border-color .15s ease,box-shadow .15s ease}
+.copy-button:hover,.pay-link:hover{background:#19151b;border-color:rgba(255,104,131,.65);box-shadow:0 0 12px rgba(237,68,96,.08)}
 .copy-button:focus-visible,.pay-link:focus-visible{outline:2px solid #fff;outline-offset:2px}
 .copy-confirm{min-height:24px;text-align:center;font-size:13px;color:#d3f8d9}
 .payment-note{font-size:13px!important;color:#bcbcc7!important;margin:16px 0 0!important}
