@@ -69,6 +69,21 @@ for (const path of ['/support-development/', '/ru/support-development/', '/kk/su
   });
 }
 
+for (const route of ['/support-development/', '/ru/support-development/', '/kk/support-development/']) {
+  test('all support payment buttons use the dark fill and red outline: '+route, async ({page}) => {
+    await page.goto(base+route);
+    for (const id of ['kaspi','boosty','paypal','proeducation']) {
+      const action = page.locator('#'+id+' a.pay-link');
+      await expect(action).toHaveCount(1);
+      await expect(action).toHaveCSS('background-color', 'rgb(17, 18, 23)');
+      await expect(action).toHaveCSS('border-top-color', 'rgba(237, 68, 96, 0.48)');
+      await expect(action).toHaveCSS('color', 'rgb(246, 247, 251)');
+    }
+    await expect(page.locator('#proeducation .proeducation-qr a')).toHaveCount(1);
+    await expect(page.locator('#proeducation .proeducation-qr img')).toBeVisible();
+  });
+}
+
 test('ProEducation support activates only with an approved provider link', async ({page}) => {
   await page.route('**/support-development/proeducation-support.js', async route => {
     const response = await route.fetch();
