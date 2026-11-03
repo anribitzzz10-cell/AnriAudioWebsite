@@ -58,6 +58,8 @@ for (const [route, detailHref, footerText] of homepageSupportRoutes) {
     const links = panel.locator('.anri-section-actions a');
     await expect(links).toHaveCount(5);
     await expect(links.first()).toHaveAttribute('href', detailHref);
+    await expect(links.first()).toHaveCSS('background-color', 'rgb(23, 17, 22)');
+    await expect(links.first()).toHaveCSS('border-top-color', 'rgba(237, 68, 96, 0.37)');
     await expect(links.evaluateAll(nodes => nodes.slice(1).map(node => node.textContent.trim()))).resolves.toEqual([
       'Kaspi Pay ↗', 'ProEducation ↗', 'Boosty ↗', 'PayPal ↗'
     ]);
@@ -66,7 +68,7 @@ for (const [route, detailHref, footerText] of homepageSupportRoutes) {
       await expect(providers.nth(i)).toHaveAttribute('target', '_blank');
       await expect(providers.nth(i)).toHaveAttribute('rel', 'noopener noreferrer');
       await expect(providers.nth(i)).toHaveCSS('background-color', 'rgb(17, 18, 23)');
-      await expect(providers.nth(i)).toHaveCSS('border-top-color', 'rgba(237, 68, 96, 0.48)');
+      await expect(providers.nth(i)).toHaveCSS('border-top-color', 'rgba(212, 220, 237, 0.16)');
     }
     await expect(providers.nth(0)).toHaveAttribute('href', 'https://pay.kaspi.kz/pay/zxqekc5w');
     await expect(providers.nth(2)).toHaveAttribute('href', 'https://boosty.to/anriproduct');
