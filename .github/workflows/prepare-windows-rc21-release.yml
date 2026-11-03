@@ -1,0 +1,68 @@
+name: Prepare Windows RC2.1 download release (draft only)
+
+on:
+  push:
+    paths:
+      - '.github/release-triggers/windows-rc21-draft.trigger'
+
+permissions:
+  contents: write
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      TAG: windows-vst3-rc2.1
+      FILE: ANRI_AUDIO_MIDI_WINDOWS_X64_OFFLINE_SETUP_RC2_1.exe
+      SHA256: 6BD2AABF39505DC753EF573D43E1D4D9FA95B95EA7C0A2A4FBD3A6548A00D39C
+    steps:
+      - name: Guard public website repository and existing macOS release
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$GITHUB_REPOSITORY" == "anribitzzz10-cell/AnriAudioWebsite" ]] || exit 1
+          [[ "$(gh api "/repos/$GITHUB_REPOSITORY" --jq .private)" == "false" ]] || exit 1
+          gh release view macos-free-1.0.2-rc1 --repo "$GITHUB_REPOSITORY" >/dev/null
+          # Refuse a second draft with the same tag.
+          if gh api "/repos/$GITHUB_REPOSITORY/releases?per_page=100" --jq '.[] | select(.tag_name == "windows-vst3-rc2.1") | .id' | grep -q .; then
+            echo 'Windows RC2.1 release already exists'; exit 1
+          fi
+
+      - name: Create draft Windows release with checksum metadata
+        shell: bash
+        run: |
+          set -euo pipefail
+          printf '%s  %s\n' "$SHA256" "$FILE" > "$RUNNER_TEMP/$FILE.sha256"
+          cat > "$RUNNER_TEMP/release-notes.md" <<'EOF'
+          ## ANRI AUDIO MIDI Windows x64 — VST3 RC2.1
+
+          Offline Windows installer. Built with the bundled Tsumugi CPU runtime and AI model.
+          Windows RC2.1 was tested in Fender Studio Pro for audio-to-MIDI analysis, Piano Roll,
+          Preview, MIDI drag and drop, offline installation, clean uninstall and reinstallation.
+
+          **Important:** This Windows release is separate from the macOS AUv2 package.
+          No macOS Broker / SEND MIDI is included. The installer has no established code-signing
+          certificate; Windows may display a SmartScreen warning.
+
+          **SHA-256 of expected EXE:**
+          `6BD2AABF39505DC753EF573D43E1D4D9FA95B95EA7C0A2A4FBD3A6548A00D39C`
+
+          **Release status:** DRAFT. The expected EXE must be uploaded and hash-verified
+          before publishing this release and enabling download links on the website.
+          EOF
+          gh release create "$TAG" \
+            "$RUNNER_TEMP/$FILE.sha256" \
+            --repo "$GITHUB_REPOSITORY" \
+            --title 'ANRI AUDIO MIDI — Windows x64 VST3 RC2.1' \
+            --notes-file "$RUNNER_TEMP/release-notes.md" \
+            --draft --prerelease
+          echo 'PRIVATE WORKFLOW ACTION SUCCESS: public-repository release draft only; not published.'
+
+      - name: Verify draft is private and only checksum asset exists
+        shell: bash
+        run: |
+          set -euo pipefail
+          releases="$(gh api "/repos/$GITHUB_REPOSITORY/releases?per_page=100")"
+          echo "$releases" | jq -e '[.[] | select(.tag_name == "windows-vst3-rc2.1" and .draft == true)] | length == 1'
+          echo 'WINDOWS RELEASE DRAFT PREPARED; INSTALLER NOT PUBLIC YET'
